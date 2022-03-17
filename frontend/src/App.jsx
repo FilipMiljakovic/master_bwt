@@ -2,6 +2,7 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import background from './img/DNK.jpg';
+import Lesion9 from './Lesion9';
 
 function App() {
   const myStyle = {
@@ -17,6 +18,7 @@ function App() {
       {/* <header className="App-header" /> */}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/9" element={<Lesion9 />} />
         {/* <Route path="/trie" element={<Graph />} /> */}
       </Routes>
     </div>

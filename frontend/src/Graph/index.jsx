@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
+import Grid from '@mui/material/Grid';
 // import axios from 'axios';
 import { style } from './styles';
 // import grid
@@ -750,7 +751,7 @@ function SuffixTree({ genome, pattern }) {
       zoom: 1,
       pan: { x: 0, y: 0 },
       minZoom: 0.1,
-      maxZoom: 0.7,
+      maxZoom: 0.6,
       wheelSensitivity: 0.1,
       motionBlur: false,
       motionBlurOpacity: 0.5,
@@ -768,9 +769,16 @@ function SuffixTree({ genome, pattern }) {
   }, [elements]);
 
   return (
-    <Box>
-      <div className="topology-viewer-component" ref={ref} />
-    </Box>
+    <Grid container spacing={2}>
+      {/* <Grid item xs={4}>
+        <Box>Prvi deo</Box>
+      </Grid> */}
+      <Grid item xs={12}>
+        <Box>
+          <div className="topology-viewer-component canvas-css" ref={ref} />
+        </Box>
+      </Grid>
+    </Grid>
   );
 }
 
