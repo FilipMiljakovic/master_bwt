@@ -1,0 +1,17 @@
+.App {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.box {
+  height: 100;
+  display: "flex";
+  border: "1px solid black";
+  padding: 8;
+}
+
+.centerBox {
+  justifyContent: "center";
+  alignItems: "center";
+}
