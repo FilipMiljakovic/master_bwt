@@ -3,11 +3,20 @@ import Box from '@mui/material/Box';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import Grid from '@mui/material/Grid';
-// import axios from 'axios';
+import Button from '@mui/material/Button';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import { styled } from '@mui/material/styles';
 import { style } from './styles';
-// import grid
 
 cytoscape.use(dagre);
+
+const CustomButton = styled(Button)(() => ({
+  width: '50%',
+  height: 50,
+  backgroundColor: '#00FFFF',
+  color: '#191970',
+}));
 
 export const defaults = {
   // dagre algo options, uses default value on undefined
@@ -43,573 +52,6 @@ export const defaults = {
   stop() {}, // on layoutstop
 };
 
-// const trieSuffixArray = [
-//   [
-//     {
-//       edge: 'a',
-//       source: 'root',
-//       target: 'i1',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i1',
-//       target: '0',
-//     },
-//   ],
-//   [
-//     {
-//       edge: 'a',
-//       source: 'root',
-//       target: 'i1',
-//     },
-//     {
-//       edge: 'm',
-//       source: 'i1',
-//       target: 'i2',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i2',
-//       target: 'i3',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i3',
-//       target: '1',
-//     },
-//   ],
-//   [
-//     {
-//       edge: 'a',
-//       source: 'root',
-//       target: 'i1',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i1',
-//       target: 'i4',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i4',
-//       target: 'i5',
-//     },
-//     {
-//       edge: 'm',
-//       source: 'i5',
-//       target: 'i6',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i6',
-//       target: 'i7',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i7',
-//       target: '2',
-//     },
-//   ],
-//   [
-//     {
-//       edge: 'a',
-//       source: 'root',
-//       target: 'i1',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i1',
-//       target: 'i4',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i4',
-//       target: 'i5',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i5',
-//       target: 'i8',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i8',
-//       target: 'i9',
-//     },
-//     {
-//       edge: 's',
-//       source: 'i9',
-//       target: 'i10',
-//     },
-//     {
-//       edge: 'p',
-//       source: 'i10',
-//       target: 'i11',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i11',
-//       target: 'i12',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i12',
-//       target: 'i13',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i13',
-//       target: 'i14',
-//     },
-//     {
-//       edge: 'm',
-//       source: 'i14',
-//       target: 'i15',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i15',
-//       target: 'i16',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i16',
-//       target: '3',
-//     },
-//   ],
-//   [
-//     {
-//       edge: 'a',
-//       source: 'root',
-//       target: 'i1',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i1',
-//       target: 'i4',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i4',
-//       target: 'i5',
-//     },
-//     {
-//       edge: 's',
-//       source: 'i5',
-//       target: 'i17',
-//     },
-//     {
-//       edge: 'p',
-//       source: 'i17',
-//       target: 'i18',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i18',
-//       target: 'i19',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i19',
-//       target: 'i20',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i20',
-//       target: 'i21',
-//     },
-//     {
-//       edge: 'm',
-//       source: 'i21',
-//       target: 'i22',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i22',
-//       target: 'i23',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i23',
-//       target: '4',
-//     },
-//   ],
-//   [
-//     {
-//       edge: 'a',
-//       source: 'root',
-//       target: 'i1',
-//     },
-//     {
-//       edge: 's',
-//       source: 'i1',
-//       target: 'i24',
-//     },
-//     {
-//       edge: 'p',
-//       source: 'i24',
-//       target: 'i25',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i25',
-//       target: 'i26',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i26',
-//       target: 'i27',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i27',
-//       target: 'i28',
-//     },
-//     {
-//       edge: 'm',
-//       source: 'i28',
-//       target: 'i29',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i29',
-//       target: 'i30',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i30',
-//       target: '5',
-//     },
-//   ],
-//   [
-//     {
-//       edge: 'b',
-//       source: 'root',
-//       target: 'i31',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i31',
-//       target: 'i32',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i32',
-//       target: 'i33',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i33',
-//       target: 'i34',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i34',
-//       target: 'i35',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i35',
-//       target: 'i36',
-//     },
-//     {
-//       edge: 's',
-//       source: 'i36',
-//       target: 'i37',
-//     },
-//     {
-//       edge: 'p',
-//       source: 'i37',
-//       target: 'i38',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i38',
-//       target: 'i39',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i39',
-//       target: 'i40',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i40',
-//       target: 'i41',
-//     },
-//     {
-//       edge: 'm',
-//       source: 'i41',
-//       target: 'i42',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i42',
-//       target: 'i43',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i43',
-//       target: '6',
-//     },
-//   ],
-//   [
-//     {
-//       edge: 'm',
-//       source: 'root',
-//       target: 'i44',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i44',
-//       target: 'i45',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i45',
-//       target: '7',
-//     },
-//   ],
-//   [
-//     {
-//       edge: 'n',
-//       source: 'root',
-//       target: 'i46',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i46',
-//       target: 'i47',
-//     },
-//     {
-//       edge: 'm',
-//       source: 'i47',
-//       target: 'i48',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i48',
-//       target: 'i49',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i49',
-//       target: '8',
-//     },
-//   ],
-//   [
-//     {
-//       edge: 'n',
-//       source: 'root',
-//       target: 'i46',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i46',
-//       target: 'i47',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i47',
-//       target: 'i50',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i50',
-//       target: 'i51',
-//     },
-//     {
-//       edge: 's',
-//       source: 'i51',
-//       target: 'i52',
-//     },
-//     {
-//       edge: 'p',
-//       source: 'i52',
-//       target: 'i53',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i53',
-//       target: 'i54',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i54',
-//       target: 'i55',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i55',
-//       target: 'i56',
-//     },
-//     {
-//       edge: 'm',
-//       source: 'i56',
-//       target: 'i57',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i57',
-//       target: 'i58',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i58',
-//       target: '9',
-//     },
-//   ],
-//   [
-//     {
-//       edge: 'n',
-//       source: 'root',
-//       target: 'i46',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i46',
-//       target: 'i47',
-//     },
-//     {
-//       edge: 's',
-//       source: 'i47',
-//       target: 'i59',
-//     },
-//     {
-//       edge: 'p',
-//       source: 'i59',
-//       target: 'i60',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i60',
-//       target: 'i61',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i61',
-//       target: 'i62',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i62',
-//       target: 'i63',
-//     },
-//     {
-//       edge: 'm',
-//       source: 'i63',
-//       target: 'i64',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i64',
-//       target: 'i65',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i65',
-//       target: '10',
-//     },
-//   ],
-//   [
-//     {
-//       edge: 'p',
-//       source: 'root',
-//       target: 'i66',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i66',
-//       target: 'i67',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i67',
-//       target: 'i68',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i68',
-//       target: 'i69',
-//     },
-//     {
-//       edge: 'm',
-//       source: 'i69',
-//       target: 'i70',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i70',
-//       target: 'i71',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i71',
-//       target: '11',
-//     },
-//   ],
-//   [
-//     {
-//       edge: 's',
-//       source: 'root',
-//       target: 'i72',
-//     },
-//     {
-//       edge: 'p',
-//       source: 'i72',
-//       target: 'i73',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i73',
-//       target: 'i74',
-//     },
-//     {
-//       edge: 'n',
-//       source: 'i74',
-//       target: 'i75',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i75',
-//       target: 'i76',
-//     },
-//     {
-//       edge: 'm',
-//       source: 'i76',
-//       target: 'i77',
-//     },
-//     {
-//       edge: 'a',
-//       source: 'i77',
-//       target: 'i78',
-//     },
-//     {
-//       edge: '$',
-//       source: 'i78',
-//       target: '12',
-//     },
-//   ],
-// ];
-
-// async function getResults(genome, pattern) {
-//   axios
-//     .post(
-//       'http://localhost:5100/trie/construction',
-//       {
-//         pattern_string: pattern,
-//         matching_string: genome,
-//       },
-//       { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-//     )
-//     .then((res) => {
-//       return res.data;
-//     })
-//     .catch((error) => {
-//       console.error('Something went wrong!', error);
-//     });
-// }
-
 function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
   if (trie[source] && Object.keys(trie[source]).length === 0) {
     patternMatchingIndexes.push(source);
@@ -621,19 +63,6 @@ function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
 
 // TODO: This should be used to find matching index
 function doesTrieContains(pattern, trie) {
-  // def prefix_trie_pattern_matching(text, Trie):
-  //   v = 'root'
-
-  //   for c in text:
-  //       if c not in Trie[v]:
-  //           return False
-
-  //       v = Trie[v][c]
-
-  //       if '$' in Trie[v]:
-  //           return Trie[v]['$']
-
-  //   return False
   let source = 'root';
   const patternMatchingIndexes = [];
   for (let i = 0; i < pattern.length; i += 1) {
@@ -647,29 +76,26 @@ function doesTrieContains(pattern, trie) {
     // }
     source = trie[source][c];
   }
-  // ovde bi trebalo da ode do lista za svaki i da uzme index gde pocinje taj sufix
   findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes);
   console.log(patternMatchingIndexes);
   return patternMatchingIndexes;
 }
 let k = 0;
+let suffixArrayTmp = '';
 function SuffixTree({ genome, pattern }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
   const [indexes, setIndexes] = useState({ i: 0, j: 0 });
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [suffixArray, setSuffixArray] = useState([]);
 
+  // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
   if (data && k < 1) {
     const suffixTrie = data.trie;
     doesTrieContains(pattern, suffixTrie);
     k += 1;
   }
   useEffect(() => {
-    // const suffixTrieResults = async () => {
-    //   const result = await getResults(genome, pattern);
-    //   setData(result);
-    // };
-    // suffixTrieResults();
-    // POST request using fetch inside useEffect React hook
     const requestOptions = {
       method: 'POST',
       headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
@@ -685,7 +111,8 @@ function SuffixTree({ genome, pattern }) {
 
   useEffect(() => {
     let timeout;
-    if (data) {
+    // TODO: isPlaying se menja kad se stisne dugme. Disable dugme kad zavrsi generisanje!!!
+    if (data && isPlaying) {
       const trieSuffixArray = data.trie_suffix_array;
       timeout = setTimeout(() => {
         const { i, j } = indexes;
@@ -713,6 +140,7 @@ function SuffixTree({ genome, pattern }) {
           },
           classes: 'active',
         };
+
         setElements({
           nodes: [
             ...nodes,
@@ -725,17 +153,26 @@ function SuffixTree({ genome, pattern }) {
           clearTimeout(timeout);
           return;
         }
+        suffixArrayTmp += edge;
+        if (suffixArrayTmp.length === 1) {
+          setSuffixArray([...suffixArray, `${i} ${suffixArrayTmp}`]);
+        } else {
+          suffixArray.pop();
+          setSuffixArray([...suffixArray, `${i} ${suffixArrayTmp}`]);
+        }
         if (j === trieSuffixArray[i].length - 1) {
           setIndexes({ i: i + 1, j: 0 });
+          suffixArrayTmp = '';
           return;
         }
+
         setIndexes({ i, j: j + 1 });
-      }, 1000);
+      }, 100);
     }
     return () => {
       clearTimeout(timeout);
     };
-  }, [indexes, data]);
+  }, [indexes, data, isPlaying, suffixArray]);
 
   const ref = useRef(null);
   useEffect(() => {
@@ -748,10 +185,10 @@ function SuffixTree({ genome, pattern }) {
         name: 'dagre',
         ...defaults,
       },
-      zoom: 1,
+      zoom: 0.6,
       pan: { x: 0, y: 0 },
       minZoom: 0.1,
-      maxZoom: 0.6,
+      maxZoom: 1,
       wheelSensitivity: 0.1,
       motionBlur: false,
       motionBlurOpacity: 0.5,
@@ -768,14 +205,37 @@ function SuffixTree({ genome, pattern }) {
     };
   }, [elements]);
 
+  const renderedOutput = suffixArray
+    ? suffixArray.map((item) => <div style={{ color: '#00FFFF' }}> {item} </div>)
+    : 'Error!!!';
   return (
     <Grid container spacing={2}>
-      {/* <Grid item xs={4}>
-        <Box>Prvi deo</Box>
-      </Grid> */}
-      <Grid item xs={12}>
-        <Box>
-          <div className="topology-viewer-component canvas-css" ref={ref} />
+      <Grid item xs={4}>
+        <Box textAlign="center" style={{ marginTop: '20%' }}>
+          <CustomButton
+            variant="contained"
+            startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+            onClick={() => setIsPlaying(!isPlaying)}
+          />
+        </Box>
+        <Box style={{ margin: '20%' }}>{renderedOutput}</Box>
+      </Grid>
+      <Grid item xs={8}>
+        <Box
+          style={{
+            borderRadius: '25px',
+            border: '2px solid #00FFFF',
+            padding: '20px',
+            width: '650px',
+            height: '650px',
+            margin: '2% 12%',
+          }}
+        >
+          <div
+            className="topology-viewer-component canvas-css"
+            ref={ref}
+            style={{ width: '650px', height: '650px' }}
+          />
         </Box>
       </Grid>
     </Grid>

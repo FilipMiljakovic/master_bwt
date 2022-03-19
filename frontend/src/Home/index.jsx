@@ -15,7 +15,7 @@ const CustomButton = styled(Button)(() => ({
 function Home() {
   return (
     <Box textAlign="center" style={{ marginTop: '15%' }}>
-      <Grid container xs={7} spacing={2} textAlign="center">
+      <Grid container item xs={7} spacing={2} textAlign="center">
         <Grid item xs={7}>
           <CustomButton variant="contained">Brute force</CustomButton>
         </Grid>
