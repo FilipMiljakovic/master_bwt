@@ -82,12 +82,14 @@ function doesTrieContains(pattern, trie) {
 }
 let k = 0;
 let suffixArrayTmp = '';
+let disableButton = false;
 function SuffixTree({ genome, pattern }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
   const [indexes, setIndexes] = useState({ i: 0, j: 0 });
   const [isPlaying, setIsPlaying] = useState(true);
   const [suffixArray, setSuffixArray] = useState([]);
+  const [currentEdge, setCurrentEdge] = useState({});
 
   // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
   if (data && k < 1) {
@@ -140,7 +142,7 @@ function SuffixTree({ genome, pattern }) {
           },
           classes: 'active',
         };
-
+        setCurrentEdge({ i, edge });
         setElements({
           nodes: [
             ...nodes,
@@ -151,15 +153,10 @@ function SuffixTree({ genome, pattern }) {
         });
         if (j === trieSuffixArray[i].length - 1 && i === trieSuffixArray.length - 1) {
           clearTimeout(timeout);
+          disableButton = true;
           return;
         }
-        suffixArrayTmp += edge;
-        if (suffixArrayTmp.length === 1) {
-          setSuffixArray([...suffixArray, `${i} ${suffixArrayTmp}`]);
-        } else {
-          suffixArray.pop();
-          setSuffixArray([...suffixArray, `${i} ${suffixArrayTmp}`]);
-        }
+
         if (j === trieSuffixArray[i].length - 1) {
           setIndexes({ i: i + 1, j: 0 });
           suffixArrayTmp = '';
@@ -172,7 +169,20 @@ function SuffixTree({ genome, pattern }) {
     return () => {
       clearTimeout(timeout);
     };
-  }, [indexes, data, isPlaying, suffixArray]);
+  }, [indexes, data, isPlaying]);
+
+  useEffect(() => {
+    const { i, edge } = currentEdge;
+    if (edge) {
+      suffixArrayTmp += edge;
+      if (suffixArrayTmp.length === 1) {
+        setSuffixArray([...suffixArray, `${i} ${suffixArrayTmp}`]);
+      } else {
+        suffixArray.pop();
+        setSuffixArray([...suffixArray, `${i} ${suffixArrayTmp}`]);
+      }
+    }
+  }, [currentEdge]);
 
   const ref = useRef(null);
   useEffect(() => {
@@ -213,6 +223,7 @@ function SuffixTree({ genome, pattern }) {
       <Grid item xs={4}>
         <Box textAlign="center" style={{ marginTop: '20%' }}>
           <CustomButton
+            disabled={disableButton}
             variant="contained"
             startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
             onClick={() => setIsPlaying(!isPlaying)}
