@@ -16,43 +16,17 @@ def add_to_trie(Trie, pattern, number_of_nodes, pattern_id):
 
     return (Trie, number_of_nodes)
 
-def trie_construction_function(patterns):
+def trie_construction_function(stringList):
     Trie = {}
     Trie['root'] = {}
 
     number_of_nodes = 1
 
-    for i in range(len(patterns)):
-        pattern = patterns[i]
+    for i in range(len(stringList)):
+        pattern = stringList[i]
         (Trie, number_of_nodes) = add_to_trie(Trie, pattern, number_of_nodes, i)
 
     return Trie
-
-#Provera da li neki element strukture Trie predstavlja prefiks niske text
-def prefix_trie_pattern_matching(text, Trie):
-    v = 'root'
-
-    for c in text:
-        if c not in Trie[v]:
-            return False
-
-        v = Trie[v][c]
-
-        if '$' in Trie[v]:
-            return Trie[v]['$']
-
-    return False
-
-#Provera da li neki element strukture Trie predstavlja podstring niske text
-#TODO: proveri da li ova funkcija dobro radi, nesto je tu sumnjivo
-def trie_matching(text, Trie):
-    found_patterns = []
-    while len(text) > 0:
-        res = prefix_trie_pattern_matching(text, Trie)
-        if res != False:
-            found_patterns.append(res)
-        text = text[1:]
-    return found_patterns
 
 #Formiranje sufiksnog niza niske string
 def suffix_array_construction(string):
@@ -65,11 +39,7 @@ def suffix_array_construction(string):
     return suffix_array
 	
 def makeSuffixTrieArray(suffix, node, trie, trie_array_suffix_array):
-    if len(suffix) == 0:
-        print("Dosli smo do kraja sufiksa")
-    else:
-        print(node)
-        print(trie[node])
+    if len(suffix) != 0:
         if suffix[0] in trie[node]:
             trie_array_suffix_array.append({"source": node, "target": trie[node][suffix[0]], "edge": suffix[0]})
         makeSuffixTrieArray(suffix[1:], trie[node][suffix[0]], trie, trie_array_suffix_array)

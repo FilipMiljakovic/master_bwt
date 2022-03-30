@@ -11,22 +11,43 @@ import BWT as bwt
 app = Flask(__name__)
 cors = CORS(app)
 
-@app.route('/trie/construction', methods=['POST'])
-def trie_construction_endpoint():
-    patternString = request.get_json().get("pattern_string")
-    matchingString = request.get_json().get("matching_string")
-    suffix_array = t.suffix_array_construction(patternString)
+@app.route('/suffix/trie/construction', methods=['POST'])
+def suffix_trie_construction_endpoint():
+    genomeString = request.get_json().get("genome")
+    suffix_array = t.suffix_array_construction(genomeString)
     trie = t.trie_construction_function(suffix_array)
-    trie_matching_value = t.trie_matching(matchingString, trie)
     trie_array = []
     for suffix in suffix_array:
         trie_array_suffix_array = []
-        print(suffix)
         t.makeSuffixTrieArray(suffix, 'root', trie, trie_array_suffix_array)
         trie_array.append(trie_array_suffix_array)    
 		    
-    return { 'trie_matching': trie_matching_value, 'trie': trie, 'trie_suffix_array': trie_array}
-	
+    return { 'trie': trie, 'trie_suffix_array': trie_array }
+
+@app.route('/suffix/compressed/trie/construction', methods=['POST'])
+def suffix_compressed_trie_construction_endpoint():
+    genomeString = request.get_json().get("genome")
+    suffix_array = t.suffix_array_construction(genomeString)
+    trie = t.trie_construction_function(suffix_array)
+    trie_array = []
+    for suffix in suffix_array:
+        trie_array_suffix_array = []
+        t.makeSuffixTrieArray(suffix, 'root', trie, trie_array_suffix_array)
+        trie_array.append(trie_array_suffix_array)    
+		    
+    return { 'trie': trie, 'trie_suffix_array': trie_array }
+
+@app.route('/pattern/trie/construction', methods=['POST'])
+def pattern_trie_construction_endpoint():
+    patternList = request.get_json().get("matching_pattern_list")
+    trie = t.trie_construction_function(patternList)
+    trie_array = []
+    for pattern in patternList:
+        trie_array_suffix_array = []
+        t.makeSuffixTrieArray(pattern, 'root', trie, trie_array_suffix_array)
+        trie_array.append(trie_array_suffix_array)
+		    
+    return { 'trie': trie, 'trie_pattern_array': trie_array }
 	
 @app.route('/suffix/array', methods=['POST'])
 def suffix_array_endpoint():

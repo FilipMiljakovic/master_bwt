@@ -80,9 +80,8 @@ function doesTrieContains(pattern, trie) {
   console.log(patternMatchingIndexes);
   return patternMatchingIndexes;
 }
+
 let k = 0;
-// let suffixArrayTmp = '';
-// let disableButton = false;
 function SuffixTree({ genome, pattern }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -102,9 +101,9 @@ function SuffixTree({ genome, pattern }) {
     const requestOptions = {
       method: 'POST',
       headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pattern_string: genome, matching_string: pattern }),
+      body: JSON.stringify({ genome }),
     };
-    fetch('http://localhost:5011/trie/construction', requestOptions)
+    fetch('http://localhost:5000/suffix/trie/construction', requestOptions)
       .then((response) => response.json())
       .then((res) => setData(res))
       .catch((error) => {
@@ -114,7 +113,6 @@ function SuffixTree({ genome, pattern }) {
 
   useEffect(() => {
     let timeout;
-    // TODO: isPlaying se menja kad se stisne dugme. Disable dugme kad zavrsi generisanje!!!
     if (data && isPlaying) {
       const trieSuffixArray = data.trie_suffix_array;
       timeout = setTimeout(() => {
@@ -161,7 +159,6 @@ function SuffixTree({ genome, pattern }) {
         if (j === trieSuffixArray[i].length - 1) {
           setIndexes({ i: i + 1, j: 0 });
           setCurrentEdge({ i: i + 1 });
-          // setSuffixArray([...suffixArray, `${i + 1} `]);
           return;
         }
 
@@ -179,13 +176,6 @@ function SuffixTree({ genome, pattern }) {
     if (edge) {
       suffixArrayCopy[i] += edge;
       setSuffixArray(suffixArrayCopy);
-      // suffixArrayTmp += edge;
-      // if (suffixArrayTmp.length === 1) {
-      //   setSuffixArray([...suffixArray, `${i} ${suffixArrayTmp}`]);
-      // } else {
-      //   suffixArray.pop();
-      //   setSuffixArray([...suffixArray, `${i} ${suffixArrayTmp}`]);
-      // }
     } else {
       suffixArrayCopy[i] = `${i} `;
       setSuffixArray(suffixArrayCopy);
@@ -225,7 +215,7 @@ function SuffixTree({ genome, pattern }) {
 
   const renderedOutput = suffixArray
     ? suffixArray.map((item) => (
-        <Grid container spacing={2}>
+        <Grid container>
           <Grid item xs={10}>
             <div style={{ color: '#00FFFF', padding: '6px', float: 'left' }}>
               {item.charAt(item.length - 1) === '$' ? item : item.substring(0, item.length - 1)}
@@ -248,7 +238,7 @@ function SuffixTree({ genome, pattern }) {
             onClick={() => setIsPlaying(!isPlaying)}
           />
         </Box>
-        <Box style={{ margin: '20%' }}>{renderedOutput}</Box>
+        <Box style={{ margin: '10%' }}>{renderedOutput}</Box>
       </Grid>
       <Grid item xs={8}>
         <Box
