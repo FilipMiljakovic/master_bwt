@@ -81,14 +81,15 @@ function doesTrieContains(pattern, trie) {
   return patternMatchingIndexes;
 }
 let k = 0;
-let suffixArrayTmp = '';
-let disableButton = false;
+// let suffixArrayTmp = '';
+// let disableButton = false;
 function SuffixTree({ genome, pattern }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
   const [indexes, setIndexes] = useState({ i: 0, j: 0 });
   const [isPlaying, setIsPlaying] = useState(true);
-  const [suffixArray, setSuffixArray] = useState([]);
+  const [disableButton, setDisableButton] = useState(false);
+  const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
 
   // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
@@ -153,18 +154,19 @@ function SuffixTree({ genome, pattern }) {
         });
         if (j === trieSuffixArray[i].length - 1 && i === trieSuffixArray.length - 1) {
           clearTimeout(timeout);
-          disableButton = true;
+          setDisableButton(true);
           return;
         }
 
         if (j === trieSuffixArray[i].length - 1) {
           setIndexes({ i: i + 1, j: 0 });
-          suffixArrayTmp = '';
+          setCurrentEdge({ i: i + 1 });
+          // setSuffixArray([...suffixArray, `${i + 1} `]);
           return;
         }
 
         setIndexes({ i, j: j + 1 });
-      }, 100);
+      }, 600);
     }
     return () => {
       clearTimeout(timeout);
@@ -173,14 +175,20 @@ function SuffixTree({ genome, pattern }) {
 
   useEffect(() => {
     const { i, edge } = currentEdge;
+    const suffixArrayCopy = [...suffixArray];
     if (edge) {
-      suffixArrayTmp += edge;
-      if (suffixArrayTmp.length === 1) {
-        setSuffixArray([...suffixArray, `${i} ${suffixArrayTmp}`]);
-      } else {
-        suffixArray.pop();
-        setSuffixArray([...suffixArray, `${i} ${suffixArrayTmp}`]);
-      }
+      suffixArrayCopy[i] += edge;
+      setSuffixArray(suffixArrayCopy);
+      // suffixArrayTmp += edge;
+      // if (suffixArrayTmp.length === 1) {
+      //   setSuffixArray([...suffixArray, `${i} ${suffixArrayTmp}`]);
+      // } else {
+      //   suffixArray.pop();
+      //   setSuffixArray([...suffixArray, `${i} ${suffixArrayTmp}`]);
+      // }
+    } else {
+      suffixArrayCopy[i] = `${i} `;
+      setSuffixArray(suffixArrayCopy);
     }
   }, [currentEdge]);
 
@@ -216,7 +224,18 @@ function SuffixTree({ genome, pattern }) {
   }, [elements]);
 
   const renderedOutput = suffixArray
-    ? suffixArray.map((item) => <div style={{ color: '#00FFFF' }}> {item} </div>)
+    ? suffixArray.map((item) => (
+        <Grid container spacing={2}>
+          <Grid item xs={10}>
+            <div style={{ color: '#00FFFF', padding: '6px', float: 'left' }}>
+              {item.charAt(item.length - 1) === '$' ? item : item.substring(0, item.length - 1)}
+            </div>
+            <div style={{ color: '#00FFFF', fontSize: '30px', float: 'left' }}>
+              {item.charAt(item.length - 1) === '$' ? '' : item.substring(item.length - 1)}
+            </div>
+          </Grid>
+        </Grid>
+      ))
     : 'Error!!!';
   return (
     <Grid container spacing={2}>

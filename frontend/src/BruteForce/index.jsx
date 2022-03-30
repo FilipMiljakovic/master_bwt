@@ -4,9 +4,9 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import Graph from '../Graph';
+import BruteForceVisual from '../BruteForceVisual';
 
-function Lesion9() {
+function BruteForce() {
   const [genome, setGenome] = useState('');
   const [pattern, setPattern] = useState('');
   const [showGraph, setShowGraph] = useState(false);
@@ -55,10 +55,10 @@ function Lesion9() {
           </Grid>
         </Box>
       ) : (
-        <Graph genome={genome} pattern={pattern} />
+        <BruteForceVisual genome={genome} pattern={pattern} />
       )}
     </>
   );
 }
 
-export default Lesion9;
+export default BruteForce;
