@@ -29,7 +29,7 @@ function Home() {
         item
         xs={4}
         textAlign="center"
-        style={{ marginTop: '10%', marginLeft: '5%', float: 'left' }}
+        style={{ marginTop: '10%', marginLeft: '10%', float: 'left' }}
       >
         <Grid item xs={7}>
           <CustomButton variant="contained" component={Link} to="/bruteforce">
@@ -37,7 +37,9 @@ function Home() {
           </CustomButton>
         </Grid>
         <Grid item xs={7}>
-          <CustomButton variant="contained">Pattern prefix trie</CustomButton>
+          <CustomButton variant="contained" component={Link} to="/patternprefixtrie">
+            Pattern prefix trie
+          </CustomButton>
         </Grid>
         <Grid item xs={7}>
           <CustomButton variant="contained" component={Link} to="/suffixtrie">
@@ -45,10 +47,14 @@ function Home() {
           </CustomButton>
         </Grid>
         <Grid item xs={7}>
-          <CustomButton variant="contained">Compressed suffix trie</CustomButton>
+          <CustomButton variant="contained" component={Link} to="/suffixtriecompressed">
+            Compressed suffix trie
+          </CustomButton>
         </Grid>
         <Grid item xs={7}>
-          <CustomButton variant="contained">BWT</CustomButton>
+          <CustomButton variant="contained" component={Link} to="/bwt">
+            BWT
+          </CustomButton>
         </Grid>
       </Grid>
       <Grid

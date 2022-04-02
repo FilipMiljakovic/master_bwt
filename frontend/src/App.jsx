@@ -4,6 +4,8 @@ import Home from './Home';
 import background from './img/DNK.jpg';
 import SuffixTrie from './SuffixTrie';
 import BruteForce from './BruteForce';
+import SuffixTrieCompressed from './SuffixTrieCompressed';
+import PatternPrefixTrie from './PatternPrefixTrie';
 
 function App() {
   const myStyle = {
@@ -19,6 +21,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/suffixtrie" element={<SuffixTrie />} />
         <Route path="/bruteforce" element={<BruteForce />} />
+        <Route path="/suffixtriecompressed" element={<SuffixTrieCompressed />} />
+        <Route path="/patternprefixtrie" element={<PatternPrefixTrie />} />
       </Routes>
     </div>
   );

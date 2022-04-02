@@ -28,6 +28,18 @@ def trie_construction_function(stringList):
 
     return Trie
 
+def compress_trie(trie):
+    Trie = {}
+    Trie['root'] = {}
+
+    number_of_nodes = 1
+
+    for i in range(len(stringList)):
+        pattern = stringList[i]
+        (Trie, number_of_nodes) = add_to_trie(Trie, pattern, number_of_nodes, i)
+
+    return Trie
+
 #Formiranje sufiksnog niza niske string
 def suffix_array_construction(string):
     suffix_array = []

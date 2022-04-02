@@ -29,6 +29,7 @@ def suffix_compressed_trie_construction_endpoint():
     genomeString = request.get_json().get("genome")
     suffix_array = t.suffix_array_construction(genomeString)
     trie = t.trie_construction_function(suffix_array)
+    compressed_trie = t.compress_trie(trie)
     trie_array = []
     for suffix in suffix_array:
         trie_array_suffix_array = []

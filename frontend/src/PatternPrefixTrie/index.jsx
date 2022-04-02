@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { Viewer, Worker } from '@react-pdf-viewer/core';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import BruteForceVisual from '../BruteForceVisual';
+import PatternPrefixTrieGraph from '../PatternPrefixTrieGraph';
 
 import pdfFile from '../pdf/Chapter_9.pdf';
 
-function BruteForce() {
+function PatternPrefixTrie() {
   const [genome, setGenome] = useState('');
-  const [pattern, setPattern] = useState('');
+  const [patternList, setPatternList] = useState('');
   const [showGraph, setShowGraph] = useState(false);
   const [defaultPdfFile] = useState(pdfFile);
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   const submitForm = () => {
-    if (genome && pattern) {
+    if (genome && patternList) {
       setShowGraph(true);
     }
   };
@@ -52,17 +52,17 @@ function BruteForce() {
             </Grid>
             <Grid item xs={7} textAlign="center" style={{ padding: '5px' }}>
               <TextField
-                id="pattern-label"
-                label="Pattern"
+                id="patternList-label"
+                label="Comma separated patterns"
                 variant="outlined"
                 style={{ backgroundColor: 'white' }}
-                value={pattern}
-                onChange={(e) => setPattern(e.target.value)}
+                value={patternList}
+                onChange={(e) => setPatternList(e.target.value)}
               />
             </Grid>
             <Grid item xs={7} style={{ padding: '5px' }}>
               <CustomButton variant="contained" onClick={submitForm}>
-                Brute force
+                Create Pattern Prefix Trie
               </CustomButton>
             </Grid>
           </Grid>
@@ -99,10 +99,10 @@ function BruteForce() {
           </Grid>
         </Grid>
       ) : (
-        <BruteForceVisual genome={genome} pattern={pattern} />
+        <PatternPrefixTrieGraph genome={genome} patternList={patternList} />
       )}
     </>
   );
 }
 
-export default BruteForce;
+export default PatternPrefixTrie;

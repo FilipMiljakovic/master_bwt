@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { Viewer, Worker } from '@react-pdf-viewer/core';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import BruteForceVisual from '../BruteForceVisual';
+import SuffixTrieCompressedGraph from '../SuffixTrieCompressedGraph';
 
 import pdfFile from '../pdf/Chapter_9.pdf';
 
-function BruteForce() {
+function SuffixTrieCompressed() {
   const [genome, setGenome] = useState('');
   const [pattern, setPattern] = useState('');
   const [showGraph, setShowGraph] = useState(false);
@@ -62,7 +62,7 @@ function BruteForce() {
             </Grid>
             <Grid item xs={7} style={{ padding: '5px' }}>
               <CustomButton variant="contained" onClick={submitForm}>
-                Brute force
+                Create Compressed Suffix Trie
               </CustomButton>
             </Grid>
           </Grid>
@@ -99,10 +99,10 @@ function BruteForce() {
           </Grid>
         </Grid>
       ) : (
-        <BruteForceVisual genome={genome} pattern={pattern} />
+        <SuffixTrieCompressedGraph genome={genome} pattern={pattern} />
       )}
     </>
   );
 }
 
-export default BruteForce;
+export default SuffixTrieCompressed;
