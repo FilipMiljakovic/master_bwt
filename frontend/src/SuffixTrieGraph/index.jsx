@@ -94,6 +94,7 @@ function SuffixTree({ genome, pattern }) {
   // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
   if (data && k < 1) {
     const suffixTrie = data.trie;
+    // Ova funkcija vraca indekse
     doesTrieContains(pattern, suffixTrie);
     k += 1;
   }
@@ -163,7 +164,7 @@ function SuffixTree({ genome, pattern }) {
         }
 
         setIndexes({ i, j: j + 1 });
-      }, 600);
+      }, 100);
     }
     return () => {
       clearTimeout(timeout);
@@ -214,8 +215,9 @@ function SuffixTree({ genome, pattern }) {
   }, [elements]);
 
   const renderedOutput = suffixArray
-    ? suffixArray.map((item) => (
-        <Grid container>
+    ? suffixArray.map((item, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Grid container key={index}>
           <Grid item xs={10}>
             <div style={{ color: '#00FFFF', padding: '6px', float: 'left' }}>
               {item.charAt(item.length - 1) === '$' ? item : item.substring(0, item.length - 1)}

@@ -67,7 +67,7 @@ function BruteForce() {
             </Grid>
           </Grid>
           <Grid
-            item
+            container
             spacing={2}
             style={{
               borderRadius: '25px',

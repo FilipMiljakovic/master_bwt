@@ -52,31 +52,35 @@ export const defaults = {
   stop() {}, // on layoutstop
 };
 
-function findAllIndexesOfGenomeMatching(trie, source, genomeMatchingIndexes) {
-  if (trie[source] && Object.keys(trie[source]).length === 0) {
-    genomeMatchingIndexes.push(source);
-  }
-  Object.values(trie[source]).forEach((c) => {
-    findAllIndexesOfGenomeMatching(trie, c, genomeMatchingIndexes);
-  });
-}
-
-// TODO: This should be used to find matching index
-function doesTrieContains(genome, trie) {
+function findPreffixTriePatternMatching(genome, trie) {
   let source = 'root';
-  const genomeMatchingIndexes = [];
   for (let i = 0; i < genome.length; i += 1) {
     const c = genome.charAt(i);
     if (!(c in trie[source])) {
-      // TODO: oboj u crveno sve cvorove u trie[source]
       return false;
     }
     // else {
     //   // TODO: oboj tekuci cvor u zeleno
     // }
     source = trie[source][c];
+    if ('$' in trie[source]) {
+      return trie[source].$;
+    }
   }
-  findAllIndexesOfGenomeMatching(trie, source, genomeMatchingIndexes);
+  return false;
+}
+
+// TODO: This should be used to find matching index
+function doesTrieContains(genome, trie) {
+  let genomeCopy = genome;
+  const genomeMatchingIndexes = [];
+  while (genome.length > 0) {
+    const index = findPreffixTriePatternMatching(genomeCopy, trie);
+    if (index !== false) {
+      genomeMatchingIndexes.push(index);
+    }
+    genomeCopy = genomeCopy.substring(1);
+  }
   console.log(genomeMatchingIndexes);
   return genomeMatchingIndexes;
 }
@@ -94,6 +98,7 @@ function PatternPrefixTrie({ genome, patternList }) {
   // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
   if (data && k < 1) {
     const suffixTrie = data.trie;
+    // Ova funkcija vraca indekse
     doesTrieContains(genome, suffixTrie);
     k += 1;
   }
@@ -217,8 +222,10 @@ function PatternPrefixTrie({ genome, patternList }) {
   }, [elements]);
 
   const renderedOutput = suffixArray
-    ? suffixArray.map((item) => (
-        <Grid container>
+    ? suffixArray.map((item, index) => (
+        // TODO: ovde videti sta da stavim za key osim index-a
+        // eslint-disable-next-line react/no-array-index-key
+        <Grid container key={index}>
           <Grid item xs={10}>
             <div style={{ color: '#00FFFF', padding: '6px', float: 'left' }}>
               {item.charAt(item.length - 1) === '$' ? item : item.substring(0, item.length - 1)}
