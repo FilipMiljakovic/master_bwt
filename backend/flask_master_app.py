@@ -25,20 +25,20 @@ def suffix_trie_construction_endpoint():
 		    
     return { 'trie': trie, 'trie_suffix_array': trie_array }
 
-# @app.route('/suffix/compressed/trie/construction', methods=['POST'])
-# def suffix_compressed_trie_construction_endpoint():
-#     genomeString = request.get_json().get("genome")
-#     suffix_array = t.suffix_array_construction(genomeString)
-#     # trie = t.trie_construction_function(suffix_array)
-#     # new_trie = copy.deepcopy(trie)
-#     compressed_trie = t.compress_trie(suffix_array)
-#     trie_array = []
-#     # for suffix in suffix_array:
-#     #     trie_array_suffix_array = []
-#     #     t.makeSuffixTrieArray(suffix, 'root', trie, trie_array_suffix_array)
-#     #     trie_array.append(trie_array_suffix_array)    
+@app.route('/suffix/compressed/trie/construction', methods=['POST'])
+def suffix_compressed_trie_construction_endpoint():
+    genomeString = request.get_json().get("genome")
+    suffix_array = t.suffix_array_construction(genomeString)
+    # trie = t.trie_construction_function(suffix_array)
+    # new_trie = copy.deepcopy(trie)
+    compressed_trie = t.compress_trie(suffix_array)
+    trie_array = []
+    # for suffix in suffix_array:
+    #     trie_array_suffix_array = []
+    #     t.makeSuffixTrieArray(suffix, 'root', trie, trie_array_suffix_array)
+    #     trie_array.append(trie_array_suffix_array)    
 		    
-#     return { 'trie': trie, 'trie_suffix_array': trie_array }
+    return { 'trie': trie, 'trie_suffix_array': trie_array }
 
 @app.route('/pattern/trie/construction', methods=['POST'])
 def pattern_trie_construction_endpoint():

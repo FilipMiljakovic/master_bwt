@@ -52,34 +52,17 @@ export const defaults = {
   stop() {}, // on layoutstop
 };
 
-function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
-  if (trie[source] && Object.keys(trie[source]).length === 0) {
-    patternMatchingIndexes.push(source);
-  }
-  Object.values(trie[source]).forEach((c) => {
-    findAllIndexesOfPatternMatching(trie, c, patternMatchingIndexes);
-  });
-}
+// function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
+//   if (trie[source] && Object.keys(trie[source]).length === 0) {
+//     patternMatchingIndexes.push(source);
+//   }
+//   Object.values(trie[source]).forEach((c) => {
+//     findAllIndexesOfPatternMatching(trie, c, patternMatchingIndexes);
+//   });
+// }
 
-// TODO: This should be used to find matching index
-function doesTrieContains(pattern, trie) {
-  let source = 'root';
-  const patternMatchingIndexes = [];
-  for (let i = 0; i < pattern.length; i += 1) {
-    const c = pattern.charAt(i);
-    if (!(c in trie[source])) {
-      // TODO: oboj u crveno sve cvorove u trie[source]
-      return false;
-    }
-    // else {
-    //   // TODO: oboj tekuci cvor u zeleno
-    // }
-    source = trie[source][c];
-  }
-  findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes);
-  console.log(patternMatchingIndexes);
-  return patternMatchingIndexes;
-}
+// // TODO: This should be used to find matching index
+// function doesTrieContains(pattern, trie) {}
 
 let k = 0;
 function SuffixTree({ genome, pattern }) {
@@ -93,18 +76,84 @@ function SuffixTree({ genome, pattern }) {
 
   // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
   if (data && k < 1) {
-    const suffixTrie = data.trie;
+    // const suffixTrie = data.trie;
     // Ova funkcija vraca indekse
-    doesTrieContains(pattern, suffixTrie);
+    // doesTrieContains(pattern, suffixTrie);
     k += 1;
   }
+
+  useEffect(() => {
+    if (disableButton) {
+      let source = 'root';
+      // const patternMatchingIndexes = [];
+      for (let i = 0; i < pattern.length; i += 1) {
+        const c = pattern.charAt(i);
+        if (!(c in data.trie[source])) {
+          // TODO: oboj u crveno sve cvorove u trie[source]
+          // eslint-disable-next-line no-loop-func
+          const edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
+            return {
+              ...previousValue,
+              [currentValue.data.id]: {
+                ...currentValue,
+              },
+            };
+          }, {});
+          // eslint-disable-next-line no-loop-func
+          Object.keys(data.trie[source]).forEach((item) => {
+            edgesFormated[`${source}-${data.trie[source][item]}`] = {
+              data: {
+                source,
+                target: data.trie[source][item],
+                label: item,
+                id: `${source}-${data.trie[source][item]}`,
+              },
+              classes: 'reallyinactive',
+            };
+          });
+          setElements({
+            ...elements,
+            edges: Object.values(edgesFormated),
+          });
+
+          break;
+        }
+        const edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
+          return {
+            ...previousValue,
+            [currentValue.data.id]: {
+              ...currentValue,
+            },
+          };
+        }, {});
+        edgesFormated[`${source}-${data.trie[source][c]}`] = {
+          data: {
+            source,
+            target: data.trie[source][c],
+            label: c,
+            id: `${source}-${data.trie[source][c]}`,
+          },
+          classes: 'active',
+        };
+        setElements({
+          ...elements,
+          edges: Object.values(edgesFormated),
+        });
+        source = data.trie[source][c];
+      }
+      // findAllIndexesOfPatternMatching(data.trie, source, patternMatchingIndexes);
+      // console.log(patternMatchingIndexes);
+      // return patternMatchingIndexes;
+    }
+  }, [disableButton]);
+
   useEffect(() => {
     const requestOptions = {
       method: 'POST',
       headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
       body: JSON.stringify({ genome }),
     };
-    fetch('http://localhost:5000/suffix/trie/construction', requestOptions)
+    fetch('/suffix/trie/construction', requestOptions)
       .then((response) => response.json())
       .then((res) => setData(res))
       .catch((error) => {

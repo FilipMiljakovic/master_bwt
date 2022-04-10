@@ -101,10 +101,15 @@ function SuffixTrieCompressed({ genome, pattern }) {
   useEffect(() => {
     const requestOptions = {
       method: 'POST',
-      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Request-Method': 'POST',
+        'Access-Control-Request-Headers': 'X-PINGOTHER, Content-Type',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ genome }),
     };
-    fetch('http://localhost:5000/suffix/compressed/trie/construction', requestOptions)
+    fetch('/suffix/compressed/trie/construction', requestOptions)
       .then((response) => response.json())
       .then((res) => setData(res))
       .catch((error) => {

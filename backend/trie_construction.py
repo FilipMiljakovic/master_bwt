@@ -1,5 +1,5 @@
-# from compressedTrie import Trie
-# from compressedTrie import Node
+from compressedTrie import Trie
+from compressedTrie import Node
 
 def add_to_trie(Trie, pattern, number_of_nodes, pattern_id):
     current_node = 'root'
@@ -31,11 +31,11 @@ def trie_construction_function(stringList):
 
     return Trie
 
-# def compress_trie(stringList):
-#     trie = Trie()
-#     for suffix in stringList:
-#         trie.insert(suffix)
-#     trie.print()
+def compress_trie(stringList):
+    trie = Trie()
+    for suffix in stringList:
+        trie.insert(suffix)
+    trie.print()
     # if next_branch == 'root':
     #     for item in trie[node]:
     #         next_node = trie[node][item]

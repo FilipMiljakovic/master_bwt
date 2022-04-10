@@ -18,5 +18,6 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'react/prop-types': 'off',
     'react/jsx-no-useless-fragment': 'off',
+    'react/no-array-index-key': 'off',
   },
 };

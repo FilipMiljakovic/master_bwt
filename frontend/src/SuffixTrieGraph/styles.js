@@ -159,6 +159,12 @@ export const style = [
     },
   },
   {
+    selector: '.reallyinactive',
+    style: {
+      'line-color': 'red',
+    },
+  },
+  {
     selector: '[speed]',
     style: {
       'line-color': (ele) => {
