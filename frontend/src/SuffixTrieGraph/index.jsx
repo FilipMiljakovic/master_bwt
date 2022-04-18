@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -52,17 +53,14 @@ export const defaults = {
   stop() {}, // on layoutstop
 };
 
-// function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
-//   if (trie[source] && Object.keys(trie[source]).length === 0) {
-//     patternMatchingIndexes.push(source);
-//   }
-//   Object.values(trie[source]).forEach((c) => {
-//     findAllIndexesOfPatternMatching(trie, c, patternMatchingIndexes);
-//   });
-// }
-
-// // TODO: This should be used to find matching index
-// function doesTrieContains(pattern, trie) {}
+function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
+  if (trie[source] && Object.keys(trie[source]).length === 0) {
+    patternMatchingIndexes.push(source);
+  }
+  Object.values(trie[source]).forEach((c) => {
+    findAllIndexesOfPatternMatching(trie, c, patternMatchingIndexes);
+  });
+}
 
 let k = 0;
 function SuffixTree({ genome, pattern }) {
@@ -73,6 +71,7 @@ function SuffixTree({ genome, pattern }) {
   const [disableButton, setDisableButton] = useState(false);
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
+  const [matchedIndexes, setMatchedIndexes] = useState([]);
 
   // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
   if (data && k < 1) {
@@ -85,20 +84,21 @@ function SuffixTree({ genome, pattern }) {
   useEffect(() => {
     if (disableButton) {
       let source = 'root';
-      // const patternMatchingIndexes = [];
+      const patternMatchingIndexes = [];
+      let isFound = true;
+      // eslint-disable-next-line no-loop-func
+      const edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
+        return {
+          ...previousValue,
+          [currentValue.data.id]: {
+            ...currentValue,
+            classes: 'inactive',
+          },
+        };
+      }, {});
       for (let i = 0; i < pattern.length; i += 1) {
         const c = pattern.charAt(i);
         if (!(c in data.trie[source])) {
-          // TODO: oboj u crveno sve cvorove u trie[source]
-          // eslint-disable-next-line no-loop-func
-          const edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
-            return {
-              ...previousValue,
-              [currentValue.data.id]: {
-                ...currentValue,
-              },
-            };
-          }, {});
           // eslint-disable-next-line no-loop-func
           Object.keys(data.trie[source]).forEach((item) => {
             edgesFormated[`${source}-${data.trie[source][item]}`] = {
@@ -115,17 +115,9 @@ function SuffixTree({ genome, pattern }) {
             ...elements,
             edges: Object.values(edgesFormated),
           });
-
+          isFound = false;
           break;
         }
-        const edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
-          return {
-            ...previousValue,
-            [currentValue.data.id]: {
-              ...currentValue,
-            },
-          };
-        }, {});
         edgesFormated[`${source}-${data.trie[source][c]}`] = {
           data: {
             source,
@@ -141,16 +133,19 @@ function SuffixTree({ genome, pattern }) {
         });
         source = data.trie[source][c];
       }
-      // findAllIndexesOfPatternMatching(data.trie, source, patternMatchingIndexes);
-      // console.log(patternMatchingIndexes);
-      // return patternMatchingIndexes;
+      if (isFound) {
+        findAllIndexesOfPatternMatching(data.trie, source, patternMatchingIndexes);
+        console.log(patternMatchingIndexes);
+        setMatchedIndexes(patternMatchingIndexes);
+      }
     }
   }, [disableButton]);
 
   useEffect(() => {
     const requestOptions = {
       method: 'POST',
-      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
+      mode: 'cors',
+      headers: { 'Cache-Control': 'no-cache', 'Content-Type': 'application/json' },
       body: JSON.stringify({ genome }),
     };
     fetch('/suffix/trie/construction', requestOptions)
@@ -278,10 +273,21 @@ function SuffixTree({ genome, pattern }) {
         </Grid>
       ))
     : 'Error!!!';
+
+  const indexesMatch = matchedIndexes
+    ? matchedIndexes.map((item, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Grid item textAlign="center" key={index}>
+          <div style={{ color: '#00FFFF', padding: '6px', float: 'left', fontSize: '50px' }}>
+            {index === matchedIndexes.length - 1 ? item : `${item}, `}
+          </div>
+        </Grid>
+      ))
+    : '';
   return (
     <Grid container spacing={2}>
       <Grid item xs={4}>
-        <Box textAlign="center" style={{ marginTop: '20%' }}>
+        <Box textAlign="center" style={{ margin: '15% 0 5% 0' }}>
           <CustomButton
             disabled={disableButton}
             variant="contained"
@@ -289,7 +295,12 @@ function SuffixTree({ genome, pattern }) {
             onClick={() => setIsPlaying(!isPlaying)}
           />
         </Box>
-        <Box style={{ margin: '10%' }}>{renderedOutput}</Box>
+        {disableButton && (
+          <Stack direction="row" spacing={2} style={{ margin: '5% 0 2% 10%' }}>
+            {indexesMatch}
+          </Stack>
+        )}
+        <Box style={{ marginLeft: '10%' }}>{renderedOutput}</Box>
       </Grid>
       <Grid item xs={8}>
         <Box

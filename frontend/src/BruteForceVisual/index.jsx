@@ -80,14 +80,6 @@ function BruteForceVisual({ genome, pattern }) {
       ))
     : 'Error!!!';
 
-  // useEffect(() => {
-  //   indexArray.forEach((element) => {
-  //     // TODO: Hocu da promenim nacin renderovanja ovog renderedOutputGenome.
-  //     // Ali kad se izvrsi ovaj useEffect ne radi se rerender opet, da li ovo treba da bude u state-u?
-  //     renderedOutputGenome = `aca${element}`;
-  //   });
-  // }, [indexArray]);
-
   return (
     <Grid container spacing={2}>
       <Grid

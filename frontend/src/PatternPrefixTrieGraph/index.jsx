@@ -108,17 +108,19 @@ function PatternPrefixTrie({ genome, patternList }) {
   useEffect(() => {
     const requestOptions = {
       method: 'POST',
+      mode: 'cors',
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Request-Method': 'POST',
-        'Access-Control-Request-Headers': 'X-PINGOTHER, Content-Type',
+        'Cache-Control': 'no-cache',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ matching_pattern_list: patternListSeparated }),
     };
     fetch('/pattern/trie/construction', requestOptions)
-      .then((response) => response.json())
-      .then((res) => setData(res))
+      .then((response) => response.ok && response.json())
+      .then((res) => {
+        console.log(res);
+        setData(res);
+      })
       .catch((error) => {
         console.log('Something went wrong!', error);
       });
@@ -245,7 +247,7 @@ function PatternPrefixTrie({ genome, patternList }) {
   return (
     <Grid container spacing={2}>
       <Grid item xs={4}>
-        <Box textAlign="center" style={{ marginTop: '20%' }}>
+        <Box textAlign="center" style={{ margin: '15% 0 5% 0' }}>
           <CustomButton
             disabled={disableButton}
             variant="contained"
@@ -253,7 +255,7 @@ function PatternPrefixTrie({ genome, patternList }) {
             onClick={() => setIsPlaying(!isPlaying)}
           />
         </Box>
-        <Box style={{ margin: '10%' }}>{renderedOutput}</Box>
+        <Box style={{ marginLeft: '10%' }}>{renderedOutput}</Box>
       </Grid>
       <Grid item xs={8}>
         <Box
