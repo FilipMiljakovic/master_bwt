@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { Viewer, Worker } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { styled } from '@mui/material/styles';
@@ -9,14 +7,10 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import BruteForceVisual from '../BruteForceVisual';
 
-import pdfFile from '../pdf/Chapter_9.pdf';
-
 function BruteForce() {
   const [genome, setGenome] = useState('');
   const [pattern, setPattern] = useState('');
   const [showGraph, setShowGraph] = useState(false);
-  const [defaultPdfFile] = useState(pdfFile);
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   const submitForm = () => {
     if (genome && pattern) {
@@ -65,37 +59,6 @@ function BruteForce() {
                 Brute force
               </CustomButton>
             </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={2}
-            style={{
-              borderRadius: '25px',
-              border: '2px solid #00FFFF',
-              padding: '20px',
-              width: '650px',
-              height: '650px',
-              marginTop: '20px',
-              float: 'left',
-            }}
-          >
-            {defaultPdfFile && (
-              <>
-                <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.13.216/build/pdf.worker.min.js">
-                  <Viewer
-                    fileUrl={defaultPdfFile}
-                    plugins={[defaultLayoutPluginInstance]}
-                    style={{ width: '650px', height: '650px' }}
-                    initialPage={4}
-                    theme={{
-                      theme: 'dark',
-                    }}
-                  />
-                </Worker>
-              </>
-            )}
-
-            {!defaultPdfFile && <>No pdf file selected</>}
           </Grid>
         </Grid>
       ) : (

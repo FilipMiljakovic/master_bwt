@@ -13,10 +13,11 @@ import { style } from './styles';
 cytoscape.use(dagre);
 
 const CustomButton = styled(Button)(() => ({
-  width: '50%',
+  width: '30%',
   height: 50,
   backgroundColor: '#00FFFF',
   color: '#191970',
+  margin: '5px',
 }));
 
 export const defaults = {
@@ -287,13 +288,28 @@ function SuffixTree({ genome, pattern }) {
   return (
     <Grid container spacing={2}>
       <Grid item xs={4}>
-        <Box textAlign="center" style={{ margin: '15% 0 5% 0' }}>
+        <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
           <CustomButton
             disabled={disableButton}
             variant="contained"
             startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
             onClick={() => setIsPlaying(!isPlaying)}
           />
+          <CustomButton
+            disabled={!disableButton}
+            variant="contained"
+            onClick={() => {
+              setDisableButton(false);
+              setElements({ nodes: [], edges: [] });
+              setIndexes({ i: 0, j: 0 });
+              setIsPlaying(true);
+              setSuffixArray(['0 ']);
+              setCurrentEdge({});
+              setMatchedIndexes([]);
+            }}
+          >
+            Reset
+          </CustomButton>
         </Box>
         {disableButton && (
           <Stack direction="row" spacing={2} style={{ margin: '5% 0 2% 10%' }}>

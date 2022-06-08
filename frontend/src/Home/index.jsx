@@ -1,15 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-
-import { Viewer, Worker } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-
-import pdfFile from '../pdf/Chapter_9.pdf';
 
 const CustomButton = styled(Button)(() => ({
   width: 300,
@@ -20,9 +15,6 @@ const CustomButton = styled(Button)(() => ({
 }));
 
 function Home() {
-  const [defaultPdfFile] = useState(pdfFile);
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
-
   return (
     <Grid container>
       <Grid
@@ -56,37 +48,6 @@ function Home() {
             BWT
           </CustomButton>
         </Grid>
-      </Grid>
-      <Grid
-        container
-        spacing={2}
-        style={{
-          borderRadius: '25px',
-          border: '2px solid #00FFFF',
-          padding: '20px',
-          width: '650px',
-          height: '650px',
-          marginTop: '20px',
-          float: 'left',
-        }}
-      >
-        {defaultPdfFile && (
-          <>
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.13.216/build/pdf.worker.min.js">
-              <Viewer
-                fileUrl={defaultPdfFile}
-                plugins={[defaultLayoutPluginInstance]}
-                style={{ width: '650px', height: '650px' }}
-                initialPage={4}
-                theme={{
-                  theme: 'dark',
-                }}
-              />
-            </Worker>
-          </>
-        )}
-
-        {!defaultPdfFile && <>No pdf file selected</>}
       </Grid>
     </Grid>
   );

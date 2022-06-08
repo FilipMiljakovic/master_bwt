@@ -6,6 +6,7 @@ import SuffixTrie from './SuffixTrie';
 import BruteForce from './BruteForce';
 import SuffixTrieCompressed from './SuffixTrieCompressed';
 import PatternPrefixTrie from './PatternPrefixTrie';
+import SideBar from './SideBar';
 
 function App() {
   const myStyle = {
@@ -17,6 +18,7 @@ function App() {
   };
   return (
     <div className="App" style={myStyle}>
+      <SideBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/suffixtrie" element={<SuffixTrie />} />
