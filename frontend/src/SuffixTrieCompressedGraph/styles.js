@@ -113,6 +113,7 @@ export const style = [
       shape: 'roundrectangle',
     },
   },
+
   {
     selector: '[label]',
     style: {
@@ -120,6 +121,9 @@ export const style = [
       color: COLORS['#evs-white'],
       'text-valign': 'center',
       'font-family': 'Roboto',
+      'text-rotation': 'autorotate',
+      'text-margin-x': '0px',
+      'text-margin-y': '0px',
     },
   },
   {

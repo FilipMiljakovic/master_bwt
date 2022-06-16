@@ -4,6 +4,7 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import { styled } from '@mui/material/styles';
@@ -12,10 +13,11 @@ import { style } from './styles';
 cytoscape.use(dagre);
 
 const CustomButton = styled(Button)(() => ({
-  width: '50%',
+  width: '30%',
   height: 50,
   backgroundColor: '#00FFFF',
   color: '#191970',
+  margin: '5px',
 }));
 
 export const defaults = {
@@ -52,40 +54,40 @@ export const defaults = {
   stop() {}, // on layoutstop
 };
 
-function findPreffixTriePatternMatching(genome, trie) {
-  let source = 'root';
-  for (let i = 0; i < genome.length; i += 1) {
-    const c = genome.charAt(i);
-    if (!(c in trie[source])) {
-      return false;
-    }
-    // else {
-    //   // TODO: oboj tekuci cvor u zeleno
-    // }
-    source = trie[source][c];
-    if ('$' in trie[source]) {
-      return trie[source].$;
-    }
-  }
-  return false;
-}
+// function findPreffixTriePatternMatching(genome, trie) {
+//   let source = 'root';
+//   for (let i = 0; i < genome.length; i += 1) {
+//     const c = genome.charAt(i);
+//     if (!(c in trie[source])) {
+//       return false;
+//     }
+//     // else {
+//     //   // TODO: oboj tekuci cvor u zeleno
+//     // }
+//     source = trie[source][c];
+//     if ('$' in trie[source]) {
+//       return trie[source].$;
+//     }
+//   }
+//   return false;
+// }
 
 // TODO: This should be used to find matching index
-function doesTrieContains(genome, trie) {
-  let genomeCopy = genome;
-  const genomeMatchingIndexes = [];
-  while (genome.length > 0) {
-    const index = findPreffixTriePatternMatching(genomeCopy, trie);
-    if (index !== false) {
-      genomeMatchingIndexes.push(index);
-    }
-    genomeCopy = genomeCopy.substring(1);
-  }
-  console.log(genomeMatchingIndexes);
-  return genomeMatchingIndexes;
-}
+// function doesTrieContains(genome, trie) {
+//   let genomeCopy = genome;
+//   const genomeMatchingIndexes = [];
+//   while (genome.length > 0) {
+//     const index = findPreffixTriePatternMatching(genomeCopy, trie);
+//     if (index !== false) {
+//       genomeMatchingIndexes.push(index);
+//     }
+//     genomeCopy = genomeCopy.substring(1);
+//   }
+//   console.log(genomeMatchingIndexes);
+//   return genomeMatchingIndexes;
+// }
 
-let k = 0;
+// let k = 0;
 function PatternPrefixTrie({ genome, patternList }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -94,33 +96,35 @@ function PatternPrefixTrie({ genome, patternList }) {
   const [disableButton, setDisableButton] = useState(false);
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
+  const [value, setValue] = useState(100);
 
   // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
-  if (data && k < 1) {
-    const suffixTrie = data.trie;
-    // Ova funkcija vraca indekse
-    doesTrieContains(genome, suffixTrie);
-    k += 1;
-  }
-  const patternListSeparated = patternList.split(',').map((element) => {
+  // if (data && k < 1) {
+  //   const suffixTrie = data.trie;
+  //   // Ova funkcija vraca indekse
+  //   doesTrieContains(genome, suffixTrie);
+  //   k += 1;
+  // }
+  console.log(genome);
+  const matchingPatternList = patternList.split(',').map((element) => {
     return `${element.trim()}$`;
   });
+
   useEffect(() => {
-    const requestOptions = {
+    // const requestOptions = {
+    //   method: 'POST',
+    //   mode: 'cors',
+    //   headers: { 'Cache-Control': 'no-cache', 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ matching_pattern_list: patternListSeparated }),
+    // };
+    // fetch('/pattern/trie/construction', requestOptions);
+    fetch(`http://localhost:8080/pattern/trie/construction`, {
       method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ matching_pattern_list: patternListSeparated }),
-    };
-    fetch('/pattern/trie/construction', requestOptions)
-      .then((response) => response.ok && response.json())
-      .then((res) => {
-        console.log(res);
-        setData(res);
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ matchingPatternList }),
+    })
+      .then((response) => response.json())
+      .then((res) => setData(res))
       .catch((error) => {
         console.log('Something went wrong!', error);
       });
@@ -129,7 +133,7 @@ function PatternPrefixTrie({ genome, patternList }) {
   useEffect(() => {
     let timeout;
     if (data && isPlaying) {
-      const triePatternArray = data.trie_pattern_array;
+      const triePatternArray = data.trieArray;
       timeout = setTimeout(() => {
         const { i, j } = indexes;
 
@@ -178,7 +182,7 @@ function PatternPrefixTrie({ genome, patternList }) {
         }
 
         setIndexes({ i, j: j + 1 });
-      }, 600);
+      }, value);
     }
     return () => {
       clearTimeout(timeout);
@@ -228,6 +232,10 @@ function PatternPrefixTrie({ genome, patternList }) {
     };
   }, [elements]);
 
+  const changeValue = (event, valueToChange) => {
+    setValue(valueToChange);
+  };
+
   const renderedOutput = suffixArray
     ? suffixArray.map((item, index) => (
         // TODO: ovde videti sta da stavim za key osim index-a
@@ -244,15 +252,41 @@ function PatternPrefixTrie({ genome, patternList }) {
         </Grid>
       ))
     : 'Error!!!';
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={4}>
-        <Box textAlign="center" style={{ margin: '15% 0 5% 0' }}>
+        <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
           <CustomButton
             disabled={disableButton}
             variant="contained"
             startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
             onClick={() => setIsPlaying(!isPlaying)}
+          />
+          <CustomButton
+            disabled={!disableButton}
+            variant="contained"
+            onClick={() => {
+              setDisableButton(false);
+              setElements({ nodes: [], edges: [] });
+              setIndexes({ i: 0, j: 0 });
+              setIsPlaying(true);
+              setSuffixArray(['0 ']);
+              setCurrentEdge({});
+            }}
+          >
+            Reset
+          </CustomButton>
+          <Slider
+            defaultValue={50}
+            aria-label="Iteration speed"
+            valueLabelDisplay="auto"
+            value={value}
+            onChange={changeValue}
+            min={100}
+            max={1000}
+            step={100}
+            style={{ width: '50%', marginTop: '20px' }}
           />
         </Box>
         <Box style={{ marginLeft: '10%' }}>{renderedOutput}</Box>

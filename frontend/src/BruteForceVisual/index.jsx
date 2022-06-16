@@ -118,11 +118,7 @@ function BruteForceVisual({ genome, pattern }) {
 
   return (
     <Grid container spacing={2}>
-      <Grid
-        item
-        xs={10}
-        style={{ margin: '10% 10% 10% 0', paddingLeft: '5%', color: '#FFFFFF', fontSize: '50px' }}
-      >
+      <Grid item xs={10} style={{ margin: '10% 10% 10% 0', paddingLeft: '5%', color: '#FFFFFF' }}>
         <CustomButton
           disabled={disableButton}
           variant="contained"
@@ -160,10 +156,10 @@ function BruteForceVisual({ genome, pattern }) {
         >
           Reset
         </CustomButton>
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} style={{ fontSize: '30px' }}>
           {renderedOutputGenome}
         </Stack>
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} style={{ fontSize: '30px' }}>
           {renderedOutputPattern}
         </Stack>
         <Stack direction="row" spacing={2} style={{ paddingTop: '2rem' }}>

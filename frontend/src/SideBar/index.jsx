@@ -66,11 +66,6 @@ const listItems = [
     listText: 'BWT',
     link: '/bwt',
   },
-  {
-    listIcon: <ChevronRightIcon />,
-    listText: 'BWT with misstake',
-    link: '/bwt',
-  },
 ];
 
 export default function SideBar() {

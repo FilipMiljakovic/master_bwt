@@ -2,6 +2,20 @@
   font-family: sans-serif;
   display: flex;
   flex-direction: column;
+  height: 100%;
+}
+
+html { 
+  background: url(img/DNK.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 100%;
+}
+
+#root, body {
+  height: 100%;
 }
 
 .box {

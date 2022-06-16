@@ -5,6 +5,7 @@ import dagre from 'cytoscape-dagre';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import { styled } from '@mui/material/styles';
@@ -63,7 +64,7 @@ function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
   });
 }
 
-let k = 0;
+// let k = 0;
 function SuffixTree({ genome, pattern }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -73,14 +74,15 @@ function SuffixTree({ genome, pattern }) {
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
   const [matchedIndexes, setMatchedIndexes] = useState([]);
+  const [value, setValue] = useState(100);
 
-  // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
-  if (data && k < 1) {
-    // const suffixTrie = data.trie;
-    // Ova funkcija vraca indekse
-    // doesTrieContains(pattern, suffixTrie);
-    k += 1;
-  }
+  // // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
+  // if (data && k < 1) {
+  //   // const suffixTrie = data.trie;
+  //   // Ova funkcija vraca indekse
+  //   // doesTrieContains(pattern, suffixTrie);
+  //   k += 1;
+  // }
 
   useEffect(() => {
     if (disableButton) {
@@ -143,13 +145,17 @@ function SuffixTree({ genome, pattern }) {
   }, [disableButton]);
 
   useEffect(() => {
-    const requestOptions = {
+    // const requestOptions = {
+    //   method: 'POST',
+    //   mode: 'cors',
+    //   headers: { 'Cache-Control': 'no-cache', 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ genome }),
+    // };
+    fetch(`http://localhost:8080/suffix/trie/construction`, {
       method: 'POST',
-      mode: 'cors',
-      headers: { 'Cache-Control': 'no-cache', 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ genome }),
-    };
-    fetch('/suffix/trie/construction', requestOptions)
+    })
       .then((response) => response.json())
       .then((res) => setData(res))
       .catch((error) => {
@@ -160,7 +166,7 @@ function SuffixTree({ genome, pattern }) {
   useEffect(() => {
     let timeout;
     if (data && isPlaying) {
-      const trieSuffixArray = data.trie_suffix_array;
+      const trieSuffixArray = data.trieArray;
       timeout = setTimeout(() => {
         const { i, j } = indexes;
 
@@ -209,7 +215,7 @@ function SuffixTree({ genome, pattern }) {
         }
 
         setIndexes({ i, j: j + 1 });
-      }, 100);
+      }, value);
     }
     return () => {
       clearTimeout(timeout);
@@ -259,6 +265,10 @@ function SuffixTree({ genome, pattern }) {
     };
   }, [elements]);
 
+  const changeValue = (event, valueToChange) => {
+    setValue(valueToChange);
+  };
+
   const renderedOutput = suffixArray
     ? suffixArray.map((item, index) => (
         // eslint-disable-next-line react/no-array-index-key
@@ -276,10 +286,10 @@ function SuffixTree({ genome, pattern }) {
     : 'Error!!!';
 
   const indexesMatch = matchedIndexes
-    ? matchedIndexes.map((item, index) => (
+    ? matchedIndexes.sort().map((item, index) => (
         // eslint-disable-next-line react/no-array-index-key
-        <Grid item textAlign="center" key={index}>
-          <div style={{ color: '#00FFFF', padding: '6px', float: 'left', fontSize: '50px' }}>
+        <Grid item textAlign="center" key={index} style={{ marginLeft: '10px' }}>
+          <div style={{ color: '#00FFFF', float: 'left', fontSize: '30px' }}>
             {index === matchedIndexes.length - 1 ? item : `${item}, `}
           </div>
         </Grid>
@@ -310,10 +320,21 @@ function SuffixTree({ genome, pattern }) {
           >
             Reset
           </CustomButton>
+          <Slider
+            defaultValue={50}
+            aria-label="Iteration speed"
+            valueLabelDisplay="auto"
+            value={value}
+            onChange={changeValue}
+            min={100}
+            max={1000}
+            step={100}
+            style={{ width: '50%', marginTop: '20px' }}
+          />
         </Box>
         {disableButton && (
-          <Stack direction="row" spacing={2} style={{ margin: '5% 0 2% 10%' }}>
-            {indexesMatch}
+          <Stack direction="row" spacing={2} style={{ margin: '5% 0 2% 10%', color: '#00FFFF' }}>
+            <div style={{ margin: '6px' }}>Indexses found:</div> {indexesMatch}
           </Stack>
         )}
         <Box style={{ marginLeft: '10%' }}>{renderedOutput}</Box>

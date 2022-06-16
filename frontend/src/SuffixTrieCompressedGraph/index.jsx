@@ -4,6 +4,7 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import { styled } from '@mui/material/styles';
@@ -12,17 +13,18 @@ import { style } from './styles';
 cytoscape.use(dagre);
 
 const CustomButton = styled(Button)(() => ({
-  width: '50%',
+  width: '30%',
   height: 50,
   backgroundColor: '#00FFFF',
   color: '#191970',
+  margin: '5px',
 }));
 
 export const defaults = {
   // dagre algo options, uses default value on undefined
-  nodeSep: 10, // the separation between adjacent nodes in the same rank
+  nodeSep: 50, // the separation between adjacent nodes in the same rank
   edgeSep: undefined, // the separation between adjacent edges in the same rank
-  rankSep: 40, // the separation between each rank in the layout
+  rankSep: 100, // the separation between each rank in the layout
   rankDir: 'TB', // 'TB' for top to bottom flow, 'LR' for left to right,
   ranker: 'network-simplex', // Type of algorithm to assign a rank to each node in the input graph. Possible values: 'network-simplex', 'tight-tree' or 'longest-path'
   // 'network-simplex', 'tight-tree' or 'longest-path'
@@ -52,36 +54,36 @@ export const defaults = {
   stop() {}, // on layoutstop
 };
 
-function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
-  if (trie[source] && Object.keys(trie[source]).length === 0) {
-    patternMatchingIndexes.push(source);
-  }
-  Object.values(trie[source]).forEach((c) => {
-    findAllIndexesOfPatternMatching(trie, c, patternMatchingIndexes);
-  });
-}
+// function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
+//   if (trie[source] && Object.keys(trie[source]).length === 0) {
+//     patternMatchingIndexes.push(source);
+//   }
+//   Object.values(trie[source]).forEach((c) => {
+//     findAllIndexesOfPatternMatching(trie, c, patternMatchingIndexes);
+//   });
+// }
 
-// TODO: This should be used to find matching index
-function doesTrieContains(pattern, trie) {
-  let source = 'root';
-  const patternMatchingIndexes = [];
-  for (let i = 0; i < pattern.length; i += 1) {
-    const c = pattern.charAt(i);
-    if (!(c in trie[source])) {
-      // TODO: oboj u crveno sve cvorove u trie[source]
-      return false;
-    }
-    // else {
-    //   // TODO: oboj tekuci cvor u zeleno
-    // }
-    source = trie[source][c];
-  }
-  findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes);
-  console.log(patternMatchingIndexes);
-  return patternMatchingIndexes;
-}
+// // TODO: This should be used to find matching index
+// function doesTrieContains(pattern, trie) {
+//   let source = 'root';
+//   const patternMatchingIndexes = [];
+//   for (let i = 0; i < pattern.length; i += 1) {
+//     const c = pattern.charAt(i);
+//     if (!(c in trie[source])) {
+//       // TODO: oboj u crveno sve cvorove u trie[source]
+//       return false;
+//     }
+//     // else {
+//     //   // TODO: oboj tekuci cvor u zeleno
+//     // }
+//     source = trie[source][c];
+//   }
+//   findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes);
+//   console.log(patternMatchingIndexes);
+//   return patternMatchingIndexes;
+// }
 
-let k = 0;
+// let k = 0;
 function SuffixTrieCompressed({ genome, pattern }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -90,26 +92,25 @@ function SuffixTrieCompressed({ genome, pattern }) {
   const [disableButton, setDisableButton] = useState(false);
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
+  const [value, setValue] = useState(400);
 
   // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
-  if (data && k < 1) {
-    const suffixTrie = data.trie;
-    // Ova funkcija treba da vrati indekse - mora da se implementira prvo stablo
-    doesTrieContains(pattern, suffixTrie);
-    k += 1;
-  }
+  // if (data && k < 1) {
+  //   const suffixTrie = data.trie;
+  //   // Ova funkcija treba da vrati indekse - mora da se implementira prvo stablo
+  //   doesTrieContains(pattern, suffixTrie);
+  //   k += 1;
+  // }
+  console.log(pattern);
   useEffect(() => {
     const requestOptions = {
       method: 'POST',
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Request-Method': 'POST',
-        'Access-Control-Request-Headers': 'X-PINGOTHER, Content-Type',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ genome }),
     };
-    fetch('/suffix/compressed/trie/construction', requestOptions)
+    fetch('http://localhost:8080/suffix/compressed/trie/construction', requestOptions)
       .then((response) => response.json())
       .then((res) => setData(res))
       .catch((error) => {
@@ -120,7 +121,7 @@ function SuffixTrieCompressed({ genome, pattern }) {
   useEffect(() => {
     let timeout;
     if (data && isPlaying) {
-      const trieSuffixArray = data.trie_suffix_array;
+      const trieSuffixArray = data.trieArray;
       timeout = setTimeout(() => {
         const { i, j } = indexes;
 
@@ -169,7 +170,7 @@ function SuffixTrieCompressed({ genome, pattern }) {
         }
 
         setIndexes({ i, j: j + 1 });
-      }, 600);
+      }, value);
     }
     return () => {
       clearTimeout(timeout);
@@ -219,6 +220,10 @@ function SuffixTrieCompressed({ genome, pattern }) {
     };
   }, [elements]);
 
+  const changeValue = (event, valueToChange) => {
+    setValue(valueToChange);
+  };
+
   const renderedOutput = suffixArray
     ? suffixArray.map((item, index) => (
         // eslint-disable-next-line react/no-array-index-key
@@ -237,15 +242,40 @@ function SuffixTrieCompressed({ genome, pattern }) {
   return (
     <Grid container spacing={2}>
       <Grid item xs={4}>
-        <Box textAlign="center" style={{ marginTop: '20%' }}>
+        <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
           <CustomButton
             disabled={disableButton}
             variant="contained"
             startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
             onClick={() => setIsPlaying(!isPlaying)}
           />
+          <CustomButton
+            disabled={!disableButton}
+            variant="contained"
+            onClick={() => {
+              setDisableButton(false);
+              setElements({ nodes: [], edges: [] });
+              setIndexes({ i: 0, j: 0 });
+              setIsPlaying(true);
+              setSuffixArray(['0 ']);
+              setCurrentEdge({});
+            }}
+          >
+            Reset
+          </CustomButton>
+          <Slider
+            defaultValue={50}
+            aria-label="Iteration speed"
+            valueLabelDisplay="auto"
+            value={value}
+            onChange={changeValue}
+            min={100}
+            max={1000}
+            step={100}
+            style={{ width: '50%', marginTop: '20px' }}
+          />
         </Box>
-        <Box style={{ margin: '10%' }}>{renderedOutput}</Box>
+        <Box style={{ marginLeft: '10%' }}>{renderedOutput}</Box>
       </Grid>
       <Grid item xs={8}>
         <Box

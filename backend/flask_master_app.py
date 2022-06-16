@@ -7,10 +7,11 @@ from subprocess import run
 import trie_construction as t
 import suffixArray as sa
 import suffixArrayMultiple as sam
+import compressedTrie as ct
 import BWT as bwt
 
 app = Flask(__name__)
-cors = CORS(app)
+CORS(app)
 
 @app.route('/suffix/trie/construction', methods=['POST'])
 def suffix_trie_construction_endpoint():
@@ -30,15 +31,18 @@ def suffix_compressed_trie_construction_endpoint():
     genomeString = request.get_json().get("genome")
     suffix_array = t.suffix_array_construction(genomeString)
     # trie = t.trie_construction_function(suffix_array)
+    trie = ct.Trie()
     # new_trie = copy.deepcopy(trie)
-    compressed_trie = t.compress_trie(suffix_array)
-    trie_array = []
-    # for suffix in suffix_array:
-    #     trie_array_suffix_array = []
-    #     t.makeSuffixTrieArray(suffix, 'root', trie, trie_array_suffix_array)
-    #     trie_array.append(trie_array_suffix_array)    
-		    
-    return { 'trie': trie, 'trie_suffix_array': trie_array }
+    # compressed_trie = t.compress_trie(suffix_array)
+    # trie_array = []
+    for suffix in suffix_array:
+        trie.insert(suffix)
+        # trie.print()
+        # trie_array_suffix_array = []
+        # t.makeSuffixTrieArray(suffix, 'root', trie, trie_array_suffix_array)
+        # trie_array.append(trie_array_suffix_array)    
+		#    , 'trie_suffix_array': trie_array  
+    return { 'trie': trie }
 
 @app.route('/pattern/trie/construction', methods=['POST'])
 def pattern_trie_construction_endpoint():
