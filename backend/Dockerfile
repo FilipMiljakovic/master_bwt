@@ -1,18 +1,8 @@
-FROM continuumio/miniconda3:4.9.2
+FROM openjdk:11-jre-slim
 
-ENV FLASK_APP=flask_master_app.py
+ENV SERVER_PORT=5555
+EXPOSE 5555
 
-# Flask app
-COPY flask_master_app.py .
-COPY trie_construction.py .
-COPY suffixArray.py .
-COPY suffixArrayMultiple.py .
-COPY BWT.py .
-# Python Libraries
-COPY requirements.txt .
-
-RUN pip install -r requirements.txt --ignore-installed ruamel.yaml
-
-EXPOSE 5000
-
-CMD ["flask", "run", "--host=0.0.0.0"]
+VOLUME /tmp
+ADD ./target/bwt-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
