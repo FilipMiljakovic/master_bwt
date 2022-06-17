@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Slider from '@mui/material/Slider';
+import Box from '@mui/material/Box';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import { styled } from '@mui/material/styles';
@@ -48,6 +50,7 @@ function BruteForceVisual({ genome, pattern }) {
   const [renderedOutputResults, setRenderedOutputResults] = useState([]);
   const [isPlaying, setIsPlaying] = useState(true);
   const [disableButton, setDisableButton] = useState(false);
+  const [value, setValue] = useState(400);
   const [renderedOutputPattern, setRenderedOutputPattern] = useState(
     pattern
       ? [...pattern].map((item, index) => (
@@ -100,7 +103,7 @@ function BruteForceVisual({ genome, pattern }) {
             setDisableButton(true);
           }
         }
-      }, 800);
+      }, value);
     }
     return () => {
       clearTimeout(timeout);
@@ -116,65 +119,84 @@ function BruteForceVisual({ genome, pattern }) {
     // setRenderedOutputPattern(renderPattern(i, pattern));
   }, [moveIndexes]);
 
+  const changeValue = (event, valueToChange) => {
+    setValue(valueToChange);
+  };
+
   return (
     <Grid container spacing={2}>
-      <Grid item xs={10} style={{ margin: '10% 10% 10% 0', paddingLeft: '5%', color: '#FFFFFF' }}>
-        <CustomButton
-          disabled={disableButton}
-          variant="contained"
-          startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-          onClick={() => setIsPlaying(!isPlaying)}
-        />
-        <CustomButton
-          disabled={!disableButton}
-          variant="contained"
-          onClick={() => {
-            setDisableButton(false);
-            setRenderedOutputResults([]);
-            setIndexes({ i: 0, j: 0 });
-            setMoveIndexes({ i: 0, j: 0 });
-            setIsPlaying(true);
-            setRenderedOutputPattern(
-              pattern
-                ? [...pattern].map((item, index) => (
-                    <Grid item textAlign="center" key={index}>
-                      <div>{item}</div>
-                    </Grid>
-                  ))
-                : 'Error!!!',
-            );
-            setRenderedOutputGenome(
-              genome
-                ? [...genome].map((item, index) => (
-                    <Grid item textAlign="center" key={index}>
-                      <div>{item}</div>
-                    </Grid>
-                  ))
-                : 'Error!!!',
-            );
-          }}
-        >
-          Reset
-        </CustomButton>
-        <Stack direction="row" spacing={2} style={{ fontSize: '30px' }}>
-          {renderedOutputGenome}
-        </Stack>
-        <Stack direction="row" spacing={2} style={{ fontSize: '30px' }}>
-          {renderedOutputPattern}
-        </Stack>
-        <Stack direction="row" spacing={2} style={{ paddingTop: '2rem' }}>
-          Indexses found:
-          {renderedOutputResults.slice(0, -1).map((listItem, ind) => (
-            <Grid item textAlign="center" key={ind}>
-              <div> {listItem},</div>
-            </Grid>
-          ))}
-          {renderedOutputResults.slice(-1).map((listItem, ind) => (
-            <Grid item textAlign="center" key={ind}>
-              <div> {listItem} </div>
-            </Grid>
-          ))}
-        </Stack>
+      <Grid item xs={4}>
+        <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
+          <CustomButton
+            disabled={disableButton}
+            variant="contained"
+            startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+            onClick={() => setIsPlaying(!isPlaying)}
+          />
+          <CustomButton
+            disabled={!disableButton}
+            variant="contained"
+            onClick={() => {
+              setDisableButton(false);
+              setRenderedOutputResults([]);
+              setIndexes({ i: 0, j: 0 });
+              setMoveIndexes({ i: 0, j: 0 });
+              setIsPlaying(true);
+              setRenderedOutputPattern(
+                pattern
+                  ? [...pattern].map((item, index) => (
+                      <Grid item textAlign="center" key={index}>
+                        <div>{item}</div>
+                      </Grid>
+                    ))
+                  : 'Error!!!',
+              );
+              setRenderedOutputGenome(
+                genome
+                  ? [...genome].map((item, index) => (
+                      <Grid item textAlign="center" key={index}>
+                        <div>{item}</div>
+                      </Grid>
+                    ))
+                  : 'Error!!!',
+              );
+            }}
+          >
+            Reset
+          </CustomButton>
+          <Slider
+            defaultValue={50}
+            aria-label="Iteration speed"
+            valueLabelDisplay="auto"
+            value={value}
+            onChange={changeValue}
+            min={400}
+            max={1000}
+            step={100}
+            style={{ width: '50%', marginTop: '20px' }}
+          />
+        </Box>
+        <Box style={{ margin: '0 10% 10% 10%', color: '#FFFFFF' }}>
+          <Stack direction="row" spacing={2} style={{ fontSize: '30px' }}>
+            {renderedOutputGenome}
+          </Stack>
+          <Stack direction="row" spacing={2} style={{ fontSize: '30px' }}>
+            {renderedOutputPattern}
+          </Stack>
+          <Stack direction="row" spacing={2} style={{ paddingTop: '2rem' }}>
+            Indexses found:
+            {renderedOutputResults.slice(0, -1).map((listItem, ind) => (
+              <Grid item textAlign="center" key={ind}>
+                <div> {listItem},</div>
+              </Grid>
+            ))}
+            {renderedOutputResults.slice(-1).map((listItem, ind) => (
+              <Grid item textAlign="center" key={ind}>
+                <div> {listItem} </div>
+              </Grid>
+            ))}
+          </Stack>
+        </Box>
       </Grid>
     </Grid>
   );
