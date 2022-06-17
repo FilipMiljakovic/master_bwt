@@ -118,7 +118,7 @@ function PatternPrefixTrie({ genome, patternList }) {
     //   body: JSON.stringify({ matching_pattern_list: patternListSeparated }),
     // };
     // fetch('/pattern/trie/construction', requestOptions);
-    fetch(`http://localhost:8080/pattern/trie/construction`, {
+    fetch(`http://localhost:5555/pattern/trie/construction`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ matchingPatternList }),

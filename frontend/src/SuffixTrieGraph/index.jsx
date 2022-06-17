@@ -151,7 +151,7 @@ function SuffixTree({ genome, pattern }) {
     //   headers: { 'Cache-Control': 'no-cache', 'Content-Type': 'application/json' },
     //   body: JSON.stringify({ genome }),
     // };
-    fetch(`http://localhost:8080/suffix/trie/construction`, {
+    fetch(`http://localhost:5555/suffix/trie/construction`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ genome }),

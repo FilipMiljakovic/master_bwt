@@ -110,7 +110,7 @@ function SuffixTrieCompressed({ genome, pattern }) {
       },
       body: JSON.stringify({ genome }),
     };
-    fetch('http://localhost:8080/suffix/compressed/trie/construction', requestOptions)
+    fetch('http://localhost:5555/suffix/compressed/trie/construction', requestOptions)
       .then((response) => response.json())
       .then((res) => setData(res))
       .catch((error) => {
