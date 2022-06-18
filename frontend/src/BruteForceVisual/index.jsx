@@ -45,7 +45,6 @@ function changeIElement(renderedOutput, i, valueString, colorHash) {
 //   );
 //   return renderedOutputPattern;
 // }
-
 function BruteForceVisual({ genome, pattern }) {
   const [renderedOutputResults, setRenderedOutputResults] = useState([]);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -77,31 +76,31 @@ function BruteForceVisual({ genome, pattern }) {
     if (isPlaying) {
       timeout = setTimeout(() => {
         const { i, j } = indexes;
-        if (genome.charAt(i) !== pattern.charAt(j)) {
+
+        if (i < genome.length && genome.charAt(i) !== pattern.charAt(j)) {
           setRenderedOutputGenome(changeIElement(renderedOutputGenome, i, genome, '#FF0000'));
           setRenderedOutputPattern(changeIElement(renderedOutputPattern, j, pattern, '#FF0000'));
-          if (i < genome.length - 1) {
+          if (i < genome.length) {
             // Pomeri pattern za jedan
             setIndexes({ i: i + 1, j: 0 });
           } else {
             setDisableButton(true);
           }
           setMoveIndexes({ i, j });
-        } else {
+        } else if (i < genome.length) {
           setRenderedOutputGenome(changeIElement(renderedOutputGenome, i, genome, '#00FFFF'));
           setRenderedOutputPattern(changeIElement(renderedOutputPattern, j, pattern, '#00FFFF'));
-          if (i < genome.length - 1) {
-            if (j === pattern.length - 1) {
-              // Pomeri pattern za jedan
-              setRenderedOutputResults([...renderedOutputResults, i - j]);
-              setIndexes({ i: i - j + 1, j: 0 });
-              setMoveIndexes({ i, j });
-            } else {
-              setIndexes({ i: i + 1, j: j + 1 });
-            }
+
+          if (j === pattern.length - 1) {
+            setRenderedOutputResults([...renderedOutputResults, i - j]);
+            setIndexes({ i: i - j + 1, j: 0 });
+            setMoveIndexes({ i, j });
           } else {
-            setDisableButton(true);
+            setIndexes({ i: i + 1, j: j + 1 });
+            setMoveIndexes({ i, j });
           }
+        } else {
+          setDisableButton(true);
         }
       }, value);
     }

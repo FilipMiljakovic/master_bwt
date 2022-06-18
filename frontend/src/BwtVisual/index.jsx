@@ -23,11 +23,13 @@ function BwtVisual({ genome, pattern, mistake }) {
   const [cyclicRotationList2, setCyclicRotationList2] = useState([]);
   const [isPlaying, setIsPlaying] = useState(true);
   const [disableButton, setDisableButton] = useState(false);
+  const [resetButton, setResetButton] = useState(false);
   const [inverseMatrix, setInverseMatrix] = useState([]);
   const [inverseMatrix2, setInverseMatrix2] = useState([]);
   const [bwtString, setBwtString] = useState('');
   const [bwtLength, setBwtLength] = useState(-1);
-  const [value, setValue] = useState(100);
+  const [value, setValue] = useState(500);
+  const [firstLast, setFirstLast] = useState([]);
 
   console.log(pattern);
   console.log(mistake);
@@ -47,7 +49,7 @@ function BwtVisual({ genome, pattern, mistake }) {
 
     setCyclicRotationList1(cyclicRotationListTmp);
     setCyclicRotationList2(cyclicRotationListTmpSort.sort());
-  }, []);
+  }, [resetButton]);
 
   useEffect(() => {
     setBwtString(cyclicRotationList2.map((listItem) => listItem.substring(listItem.length - 1)));
@@ -75,16 +77,43 @@ function BwtVisual({ genome, pattern, mistake }) {
           k = 0;
         }
       }, value);
-      // Vidi kada da disablujes dugme
     }
     return () => {
       clearTimeout(timeout);
     };
   }, [inverseMatrix, bwtLength, isPlaying]);
 
+  // private static int countOccurences(
+  //   String someString, char searchedChar, int index) {
+  //     if (index >= someString.length()) {
+  //         return 0;
+  //     }
+
+  //     int count = someString.charAt(index) == searchedChar ? 1 : 0;
+  //     return count + countOccurences(
+  //       someString, searchedChar, index + 1);
+  // }
+
+  // function findOccurences(array, character, index) {
+  //   if (index >= array.length) {
+  //     return 0;
+  //   }
+  //   const count = array[index] === character ? 1 : 0;
+  //   return count + findOccurences(array, character, index + 1);
+  // }
+
+  // function addIndexesToBwt(matrix) {
+  //   let firstColumn = matrix[0];
+  //   let lastColumn = matrix[-1];
+
+  //   return matrix;
+  // }
+
   useEffect(() => {
     if (bwtLength !== 0 && bwtLength === bwtString.length + 1) {
       setDisableButton(true);
+      setFirstLast();
+      // setFirstLast(addIndexesToBwt(inverseMatrix));
     }
   }, [bwtLength]);
 
@@ -112,15 +141,6 @@ function BwtVisual({ genome, pattern, mistake }) {
         </Grid>
       ));
 
-  // {inverseMatrix.map((listItem, index) => (
-  //   <Grid container key={index}>
-  //     <Grid item xs={10}>
-  //       <div style={{ padding: '6px' }}>{listItem}</div>
-  //       {/* // color: '#00FFFF', */}
-  //     </Grid>
-  //   </Grid>
-  // ))}
-
   return (
     <Grid container spacing={2} style={{ padding: '0% 10% 0% 10%', color: '#FFFFFF' }}>
       <Grid container style={{ margin: '5% 0%', fontSize: '30px' }}>
@@ -136,7 +156,6 @@ function BwtVisual({ genome, pattern, mistake }) {
             <Grid container key={index}>
               <Grid item xs={10}>
                 <div style={{ padding: '6px' }}>{listItem}</div>
-                {/* // color: '#00FFFF', */}
               </Grid>
             </Grid>
           ))}
@@ -146,7 +165,6 @@ function BwtVisual({ genome, pattern, mistake }) {
             float: 'left',
             margin: 'auto 10% auto 10%',
             fontSize: '100px',
-            // color: '#00FFFF',
           }}
         />
         <Grid style={{ float: 'left' }}>
@@ -154,7 +172,6 @@ function BwtVisual({ genome, pattern, mistake }) {
             <Grid container key={index}>
               <Grid item xs={10}>
                 <div style={{ padding: '6px' }}>{listItem}</div>
-                {/* // color: '#00FFFF', */}
               </Grid>
             </Grid>
           ))}
@@ -164,7 +181,6 @@ function BwtVisual({ genome, pattern, mistake }) {
         Bwt:
         <Grid style={{ marginLeft: '20px' }}>{bwtString}</Grid>
       </Grid>
-      {/* // Sta kk, namesti da su dugmici iznad a ispod prikaz ovog sranje */}
       <Box textAlign="center" style={{ margin: '3% auto 3% auto' }}>
         <Grid style={{ paddingBottom: '10%', fontSize: '30px' }}>Inverzna BWT transformacija</Grid>
         <CustomButton
@@ -182,7 +198,9 @@ function BwtVisual({ genome, pattern, mistake }) {
             setIsPlaying(true);
             setInverseMatrix([]);
             setInverseMatrix2([]);
-            setBwtLength(-1);
+            setBwtLength(0);
+            setResetButton(!resetButton);
+            k = 0;
           }}
         >
           Reset
@@ -193,7 +211,7 @@ function BwtVisual({ genome, pattern, mistake }) {
           valueLabelDisplay="auto"
           value={value}
           onChange={changeValue}
-          min={100}
+          min={500}
           max={1000}
           step={100}
           style={{ width: '50%', marginTop: '20px' }}
@@ -205,7 +223,6 @@ function BwtVisual({ genome, pattern, mistake }) {
             <Grid container key={index}>
               <Grid item xs={10}>
                 <div style={{ padding: '6px' }}>{listItem}</div>
-                {/* // color: '#00FFFF', */}
               </Grid>
             </Grid>
           ))}
@@ -215,10 +232,12 @@ function BwtVisual({ genome, pattern, mistake }) {
             float: 'left',
             margin: 'auto 10% auto 10%',
             fontSize: '100px',
-            // color: '#00FFFF',
           }}
         />
         <Grid style={{ float: 'left' }}>{indexMatrixRender}</Grid>
+      </Grid>
+      <Grid container style={{ margin: '3% auto 3% auto' }}>
+        <Grid>{firstLast}</Grid>
       </Grid>
     </Grid>
   );

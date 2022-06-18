@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -54,40 +55,44 @@ export const defaults = {
   stop() {}, // on layoutstop
 };
 
-// function findPreffixTriePatternMatching(genome, trie) {
-//   let source = 'root';
-//   for (let i = 0; i < genome.length; i += 1) {
-//     const c = genome.charAt(i);
-//     if (!(c in trie[source])) {
-//       return false;
-//     }
-//     // else {
-//     //   // TODO: oboj tekuci cvor u zeleno
-//     // }
-//     source = trie[source][c];
-//     if ('$' in trie[source]) {
-//       return trie[source].$;
-//     }
-//   }
-//   return false;
-// }
+function findPreffixTriePatternMatching(genome, trie) {
+  let source = 'root';
+  let resultValue = '';
+  const result = [];
+  for (let i = 0; i <= genome.length; i += 1) {
+    const c = genome.charAt(i);
+    if ('$' in trie[source]) {
+      if (Object.keys(trie[source]).length === 0) {
+        return result;
+      }
+      result.push(resultValue);
+    }
+
+    if (c in trie[source]) {
+      resultValue += c;
+      source = trie[source][c];
+    } else {
+      return result;
+    }
+  }
+  return result;
+}
 
 // TODO: This should be used to find matching index
-// function doesTrieContains(genome, trie) {
-//   let genomeCopy = genome;
-//   const genomeMatchingIndexes = [];
-//   while (genome.length > 0) {
-//     const index = findPreffixTriePatternMatching(genomeCopy, trie);
-//     if (index !== false) {
-//       genomeMatchingIndexes.push(index);
-//     }
-//     genomeCopy = genomeCopy.substring(1);
-//   }
-//   console.log(genomeMatchingIndexes);
-//   return genomeMatchingIndexes;
-// }
+function doesTrieContains(genome, trie) {
+  let genomeCopy = genome;
+  const genomeMatchingIndexes = [];
+  for (let i = 0; i < genome.length; i += 1) {
+    const result = findPreffixTriePatternMatching(genomeCopy, trie);
+    if (result.length !== 0) {
+      result.forEach((resultItem) => genomeMatchingIndexes.push([resultItem, i]));
+    }
+    genomeCopy = genomeCopy.substring(1);
+  }
+  console.log(genomeMatchingIndexes);
+  return genomeMatchingIndexes;
+}
 
-// let k = 0;
 function PatternPrefixTrie({ genome, patternList }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -97,14 +102,8 @@ function PatternPrefixTrie({ genome, patternList }) {
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
   const [value, setValue] = useState(100);
+  const [matchingIndexes, setMatchingIndexes] = useState([]);
 
-  // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
-  // if (data && k < 1) {
-  //   const suffixTrie = data.trie;
-  //   // Ova funkcija vraca indekse
-  //   doesTrieContains(genome, suffixTrie);
-  //   k += 1;
-  // }
   console.log(genome);
   const matchingPatternList = patternList.split(',').map((element) => {
     return `${element.trim()}$`;
@@ -172,6 +171,7 @@ function PatternPrefixTrie({ genome, patternList }) {
         if (j === triePatternArray[i].length - 1 && i === triePatternArray.length - 1) {
           clearTimeout(timeout);
           setDisableButton(true);
+          setMatchingIndexes(doesTrieContains(genome, data.trie));
           return;
         }
 
@@ -253,8 +253,25 @@ function PatternPrefixTrie({ genome, patternList }) {
       ))
     : 'Error!!!';
 
+  const indexesMatch = matchingIndexes
+    ? matchingIndexes.map((item, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Grid item textAlign="center" key={index} style={{ marginLeft: '10px' }}>
+          <div style={{ color: '#00FFFF', float: 'left', fontSize: '30px' }}>
+            {index === matchingIndexes.length - 1
+              ? `(${item[0]},${item[1]})`
+              : `(${item[0]},${item[1]}), `}
+          </div>
+        </Grid>
+      ))
+    : '';
+
   return (
     <Grid container spacing={2}>
+      <Grid container style={{ margin: '5% 0% 0% 5%', fontSize: '30px', color: '#FFFFFF' }}>
+        Genom:
+        <Grid style={{ marginLeft: '20px' }}>{genome}</Grid>
+      </Grid>
       <Grid item xs={4}>
         <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
           <CustomButton
@@ -273,6 +290,7 @@ function PatternPrefixTrie({ genome, patternList }) {
               setIsPlaying(true);
               setSuffixArray(['0 ']);
               setCurrentEdge({});
+              setMatchingIndexes([]);
             }}
           >
             Reset
@@ -289,6 +307,15 @@ function PatternPrefixTrie({ genome, patternList }) {
             style={{ width: '50%', marginTop: '20px' }}
           />
         </Box>
+        {disableButton && (
+          <Stack
+            direction="row"
+            spacing={2}
+            style={{ margin: '5% 0 2% 10%', color: '#00FFFF', flexWrap: 'wrap' }}
+          >
+            <div style={{ margin: '6px' }}>Indexses found:</div> {indexesMatch}
+          </Stack>
+        )}
         <Box style={{ marginLeft: '10%' }}>{renderedOutput}</Box>
       </Grid>
       <Grid item xs={8}>
