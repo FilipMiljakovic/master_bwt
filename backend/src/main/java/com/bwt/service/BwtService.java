@@ -29,8 +29,8 @@ public class BwtService {
         LOGGER.info("Compressed suffix Trie");
         Trie compressedTrie = new Trie('$');
         List<String> suffixArray = createSuffixArray(genome);
-        for (String suffix : suffixArray) {
-            compressedTrie.insert(suffix);
+        for (int i=0; i < suffixArray.size() ; i++) {
+            compressedTrie.insert(suffixArray.get(i), i );
         }
         Map<String, Map<String, String>> trie = new HashMap<>();
         compressedTrie.addToTrie(trie);

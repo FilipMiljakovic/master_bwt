@@ -59,12 +59,13 @@ function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
   if (trie[source] && Object.keys(trie[source]).length === 0) {
     patternMatchingIndexes.push(source);
   }
+  // Vidi kako ovu funkciju da prebacis u useEffect i da svaki prolaz modifikuje svoje grane
+  // Uvedi posebnu boju za te grane koje ce da se pretraze, u css
   Object.values(trie[source]).forEach((c) => {
     findAllIndexesOfPatternMatching(trie, c, patternMatchingIndexes);
   });
 }
 
-// let k = 0;
 function SuffixTree({ genome, pattern }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -76,16 +77,9 @@ function SuffixTree({ genome, pattern }) {
   const [matchedIndexes, setMatchedIndexes] = useState([]);
   const [value, setValue] = useState(100);
 
-  // // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
-  // if (data && k < 1) {
-  //   // const suffixTrie = data.trie;
-  //   // Ova funkcija vraca indekse
-  //   // doesTrieContains(pattern, suffixTrie);
-  //   k += 1;
-  // }
-
   useEffect(() => {
     if (disableButton) {
+      // Umesto na disable button da ide, ovde staviti neki poseban flag
       let source = 'root';
       const patternMatchingIndexes = [];
       let isFound = true;
@@ -99,6 +93,7 @@ function SuffixTree({ genome, pattern }) {
           },
         };
       }, {});
+      // Ovo mora da se izdvoji u indekse
       for (let i = 0; i < pattern.length; i += 1) {
         const c = pattern.charAt(i);
         if (!(c in data.trie[source])) {
@@ -138,7 +133,6 @@ function SuffixTree({ genome, pattern }) {
       }
       if (isFound) {
         findAllIndexesOfPatternMatching(data.trie, source, patternMatchingIndexes);
-        console.log(patternMatchingIndexes);
         setMatchedIndexes(patternMatchingIndexes);
       }
     }

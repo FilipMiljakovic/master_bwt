@@ -78,8 +78,10 @@ function findPreffixTriePatternMatching(genome, trie) {
   return result;
 }
 
-// TODO: This should be used to find matching index
 function doesTrieContains(genome, trie) {
+  // Treba mi neka funkcija kojom bih bojio samo odredjena slova genoma, tako da genom mora da bude niz JSX elemenata
+  // Dodati timeout i indekse umesto for petlje, bojiti samo trenutni pattern kroz koji se prolazi, na kraju resetovati bojanje za taj pattern
+  // Kad se resetuje pattern, dodaje se u niz sa rezultatima podniz i indeks
   let genomeCopy = genome;
   const genomeMatchingIndexes = [];
   for (let i = 0; i < genome.length; i += 1) {
@@ -89,10 +91,10 @@ function doesTrieContains(genome, trie) {
     }
     genomeCopy = genomeCopy.substring(1);
   }
-  console.log(genomeMatchingIndexes);
   return genomeMatchingIndexes;
 }
 
+// TODO: Vidi da li indeksi na kraju u listovima treba da postoje ili ne...Mozda nema smisla, pa da ne zbunjuju
 function PatternPrefixTrie({ genome, patternList }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -104,7 +106,6 @@ function PatternPrefixTrie({ genome, patternList }) {
   const [value, setValue] = useState(100);
   const [matchingIndexes, setMatchingIndexes] = useState([]);
 
-  console.log(genome);
   const matchingPatternList = patternList.split(',').map((element) => {
     return `${element.trim()}$`;
   });
@@ -268,7 +269,7 @@ function PatternPrefixTrie({ genome, patternList }) {
 
   return (
     <Grid container spacing={2}>
-      <Grid container style={{ margin: '5% 0% 0% 5%', fontSize: '30px', color: '#FFFFFF' }}>
+      <Grid container style={{ margin: '5% 0% 0% 5%', fontSize: '30px', color: '#00FFFF' }}>
         Genom:
         <Grid style={{ marginLeft: '20px' }}>{genome}</Grid>
       </Grid>

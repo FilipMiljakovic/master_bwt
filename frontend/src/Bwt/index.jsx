@@ -73,7 +73,7 @@ function Bwt() {
           </Grid>
         </Grid>
       ) : (
-        <BwtVisual genome={genome} pattern={pattern} mistake={mistake} />
+        <BwtVisual genome={genome} pattern={pattern} mistake={mistake} setMistake={setMistake} />
       )}
     </>
   );

@@ -4,6 +4,7 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -54,36 +55,17 @@ export const defaults = {
   stop() {}, // on layoutstop
 };
 
-// function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
-//   if (trie[source] && Object.keys(trie[source]).length === 0) {
-//     patternMatchingIndexes.push(source);
-//   }
-//   Object.values(trie[source]).forEach((c) => {
-//     findAllIndexesOfPatternMatching(trie, c, patternMatchingIndexes);
-//   });
-// }
+function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
+  if (trie[source] && Object.keys(trie[source]).length === 0) {
+    patternMatchingIndexes.push(source);
+  }
+  // Vidi kako ovu funkciju da prebacis u useEffect i da svaki prolaz modifikuje svoje grane
+  // Uvedi posebnu boju za te grane koje ce da se pretraze, u css
+  Object.values(trie[source]).forEach((c) => {
+    findAllIndexesOfPatternMatching(trie, c, patternMatchingIndexes);
+  });
+}
 
-// // TODO: This should be used to find matching index
-// function doesTrieContains(pattern, trie) {
-//   let source = 'root';
-//   const patternMatchingIndexes = [];
-//   for (let i = 0; i < pattern.length; i += 1) {
-//     const c = pattern.charAt(i);
-//     if (!(c in trie[source])) {
-//       // TODO: oboj u crveno sve cvorove u trie[source]
-//       return false;
-//     }
-//     // else {
-//     //   // TODO: oboj tekuci cvor u zeleno
-//     // }
-//     source = trie[source][c];
-//   }
-//   findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes);
-//   console.log(patternMatchingIndexes);
-//   return patternMatchingIndexes;
-// }
-
-// let k = 0;
 function SuffixTrieCompressed({ genome, pattern }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -93,15 +75,80 @@ function SuffixTrieCompressed({ genome, pattern }) {
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
   const [value, setValue] = useState(400);
+  const [matchedIndexes, setMatchedIndexes] = useState([]);
 
-  // TODO: Ruzno je, vidi kako ovo bolje da se uradi, da zove samo jednom
-  // if (data && k < 1) {
-  //   const suffixTrie = data.trie;
-  //   // Ova funkcija treba da vrati indekse - mora da se implementira prvo stablo
-  //   doesTrieContains(pattern, suffixTrie);
-  //   k += 1;
-  // }
-  console.log(pattern);
+  useEffect(() => {
+    if (disableButton) {
+      // Umesto na disable button da ide, ovde staviti neki poseban flag
+      let source = 'root';
+      const patternMatchingIndexes = [];
+      let isFound = true;
+      let patternTmp = `${pattern}$`;
+      // eslint-disable-next-line no-loop-func
+      const edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
+        return {
+          ...previousValue,
+          [currentValue.data.id]: {
+            ...currentValue,
+            classes: 'inactive',
+          },
+        };
+      }, {});
+      // Ovo mora da se izdvoji u indekse
+      for (let i = 0; i < patternTmp.length; i += 1) {
+        // Ovde moram da proverim sve prefikse patterna, da li su substring necega u tom cvoru (sledeci if)
+        const patternSubstring = patternTmp.substring(0, i);
+        // Ako nije nasao, boji svakako sve podcvorove u crveno
+        if (!(patternSubstring in data.trie[source])) {
+          if (i === patternTmp.length - 1) {
+            // eslint-disable-next-line no-loop-func
+            Object.keys(data.trie[source]).forEach((item) => {
+              edgesFormated[`${source}-${data.trie[source][item]}`] = {
+                data: {
+                  source,
+                  target: data.trie[source][item],
+                  label: item,
+                  id: `${source}-${data.trie[source][item]}`,
+                },
+                classes: 'reallyinactive',
+              };
+            });
+            setElements({
+              ...elements,
+              edges: Object.values(edgesFormated),
+            });
+            isFound = false;
+            break;
+          }
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+        // Dva usecase-a. Ako je ostalo nesto u patternu, onda oboj ovo sto je nasao i nastavi dalje,
+        // ako ne, onda samo taj oboj i nadji indeks (ako je stigao do kraja indeksa i nasao kao podstring postojeceg)
+        edgesFormated[`${source}-${data.trie[source][patternSubstring]}`] = {
+          data: {
+            source,
+            target: data.trie[source][patternSubstring],
+            label: patternSubstring,
+            id: `${source}-${data.trie[source][patternSubstring]}`,
+          },
+          classes: 'active',
+        };
+        setElements({
+          ...elements,
+          edges: Object.values(edgesFormated),
+        });
+        source = data.trie[source][patternSubstring];
+        patternTmp = patternTmp.substring(i);
+        i = 0;
+      }
+      if (isFound) {
+        findAllIndexesOfPatternMatching(data.trie, source, patternMatchingIndexes);
+        setMatchedIndexes(patternMatchingIndexes);
+      }
+    }
+  }, [disableButton]);
+
   useEffect(() => {
     const requestOptions = {
       method: 'POST',
@@ -191,7 +238,6 @@ function SuffixTrieCompressed({ genome, pattern }) {
 
   const ref = useRef(null);
   useEffect(() => {
-    console.log(elements);
     const cy = cytoscape({
       container: ref.current,
       boxSelectionEnabled: false,
@@ -223,6 +269,17 @@ function SuffixTrieCompressed({ genome, pattern }) {
   const changeValue = (event, valueToChange) => {
     setValue(valueToChange);
   };
+
+  const indexesMatch = matchedIndexes
+    ? matchedIndexes.sort().map((item, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Grid item textAlign="center" key={index} style={{ marginLeft: '10px' }}>
+          <div style={{ color: '#00FFFF', float: 'left', fontSize: '30px' }}>
+            {index === matchedIndexes.length - 1 ? item : `${item}, `}
+          </div>
+        </Grid>
+      ))
+    : '';
 
   const renderedOutput = suffixArray
     ? suffixArray.map((item, index) => (
@@ -259,6 +316,7 @@ function SuffixTrieCompressed({ genome, pattern }) {
               setIsPlaying(true);
               setSuffixArray(['0 ']);
               setCurrentEdge({});
+              setMatchedIndexes([]);
             }}
           >
             Reset
@@ -275,6 +333,11 @@ function SuffixTrieCompressed({ genome, pattern }) {
             style={{ width: '50%', marginTop: '20px' }}
           />
         </Box>
+        {disableButton && (
+          <Stack direction="row" spacing={2} style={{ margin: '5% 0 2% 10%', color: '#00FFFF' }}>
+            <div style={{ margin: '6px' }}>Indexses found:</div> {indexesMatch}
+          </Stack>
+        )}
         <Box style={{ marginLeft: '10%' }}>{renderedOutput}</Box>
       </Grid>
       <Grid item xs={8}>

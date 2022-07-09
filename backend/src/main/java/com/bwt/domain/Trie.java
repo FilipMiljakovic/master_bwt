@@ -1,5 +1,6 @@
 package com.bwt.domain;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Trie {
@@ -15,7 +16,7 @@ public class Trie {
         this.CASE = CASE;
     }
 
-    public void insert(String word) {
+    public void insert(String word, int suffixIndex) {
         Node trav = root;
         int i = 0;
 
@@ -33,7 +34,7 @@ public class Trie {
             } else {
                 if (i == word.length()) {
                     Node existingChild = trav.children[index];
-                    Node newChild = new Node(true, "i" + k++);
+                    Node newChild = new Node(true, String.valueOf(suffixIndex));
                     StringBuilder remainingLabel = strCopy(label, j);
                     label.setLength(j);
                     trav.children[index] = newChild;
@@ -49,7 +50,7 @@ public class Trie {
                     newChild.edgeLabel[remainingLabel.charAt(0) - CASE] = remainingLabel;
                     newChild.children[remainingLabel.charAt(0) - CASE] = temp;
                     newChild.edgeLabel[remainingWord.charAt(0) - CASE] = remainingWord;
-                    newChild.children[remainingWord.charAt(0) - CASE] = new Node(true,"i" + k++);
+                    newChild.children[remainingWord.charAt(0) - CASE] = new Node(true,String.valueOf(suffixIndex));
                 }
 
                 return;
@@ -58,7 +59,7 @@ public class Trie {
 
         if (i < word.length()) {
             trav.edgeLabel[word.charAt(i) - CASE] = strCopy(word, i);
-            trav.children[word.charAt(i) - CASE] = new Node(true,"i" + k++);
+            trav.children[word.charAt(i) - CASE] = new Node(true,String.valueOf(suffixIndex));
         } else {
             trav.isEnd = true;
         }
@@ -102,6 +103,9 @@ public class Trie {
         for (int i = 0; i < node.edgeLabel.length; i++) {
             if (node.edgeLabel[i] != null) {
                 node.mapResult.put(node.edgeLabel[i].toString(), node.children[i].name);
+                if(!node.children[i].name.startsWith("i")) {
+                    trie.put(node.children[i].name, new HashMap<>());
+                }
                 trie.put(node.name, node.mapResult);
                 addToTrie2(node.children[i], trie);
             }
