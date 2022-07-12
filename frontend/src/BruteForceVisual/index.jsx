@@ -21,7 +21,7 @@ function changeIElement(renderedOutput, i, valueString, colorHash) {
   const renderedOutputNew = renderedOutput;
   renderedOutputNew[i] = (
     <Grid item textAlign="center" key={i}>
-      <div style={{ color: colorHash }}>{valueString[i]}</div>
+      <div style={{ color: colorHash, width: '25px' }}>{valueString[i]}</div>
     </Grid>
   );
   return renderedOutputNew;
@@ -36,7 +36,7 @@ function BruteForceVisual({ genome, pattern }) {
     pattern
       ? [...pattern].map((item, index) => (
           <Grid item textAlign="center" key={index}>
-            <div>{item}</div>
+            <div style={{ width: '25px' }}>{item}</div>
           </Grid>
         ))
       : 'Error!!!',
@@ -45,7 +45,7 @@ function BruteForceVisual({ genome, pattern }) {
     genome
       ? [...genome].map((item, index) => (
           <Grid item textAlign="center" key={index}>
-            <div>{item}</div>
+            <div style={{ width: '25px' }}>{item}</div>
           </Grid>
         ))
       : 'Error!!!',
@@ -64,6 +64,7 @@ function BruteForceVisual({ genome, pattern }) {
             setRenderedOutputGenome(changeIElement(renderedOutputGenome, i, genome, '#FF0000'));
             setRenderedOutputPattern(changeIElement(renderedOutputPattern, j, pattern, '#FF0000'));
             setIndexes({ i: i + 1, j: 0 });
+            setPatternSpaces(new Array(i - j + 1).join('_'));
             setMoveIndexes({ i, j });
           } else if (i < genome.length) {
             setRenderedOutputGenome(changeIElement(renderedOutputGenome, i, genome, '#00FFFF'));
@@ -72,9 +73,11 @@ function BruteForceVisual({ genome, pattern }) {
             if (j === pattern.length - 1) {
               setRenderedOutputResults([...renderedOutputResults, i - j]);
               setIndexes({ i: i - j + 1, j: 0 });
+              setPatternSpaces(new Array(i - j + 1).join('_'));
               setMoveIndexes({ i, j });
             } else {
               setIndexes({ i: i + 1, j: j + 1 });
+              setPatternSpaces(new Array(i - j + 1).join('_'));
             }
           } else {
             setDisableButton(true);
@@ -97,11 +100,6 @@ function BruteForceVisual({ genome, pattern }) {
       setRenderedOutputPattern(changeIElement(renderedOutputPattern, j - k, pattern, '#FFFFFF'));
     }
   }, [moveIndexes]);
-
-  // useEffect(() => {
-  //   const { i, j } = moveIndexes;
-  //   setPatternSpaces(new Array(i - j + 1).join('_'));
-  // }, [moveIndexes]);
 
   const changeValue = (event, valueToChange) => {
     setValue(valueToChange);
@@ -131,7 +129,7 @@ function BruteForceVisual({ genome, pattern }) {
                 pattern
                   ? [...pattern].map((item, index) => (
                       <Grid item textAlign="center" key={index}>
-                        <div>{item}</div>
+                        <div style={{ width: '25px' }}>{item}</div>
                       </Grid>
                     ))
                   : 'Error!!!',
@@ -140,7 +138,7 @@ function BruteForceVisual({ genome, pattern }) {
                 genome
                   ? [...genome].map((item, index) => (
                       <Grid item textAlign="center" key={index}>
-                        <div>{item}</div>
+                        <div style={{ width: '25px' }}>{item}</div>
                       </Grid>
                     ))
                   : 'Error!!!',
@@ -166,12 +164,18 @@ function BruteForceVisual({ genome, pattern }) {
             {renderedOutputGenome}
           </Stack>
           <Stack direction="row" style={{ fontSize: '30px' }}>
-            <Stack direction="row">{patternSpaces}</Stack>
+            <Stack direction="row">
+              {patternSpaces.split('').map((character, index) => (
+                <Grid item textAlign="center" key={index}>
+                  <div style={{ width: '25px' }}>{character}</div>
+                </Grid>
+              ))}
+            </Stack>
             {/* flex: 0 0 width u pikselima ako ne radi sa width zakucanim */}
             <Stack direction="row">{renderedOutputPattern}</Stack>
           </Stack>
           <Stack direction="row" spacing={2} style={{ paddingTop: '2rem' }}>
-            Indexses found:
+            Indexes found:
             {renderedOutputResults.slice(0, -1).map((listItem, ind) => (
               <Grid item textAlign="center" key={ind}>
                 <div> {listItem},</div>
