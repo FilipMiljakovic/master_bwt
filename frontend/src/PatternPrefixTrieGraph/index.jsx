@@ -111,13 +111,24 @@ function PatternPrefixTrie({ genome, patternList }) {
   });
 
   useEffect(() => {
-    // const requestOptions = {
-    //   method: 'POST',
-    //   mode: 'cors',
-    //   headers: { 'Cache-Control': 'no-cache', 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ matching_pattern_list: patternListSeparated }),
-    // };
-    // fetch('/pattern/trie/construction', requestOptions);
+    if (disableButton) {
+      const edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
+        return {
+          ...previousValue,
+          [currentValue.data.id]: {
+            ...currentValue,
+            classes: 'inactive',
+          },
+        };
+      }, {});
+      setElements({
+        ...elements,
+        edges: Object.values(edgesFormated),
+      });
+    }
+  }, [disableButton]);
+
+  useEffect(() => {
     fetch(`http://localhost:5555/pattern/trie/construction`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -204,7 +215,6 @@ function PatternPrefixTrie({ genome, patternList }) {
 
   const ref = useRef(null);
   useEffect(() => {
-    console.log(elements);
     const cy = cytoscape({
       container: ref.current,
       boxSelectionEnabled: false,

@@ -82,6 +82,7 @@ function SuffixTrieCompressed({ genome, pattern }) {
       // Umesto na disable button da ide, ovde staviti neki poseban flag
       let source = 'root';
       const patternMatchingIndexes = [];
+      // VIDI KAKO PROMENITI ISFOUND I KADA!!!!!!
       let isFound = true;
       let patternTmp = `${pattern}$`;
       // eslint-disable-next-line no-loop-func
@@ -95,56 +96,96 @@ function SuffixTrieCompressed({ genome, pattern }) {
         };
       }, {});
       // Ovo mora da se izdvoji u indekse
-      for (let i = 0; i < patternTmp.length; i += 1) {
-        // Ovde moram da proverim sve prefikse patterna, da li su substring necega u tom cvoru (sledeci if)
+      for (let i = patternTmp.length; i > 0; i -= 1) {
         const patternSubstring = patternTmp.substring(0, i);
-        // Ako nije nasao, boji svakako sve podcvorove u crveno
-        if (!(patternSubstring in data.trie[source])) {
-          if (i === patternTmp.length - 1) {
-            // eslint-disable-next-line no-loop-func
-            Object.keys(data.trie[source]).forEach((item) => {
-              edgesFormated[`${source}-${data.trie[source][item]}`] = {
-                data: {
-                  source,
-                  target: data.trie[source][item],
-                  label: item,
-                  id: `${source}-${data.trie[source][item]}`,
-                },
-                classes: 'reallyinactive',
-              };
-            });
+        const sourceKeys = Object.keys(data.trie[source]);
+        for (let j = 0; j < sourceKeys.length; j += 1) {
+          if (sourceKeys[j].startsWith(patternSubstring)) {
+            edgesFormated[`${source}-${data.trie[source][sourceKeys[j]]}`] = {
+              data: {
+                source,
+                target: data.trie[source][sourceKeys[j]],
+                label: sourceKeys[j],
+                id: `${source}-${data.trie[source][sourceKeys[j]]}`,
+              },
+              classes: 'active',
+            };
             setElements({
               ...elements,
               edges: Object.values(edgesFormated),
             });
-            isFound = false;
+            source = data.trie[source][sourceKeys[j]];
+            patternTmp = patternTmp.substring(i);
+            i = patternTmp.length;
             break;
+          } else if (j === sourceKeys.length - 1 && i === 1) {
+            isFound = false;
           }
-          // eslint-disable-next-line no-continue
-          continue;
         }
-        // Dva usecase-a. Ako je ostalo nesto u patternu, onda oboj ovo sto je nasao i nastavi dalje,
-        // ako ne, onda samo taj oboj i nadji indeks (ako je stigao do kraja indeksa i nasao kao podstring postojeceg)
-        edgesFormated[`${source}-${data.trie[source][patternSubstring]}`] = {
-          data: {
-            source,
-            target: data.trie[source][patternSubstring],
-            label: patternSubstring,
-            id: `${source}-${data.trie[source][patternSubstring]}`,
-          },
-          classes: 'active',
-        };
+      }
+      //   // Ako nije nasao, boji svakako sve podcvorove u crveno
+      //   if (!(patternSubstring in data.trie[source])) {
+      //     if (i === patternTmp.length - 1) {
+      //       // eslint-disable-next-line no-loop-func
+      //       Object.keys(data.trie[source]).forEach((item) => {
+      //         edgesFormated[`${source}-${data.trie[source][item]}`] = {
+      //           data: {
+      //             source,
+      //             target: data.trie[source][item],
+      //             label: item,
+      //             id: `${source}-${data.trie[source][item]}`,
+      //           },
+      //           classes: 'reallyinactive',
+      //         };
+      //       });
+      //       setElements({
+      //         ...elements,
+      //         edges: Object.values(edgesFormated),
+      //       });
+      //       isFound = false;
+      //       break;
+      //     }
+      //     // eslint-disable-next-line no-continue
+      //     continue;
+      //   }
+      //   // Dva usecase-a. Ako je ostalo nesto u patternu, onda oboj ovo sto je nasao i nastavi dalje,
+      //   // ako ne, onda samo taj oboj i nadji indeks (ako je stigao do kraja indeksa i nasao kao podstring postojeceg)
+      //   edgesFormated[`${source}-${data.trie[source][patternSubstring]}`] = {
+      //     data: {
+      //       source,
+      //       target: data.trie[source][patternSubstring],
+      //       label: patternSubstring,
+      //       id: `${source}-${data.trie[source][patternSubstring]}`,
+      //     },
+      //     classes: 'active',
+      //   };
+      //   setElements({
+      //     ...elements,
+      //     edges: Object.values(edgesFormated),
+      //   });
+      //   source = data.trie[source][patternSubstring];
+      //   patternTmp = patternTmp.substring(i);
+      //   i = 0;
+      // }
+      if (isFound) {
+        findAllIndexesOfPatternMatching(data.trie, source, patternMatchingIndexes);
+        setMatchedIndexes(patternMatchingIndexes);
+      } else {
+        Object.keys(data.trie[source]).forEach((item) => {
+          edgesFormated[`${source}-${data.trie[source][item]}`] = {
+            data: {
+              source,
+              target: data.trie[source][item],
+              label: item,
+              id: `${source}-${data.trie[source][item]}`,
+            },
+            classes: 'reallyinactive',
+          };
+        });
         setElements({
           ...elements,
           edges: Object.values(edgesFormated),
         });
-        source = data.trie[source][patternSubstring];
-        patternTmp = patternTmp.substring(i);
-        i = 0;
-      }
-      if (isFound) {
-        findAllIndexesOfPatternMatching(data.trie, source, patternMatchingIndexes);
-        setMatchedIndexes(patternMatchingIndexes);
       }
     }
   }, [disableButton]);
