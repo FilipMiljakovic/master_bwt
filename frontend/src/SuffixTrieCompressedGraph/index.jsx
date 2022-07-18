@@ -74,7 +74,7 @@ function SuffixTrieCompressed({ genome, pattern }) {
   const [disableButton, setDisableButton] = useState(false);
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
-  const [value, setValue] = useState(400);
+  const [value, setValue] = useState(100);
   const [matchedIndexes, setMatchedIndexes] = useState([]);
 
   useEffect(() => {
@@ -100,7 +100,10 @@ function SuffixTrieCompressed({ genome, pattern }) {
         const patternSubstring = patternTmp.substring(0, i);
         const sourceKeys = Object.keys(data.trie[source]);
         for (let j = 0; j < sourceKeys.length; j += 1) {
-          if (sourceKeys[j].startsWith(patternSubstring)) {
+          if (
+            (sourceKeys[j].startsWith(patternSubstring) && i === patternTmp.length - 1) ||
+            (i !== patternTmp.length && sourceKeys[j] === patternSubstring)
+          ) {
             edgesFormated[`${source}-${data.trie[source][sourceKeys[j]]}`] = {
               data: {
                 source,
