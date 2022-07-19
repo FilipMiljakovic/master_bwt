@@ -63,7 +63,7 @@ function BruteForceVisual({ genome, pattern }) {
           if (i < genome.length && genome.charAt(i) !== pattern.charAt(j)) {
             setRenderedOutputGenome(changeIElement(renderedOutputGenome, i, genome, '#FF0000'));
             setRenderedOutputPattern(changeIElement(renderedOutputPattern, j, pattern, '#FF0000'));
-            setIndexes({ i: i + 1, j: 0 });
+            setIndexes({ i: i - j + 1, j: 0 });
             setPatternSpaces(new Array(i - j + 1).join('_'));
             setMoveIndexes({ i, j });
           } else if (i < genome.length) {
