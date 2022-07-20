@@ -70,19 +70,80 @@ function SuffixTree({ genome, pattern }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
   const [indexes, setIndexes] = useState({ i: 0, j: 0 });
+  const [resultIndex, setResultIndex] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(true);
   const [disableButton, setDisableButton] = useState(false);
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
   const [matchedIndexes, setMatchedIndexes] = useState([]);
   const [value, setValue] = useState(100);
+  const [sourceSearch, setSourceSearch] = useState('root');
+
+  useEffect(() => {
+    const patternMatchingIndexes = [];
+    let isFound = true;
+    const edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
+      return {
+        ...previousValue,
+        [currentValue.data.id]: {
+          ...currentValue,
+        },
+      };
+    }, {});
+    let timeout;
+    if (Object.keys(edgesFormated).length > 0 && resultIndex < pattern.length) {
+      timeout = setTimeout(() => {
+        const c = pattern.charAt(resultIndex);
+        if (!(c in data.trie[sourceSearch])) {
+          // eslint-disable-next-line no-loop-func
+          Object.keys(data.trie[sourceSearch]).forEach((item) => {
+            edgesFormated[`${sourceSearch}-${data.trie[sourceSearch][item]}`] = {
+              data: {
+                source: sourceSearch,
+                target: data.trie[sourceSearch][item],
+                label: item,
+                id: `${sourceSearch}-${data.trie[sourceSearch][item]}`,
+              },
+              classes: 'reallyinactive',
+            };
+          });
+          setElements({
+            ...elements,
+            edges: Object.values(edgesFormated),
+          });
+          isFound = false;
+        } else {
+          edgesFormated[`${sourceSearch}-${data.trie[sourceSearch][c]}`] = {
+            data: {
+              source: sourceSearch,
+              target: data.trie[sourceSearch][c],
+              label: c,
+              id: `${sourceSearch}-${data.trie[sourceSearch][c]}`,
+            },
+            classes: 'active',
+          };
+          setElements({
+            ...elements,
+            edges: Object.values(edgesFormated),
+          });
+          setSourceSearch(data.trie[sourceSearch][c]);
+          setResultIndex(resultIndex + 1);
+        }
+      }, value);
+    }
+    if (isFound && resultIndex === pattern.length) {
+      findAllIndexesOfPatternMatching(data.trie, sourceSearch, patternMatchingIndexes);
+      setMatchedIndexes(patternMatchingIndexes);
+    }
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [resultIndex]);
 
   useEffect(() => {
     if (disableButton) {
       // Umesto na disable button da ide, ovde staviti neki poseban flag
-      let source = 'root';
-      const patternMatchingIndexes = [];
-      let isFound = true;
+
       // eslint-disable-next-line no-loop-func
       const edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
         return {
@@ -93,48 +154,11 @@ function SuffixTree({ genome, pattern }) {
           },
         };
       }, {});
-      // Ovo mora da se izdvoji u indekse
-      for (let i = 0; i < pattern.length; i += 1) {
-        const c = pattern.charAt(i);
-        if (!(c in data.trie[source])) {
-          // eslint-disable-next-line no-loop-func
-          Object.keys(data.trie[source]).forEach((item) => {
-            edgesFormated[`${source}-${data.trie[source][item]}`] = {
-              data: {
-                source,
-                target: data.trie[source][item],
-                label: item,
-                id: `${source}-${data.trie[source][item]}`,
-              },
-              classes: 'reallyinactive',
-            };
-          });
-          setElements({
-            ...elements,
-            edges: Object.values(edgesFormated),
-          });
-          isFound = false;
-          break;
-        }
-        edgesFormated[`${source}-${data.trie[source][c]}`] = {
-          data: {
-            source,
-            target: data.trie[source][c],
-            label: c,
-            id: `${source}-${data.trie[source][c]}`,
-          },
-          classes: 'active',
-        };
-        setElements({
-          ...elements,
-          edges: Object.values(edgesFormated),
-        });
-        source = data.trie[source][c];
-      }
-      if (isFound) {
-        findAllIndexesOfPatternMatching(data.trie, source, patternMatchingIndexes);
-        setMatchedIndexes(patternMatchingIndexes);
-      }
+      setElements({
+        ...elements,
+        edges: Object.values(edgesFormated),
+      });
+      setResultIndex(0);
     }
   }, [disableButton]);
 
@@ -304,6 +328,8 @@ function SuffixTree({ genome, pattern }) {
               setSuffixArray(['0 ']);
               setCurrentEdge({});
               setMatchedIndexes([]);
+              setResultIndex(-1);
+              setSourceSearch('root');
             }}
           >
             Reset
