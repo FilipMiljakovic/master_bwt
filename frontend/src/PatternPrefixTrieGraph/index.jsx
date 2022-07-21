@@ -78,23 +78,12 @@ function findPreffixTriePatternMatching(genome, trie) {
   return result;
 }
 
-function doesTrieContains(genome, trie) {
-  // Treba mi neka funkcija kojom bih bojio samo odredjena slova genoma, tako da genom mora da bude niz JSX elemenata
-  // Dodati timeout i indekse umesto for petlje, bojiti samo trenutni pattern kroz koji se prolazi, na kraju resetovati bojanje za taj pattern
-  // Kad se resetuje pattern, dodaje se u niz sa rezultatima podniz i indeks
-  let genomeCopy = genome;
-  const genomeMatchingIndexes = [];
-  for (let i = 0; i < genome.length; i += 1) {
-    const result = findPreffixTriePatternMatching(genomeCopy, trie);
-    if (result.length !== 0) {
-      result.forEach((resultItem) => genomeMatchingIndexes.push([resultItem, i]));
-    }
-    genomeCopy = genomeCopy.substring(1);
-  }
-  return genomeMatchingIndexes;
-}
+// function doesTrieContains(genome, trie) {
+//   // Treba mi neka funkcija kojom bih bojio samo odredjena slova genoma, tako da genom mora da bude niz JSX elemenata
+//   // Dodati timeout i indekse umesto for petlje, bojiti samo trenutni pattern kroz koji se prolazi, na kraju resetovati bojanje za taj pattern
+//   // Kad se resetuje pattern, dodaje se u niz sa rezultatima podniz i indeks
+// }
 
-// TODO: Vidi da li indeksi na kraju u listovima treba da postoje ili ne...Mozda nema smisla, pa da ne zbunjuju
 function PatternPrefixTrie({ genome, patternList }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -105,10 +94,60 @@ function PatternPrefixTrie({ genome, patternList }) {
   const [currentEdge, setCurrentEdge] = useState({});
   const [value, setValue] = useState(100);
   const [matchingIndexes, setMatchingIndexes] = useState([]);
+  const [trieState, setTrieState] = useState({});
+  const [genomeObject, setGenomeObject] = useState({});
+  const [genomeView, setGenomeView] = useState(
+    <Grid container>
+      <Stack direction="row" xs={12}>
+        <div style={{ float: 'left', color: '#FFFFFF' }}>{genome}</div>
+      </Stack>
+    </Grid>,
+  );
 
   const matchingPatternList = patternList.split(',').map((element) => {
     return `${element.trim()}$`;
   });
+
+  useEffect(() => {
+    const listItem = genomeObject;
+    if (listItem.index) {
+      setGenomeView(
+        <Grid container>
+          <Stack direction="row" xs={12}>
+            <div className="opacityText" style={{ float: 'left' }}>
+              {genome.substring(0, listItem.index)}
+            </div>
+            <div style={{ float: 'left', color: '#FFFFFF' }}>
+              {genome.substring(listItem.index)}
+            </div>
+          </Stack>
+        </Grid>,
+      );
+    }
+  }, [genomeObject]);
+
+  useEffect(() => {
+    if (Object.keys(trieState).length > 0) {
+      let genomeCopy = genome;
+      const genomeMatchingIndexes = [];
+      let currentIteration = 0;
+      const interval = setInterval(() => {
+        if (currentIteration === genome.length) {
+          setMatchingIndexes(genomeMatchingIndexes);
+          clearInterval(interval);
+        }
+        const result = findPreffixTriePatternMatching(genomeCopy, trieState);
+        if (result.length !== 0) {
+          result.forEach((resultItem) =>
+            genomeMatchingIndexes.push([resultItem, currentIteration]),
+          );
+        }
+        genomeCopy = genomeCopy.substring(1);
+        currentIteration += 1;
+        setGenomeObject({ index: currentIteration });
+      }, value);
+    }
+  }, [trieState]);
 
   useEffect(() => {
     if (disableButton) {
@@ -183,7 +222,7 @@ function PatternPrefixTrie({ genome, patternList }) {
         if (j === triePatternArray[i].length - 1 && i === triePatternArray.length - 1) {
           clearTimeout(timeout);
           setDisableButton(true);
-          setMatchingIndexes(doesTrieContains(genome, data.trie));
+          setTrieState(data.trie);
           return;
         }
 
@@ -281,7 +320,7 @@ function PatternPrefixTrie({ genome, patternList }) {
     <Grid container spacing={2}>
       <Grid container style={{ margin: '5% 0% 0% 5%', fontSize: '30px', color: '#00FFFF' }}>
         Genom:
-        <Grid style={{ marginLeft: '20px' }}>{genome}</Grid>
+        <Grid style={{ marginLeft: '20px' }}>{genomeView}</Grid>
       </Grid>
       <Grid item xs={4}>
         <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
@@ -302,6 +341,7 @@ function PatternPrefixTrie({ genome, patternList }) {
               setSuffixArray(['0 ']);
               setCurrentEdge({});
               setMatchingIndexes([]);
+              setTrieState({});
             }}
           >
             Reset
