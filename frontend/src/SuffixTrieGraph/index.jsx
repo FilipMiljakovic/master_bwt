@@ -55,17 +55,8 @@ export const defaults = {
   stop() {}, // on layoutstop
 };
 
-function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
-  if (trie[source] && Object.keys(trie[source]).length === 0) {
-    patternMatchingIndexes.push(source);
-  }
-  // Vidi kako ovu funkciju da prebacis u useEffect i da svaki prolaz modifikuje svoje grane
-  // Uvedi posebnu boju za te grane koje ce da se pretraze, u css
-  Object.values(trie[source]).forEach((c) => {
-    findAllIndexesOfPatternMatching(trie, c, patternMatchingIndexes);
-  });
-}
-
+let matchedIndexes = [];
+let alreadySeenMultipleNodes = [];
 function SuffixTree({ genome, pattern }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -75,12 +66,71 @@ function SuffixTree({ genome, pattern }) {
   const [disableButton, setDisableButton] = useState(false);
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
-  const [matchedIndexes, setMatchedIndexes] = useState([]);
   const [value, setValue] = useState(100);
   const [sourceSearch, setSourceSearch] = useState('root');
+  const [findIndexesFlag, setFindIndexesFlag] = useState(false);
+
+  function findAllIndexesOfPatternMatching(trie, sourceNiz, nekiNiz, edgesFormated) {
+    let nekiNizTmp = [...nekiNiz];
+    const edgesFormatedTmp = { ...edgesFormated };
+    let sourceNizTmp = [...sourceNiz];
+    const source = sourceNizTmp.shift();
+    if (trie[source] && Object.keys(trie[source]).length !== 0) {
+      if (alreadySeenMultipleNodes.indexOf(source) === -1) {
+        alreadySeenMultipleNodes.push(source);
+        nekiNizTmp = [...Object.entries(trie[source]), ...nekiNizTmp];
+        sourceNizTmp = [
+          ...Array(Object.keys(trie[source]).length - 1).fill(source),
+          ...sourceNizTmp,
+        ];
+      }
+    }
+    const c = nekiNizTmp.shift();
+    if (trie[source] && c[0] === '$') {
+      matchedIndexes.push(trie[source].$);
+    }
+    if (c && source) {
+      if (data.trie[source][c[0]]) {
+        edgesFormatedTmp[`${source}-${data.trie[source][c[0]]}`] = {
+          data: {
+            source,
+            target: data.trie[source][c[0]],
+            label: c[0],
+            id: `${source}-${data.trie[source][c[0]]}`,
+          },
+          classes: 'searchIndex',
+        };
+        setElements({
+          ...elements,
+          edges: Object.values(edgesFormatedTmp),
+        });
+      }
+      setTimeout(() => {
+        if (c[0] !== '$') {
+          sourceNizTmp = [c[1], ...sourceNizTmp];
+        }
+        findAllIndexesOfPatternMatching(trie, sourceNizTmp, nekiNizTmp, edgesFormatedTmp);
+      }, value);
+    } else {
+      setFindIndexesFlag(false);
+    }
+  }
 
   useEffect(() => {
-    const patternMatchingIndexes = [];
+    if (findIndexesFlag) {
+      const edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
+        return {
+          ...previousValue,
+          [currentValue.data.id]: {
+            ...currentValue,
+          },
+        };
+      }, {});
+      findAllIndexesOfPatternMatching(data.trie, [sourceSearch], [], edgesFormated);
+    }
+  }, [findIndexesFlag]);
+
+  useEffect(() => {
     let isFound = true;
     const edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
       return {
@@ -132,8 +182,7 @@ function SuffixTree({ genome, pattern }) {
       }, value);
     }
     if (isFound && resultIndex === pattern.length) {
-      findAllIndexesOfPatternMatching(data.trie, sourceSearch, patternMatchingIndexes);
-      setMatchedIndexes(patternMatchingIndexes);
+      setFindIndexesFlag(true);
     }
     return () => {
       clearTimeout(timeout);
@@ -298,7 +347,7 @@ function SuffixTree({ genome, pattern }) {
     : 'Error!!!';
 
   const indexesMatch = matchedIndexes
-    ? matchedIndexes.sort().map((item, index) => (
+    ? matchedIndexes.map((item, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <Grid item textAlign="center" key={index} style={{ marginLeft: '10px' }}>
           <div style={{ color: '#00FFFF', float: 'left', fontSize: '30px' }}>
@@ -327,9 +376,12 @@ function SuffixTree({ genome, pattern }) {
               setIsPlaying(true);
               setSuffixArray(['0 ']);
               setCurrentEdge({});
-              setMatchedIndexes([]);
+              // setMatchedIndexes([]);
               setResultIndex(-1);
               setSourceSearch('root');
+              setFindIndexesFlag(false);
+              matchedIndexes = [];
+              alreadySeenMultipleNodes = [];
             }}
           >
             Reset

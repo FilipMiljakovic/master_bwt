@@ -78,12 +78,6 @@ function findPreffixTriePatternMatching(genome, trie) {
   return result;
 }
 
-// function doesTrieContains(genome, trie) {
-//   // Treba mi neka funkcija kojom bih bojio samo odredjena slova genoma, tako da genom mora da bude niz JSX elemenata
-//   // Dodati timeout i indekse umesto for petlje, bojiti samo trenutni pattern kroz koji se prolazi, na kraju resetovati bojanje za taj pattern
-//   // Kad se resetuje pattern, dodaje se u niz sa rezultatima podniz i indeks
-// }
-
 function PatternPrefixTrie({ genome, patternList }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -133,7 +127,6 @@ function PatternPrefixTrie({ genome, patternList }) {
       let currentIteration = 0;
       const interval = setInterval(() => {
         if (currentIteration === genome.length) {
-          setMatchingIndexes(genomeMatchingIndexes);
           clearInterval(interval);
         }
         const result = findPreffixTriePatternMatching(genomeCopy, trieState);
@@ -141,6 +134,7 @@ function PatternPrefixTrie({ genome, patternList }) {
           result.forEach((resultItem) =>
             genomeMatchingIndexes.push([resultItem, currentIteration]),
           );
+          setMatchingIndexes(genomeMatchingIndexes);
         }
         genomeCopy = genomeCopy.substring(1);
         currentIteration += 1;
@@ -342,6 +336,14 @@ function PatternPrefixTrie({ genome, patternList }) {
               setCurrentEdge({});
               setMatchingIndexes([]);
               setTrieState({});
+              setGenomeView({});
+              setGenomeView(
+                <Grid container>
+                  <Stack direction="row" xs={12}>
+                    <div style={{ float: 'left', color: '#FFFFFF' }}>{genome}</div>
+                  </Stack>
+                </Grid>,
+              );
             }}
           >
             Reset

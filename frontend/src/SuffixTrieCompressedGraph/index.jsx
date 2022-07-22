@@ -55,17 +55,19 @@ export const defaults = {
   stop() {}, // on layoutstop
 };
 
-function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
-  if (trie[source] && Object.keys(trie[source]).length === 0) {
-    patternMatchingIndexes.push(source);
-  }
-  // Vidi kako ovu funkciju da prebacis u useEffect i da svaki prolaz modifikuje svoje grane
-  // Uvedi posebnu boju za te grane koje ce da se pretraze, u css
-  Object.values(trie[source]).forEach((c) => {
-    findAllIndexesOfPatternMatching(trie, c, patternMatchingIndexes);
-  });
-}
-
+// function findAllIndexesOfPatternMatching(trie, source, patternMatchingIndexes) {
+//   if (trie[source] && Object.keys(trie[source]).length === 0) {
+//     patternMatchingIndexes.push(source);
+//   }
+//   // Vidi kako ovu funkciju da prebacis u useEffect i da svaki prolaz modifikuje svoje grane
+//   // Uvedi posebnu boju za te grane koje ce da se pretraze, u css
+//   Object.values(trie[source]).forEach((c) => {
+//     findAllIndexesOfPatternMatching(trie, c, patternMatchingIndexes);
+//   });
+// }
+let matchedIndexes = [];
+let alreadySeenMultipleNodes = [];
+let sourceSearch = 'root';
 function SuffixTrieCompressed({ genome, pattern }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -75,13 +77,71 @@ function SuffixTrieCompressed({ genome, pattern }) {
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
   const [value, setValue] = useState(300);
-  const [matchedIndexes, setMatchedIndexes] = useState([]);
+  const [findIndexesFlag, setFindIndexesFlag] = useState(false);
+
+  function findAllIndexesOfPatternMatching(trie, sourceNiz, nekiNiz, edgesFormated) {
+    let nekiNizTmp = [...nekiNiz];
+    const edgesFormatedTmp = { ...edgesFormated };
+    let sourceNizTmp = [...sourceNiz];
+    const source = sourceNizTmp.shift();
+    if (trie[source] && Object.keys(trie[source]).length !== 0) {
+      if (alreadySeenMultipleNodes.indexOf(source) === -1) {
+        alreadySeenMultipleNodes.push(source);
+        nekiNizTmp = [...Object.entries(trie[source]), ...nekiNizTmp];
+        sourceNizTmp = [
+          ...Array(Object.keys(trie[source]).length - 1).fill(source),
+          ...sourceNizTmp,
+        ];
+      }
+    }
+    const c = nekiNizTmp.shift();
+    if (trie[source] && c[0][c[0].length - 1] === '$') {
+      matchedIndexes.push(trie[source][c[0]]);
+    }
+    if (c && source) {
+      if (data.trie[source][c[0]]) {
+        edgesFormatedTmp[`${source}-${data.trie[source][c[0]]}`] = {
+          data: {
+            source,
+            target: data.trie[source][c[0]],
+            label: c[0],
+            id: `${source}-${data.trie[source][c[0]]}`,
+          },
+          classes: 'searchIndex',
+        };
+        setElements({
+          ...elements,
+          edges: Object.values(edgesFormatedTmp),
+        });
+      }
+      setTimeout(() => {
+        if (c[0][c[0].length - 1] !== '$') {
+          sourceNizTmp = [c[1], ...sourceNizTmp];
+        }
+        findAllIndexesOfPatternMatching(trie, sourceNizTmp, nekiNizTmp, edgesFormatedTmp);
+      }, value);
+    } else {
+      setFindIndexesFlag(false);
+    }
+  }
+
+  useEffect(() => {
+    if (findIndexesFlag) {
+      const edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
+        return {
+          ...previousValue,
+          [currentValue.data.id]: {
+            ...currentValue,
+          },
+        };
+      }, {});
+      findAllIndexesOfPatternMatching(data.trie, [sourceSearch], [], edgesFormated);
+    }
+  }, [findIndexesFlag]);
 
   useEffect(() => {
     if (disableButton) {
       // Umesto na disable button da ide, ovde staviti neki poseban flag
-      let source = 'root';
-      const patternMatchingIndexes = [];
       let isFound = true;
       let patternTmp = `${pattern}$`;
       // eslint-disable-next-line no-loop-func
@@ -100,16 +160,15 @@ function SuffixTrieCompressed({ genome, pattern }) {
         if (currentIteration === 0) {
           clearInterval(interval);
           if (isFound) {
-            findAllIndexesOfPatternMatching(data.trie, source, patternMatchingIndexes);
-            setMatchedIndexes(patternMatchingIndexes);
+            setFindIndexesFlag(true);
           } else {
-            Object.keys(data.trie[source]).forEach((item) => {
-              edgesFormated[`${source}-${data.trie[source][item]}`] = {
+            Object.keys(data.trie[sourceSearch]).forEach((item) => {
+              edgesFormated[`${sourceSearch}-${data.trie[sourceSearch][item]}`] = {
                 data: {
-                  source,
-                  target: data.trie[source][item],
+                  source: sourceSearch,
+                  target: data.trie[sourceSearch][item],
                   label: item,
-                  id: `${source}-${data.trie[source][item]}`,
+                  id: `${sourceSearch}-${data.trie[sourceSearch][item]}`,
                 },
                 classes: 'reallyinactive',
               };
@@ -122,7 +181,7 @@ function SuffixTrieCompressed({ genome, pattern }) {
         }
 
         const patternSubstring = patternTmp.substring(0, currentIteration);
-        const sourceKeys = Object.keys(data.trie[source]);
+        const sourceKeys = Object.keys(data.trie[sourceSearch]);
         for (let j = 0; j < sourceKeys.length; j += 1) {
           if (
             (sourceKeys[j].startsWith(patternSubstring) &&
@@ -130,12 +189,12 @@ function SuffixTrieCompressed({ genome, pattern }) {
               currentIteration > 0) ||
             (currentIteration !== patternTmp.length && sourceKeys[j] === patternSubstring)
           ) {
-            edgesFormated[`${source}-${data.trie[source][sourceKeys[j]]}`] = {
+            edgesFormated[`${sourceSearch}-${data.trie[sourceSearch][sourceKeys[j]]}`] = {
               data: {
-                source,
-                target: data.trie[source][sourceKeys[j]],
+                source: sourceSearch,
+                target: data.trie[sourceSearch][sourceKeys[j]],
                 label: sourceKeys[j],
-                id: `${source}-${data.trie[source][sourceKeys[j]]}`,
+                id: `${sourceSearch}-${data.trie[sourceSearch][sourceKeys[j]]}`,
               },
               classes: 'active',
             };
@@ -143,7 +202,7 @@ function SuffixTrieCompressed({ genome, pattern }) {
               ...elements,
               edges: Object.values(edgesFormated),
             });
-            source = data.trie[source][sourceKeys[j]];
+            sourceSearch = data.trie[sourceSearch][sourceKeys[j]];
             patternTmp = patternTmp.substring(currentIteration);
             currentIteration = patternTmp.length;
             break;
@@ -277,7 +336,7 @@ function SuffixTrieCompressed({ genome, pattern }) {
   };
 
   const indexesMatch = matchedIndexes
-    ? matchedIndexes.sort().map((item, index) => (
+    ? matchedIndexes.map((item, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <Grid item textAlign="center" key={index} style={{ marginLeft: '10px' }}>
           <div style={{ color: '#00FFFF', float: 'left', fontSize: '30px' }}>
@@ -322,7 +381,10 @@ function SuffixTrieCompressed({ genome, pattern }) {
               setIsPlaying(true);
               setSuffixArray(['0 ']);
               setCurrentEdge({});
-              setMatchedIndexes([]);
+              setFindIndexesFlag(false);
+              matchedIndexes = [];
+              alreadySeenMultipleNodes = [];
+              sourceSearch = 'root';
             }}
           >
             Reset

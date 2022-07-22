@@ -165,6 +165,12 @@ export const style = [
     },
   },
   {
+    selector: '.searchIndex',
+    style: {
+      'line-color': 'gray',
+    },
+  },
+  {
     selector: '[speed]',
     style: {
       'line-color': (ele) => {
