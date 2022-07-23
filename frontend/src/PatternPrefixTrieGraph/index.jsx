@@ -55,29 +55,6 @@ export const defaults = {
   stop() {}, // on layoutstop
 };
 
-function findPreffixTriePatternMatching(genome, trie) {
-  let source = 'root';
-  let resultValue = '';
-  const result = [];
-  for (let i = 0; i <= genome.length; i += 1) {
-    const c = genome.charAt(i);
-    if ('$' in trie[source]) {
-      result.push(resultValue);
-      if (Object.keys(trie[source]).length === 1) {
-        return result;
-      }
-    }
-
-    if (c in trie[source]) {
-      resultValue += c;
-      source = trie[source][c];
-    } else {
-      return result;
-    }
-  }
-  return result;
-}
-
 function PatternPrefixTrie({ genome, patternList }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -88,10 +65,12 @@ function PatternPrefixTrie({ genome, patternList }) {
   const [currentEdge, setCurrentEdge] = useState({});
   const [value, setValue] = useState(100);
   const [matchingIndexes, setMatchingIndexes] = useState([]);
-  const [resultSearchIndexes, setResultSearchIndexes] = useState({ i: 0, j: 0 });
+  const [resultSearchIndexes, setResultSearchIndexes] = useState({ i: -1, j: -1 });
   const [trieState, setTrieState] = useState({});
   const [genomeObject, setGenomeObject] = useState({});
   const [genomeCopy, setGenomeCopy] = useState(genome);
+  const [sourceState, setSourceState] = useState('root');
+  const [resultValue, setResultValue] = useState('');
   const [genomeView, setGenomeView] = useState(
     <Grid container>
       <Stack direction="row" xs={12}>
@@ -128,21 +107,47 @@ function PatternPrefixTrie({ genome, patternList }) {
       timeout = setTimeout(() => {
         const { i, j } = resultSearchIndexes;
 
-        const result = findPreffixTriePatternMatching(genomeCopy, trieState);
-        if (result.length !== 0) {
-          setMatchingIndexes([
-            ...[...result].map((x) => {
-              return [x, i];
-            }),
-            ...matchingIndexes,
-          ]);
+        if (j !== -1) {
+          const c = genomeCopy.charAt(j);
+          if ('$' in trieState[sourceState]) {
+            // setMatchingIndexes([[resultValue, i], ...matchingIndexes]);
+            if (Object.keys(trieState[sourceState]).length === 1) {
+              setMatchingIndexes([[resultValue, i], ...matchingIndexes]);
+              setResultSearchIndexes({ i, j: -1 });
+              setSourceState('root');
+              setResultValue('');
+            } else if (c in trieState[sourceState]) {
+              setResultValue(resultValue + c);
+              setSourceState(trieState[sourceState][c]);
+              setResultSearchIndexes({ i, j: j + 1 });
+            } else {
+              setMatchingIndexes([[resultValue, i], ...matchingIndexes]);
+              setResultSearchIndexes({ i, j: -1 });
+              setSourceState('root');
+              setResultValue('');
+            }
+          } else if (c in trieState[sourceState]) {
+            setResultValue(resultValue + c);
+            setSourceState(trieState[sourceState][c]);
+            setResultSearchIndexes({ i, j: j + 1 });
+          } else {
+            setResultSearchIndexes({ i, j: -1 });
+            setSourceState('root');
+            setResultValue('');
+          }
         }
-        if (i === genome.length && j === genomeCopy.length) {
+
+        if (i === genome.length) {
           clearTimeout(timeout);
+          return;
         }
-        setGenomeCopy(genomeCopy.substring(1));
-        setResultSearchIndexes({ i: i + 1, j });
-        setGenomeObject({ index: i });
+        if (j === -1) {
+          if (i !== -1) {
+            setGenomeCopy(genomeCopy.substring(1));
+            setGenomeObject({ index: i });
+          }
+          setResultSearchIndexes({ i: i + 1, j: j + 1 });
+        }
       }, value);
     }
     return () => {
@@ -344,8 +349,10 @@ function PatternPrefixTrie({ genome, patternList }) {
               setMatchingIndexes([]);
               setTrieState({});
               setGenomeCopy(genome);
-              setResultSearchIndexes({ i: 0, j: 0 });
+              setResultSearchIndexes({ i: -1, j: -1 });
               setGenomeView({});
+              setSourceState('root');
+              setResultValue('');
               setGenomeView(
                 <Grid container>
                   <Stack direction="row" xs={12}>
