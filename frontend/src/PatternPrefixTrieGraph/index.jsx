@@ -62,10 +62,10 @@ function findPreffixTriePatternMatching(genome, trie) {
   for (let i = 0; i <= genome.length; i += 1) {
     const c = genome.charAt(i);
     if ('$' in trie[source]) {
-      if (Object.keys(trie[source]).length === 0) {
+      result.push(resultValue);
+      if (Object.keys(trie[source]).length === 1) {
         return result;
       }
-      result.push(resultValue);
     }
 
     if (c in trie[source]) {
@@ -88,8 +88,10 @@ function PatternPrefixTrie({ genome, patternList }) {
   const [currentEdge, setCurrentEdge] = useState({});
   const [value, setValue] = useState(100);
   const [matchingIndexes, setMatchingIndexes] = useState([]);
+  const [resultSearchIndexes, setResultSearchIndexes] = useState({ i: 0, j: 0 });
   const [trieState, setTrieState] = useState({});
   const [genomeObject, setGenomeObject] = useState({});
+  const [genomeCopy, setGenomeCopy] = useState(genome);
   const [genomeView, setGenomeView] = useState(
     <Grid container>
       <Stack direction="row" xs={12}>
@@ -121,27 +123,32 @@ function PatternPrefixTrie({ genome, patternList }) {
   }, [genomeObject]);
 
   useEffect(() => {
+    let timeout;
     if (Object.keys(trieState).length > 0) {
-      let genomeCopy = genome;
-      const genomeMatchingIndexes = [];
-      let currentIteration = 0;
-      const interval = setInterval(() => {
-        if (currentIteration === genome.length) {
-          clearInterval(interval);
-        }
+      timeout = setTimeout(() => {
+        const { i, j } = resultSearchIndexes;
+
         const result = findPreffixTriePatternMatching(genomeCopy, trieState);
         if (result.length !== 0) {
-          result.forEach((resultItem) =>
-            genomeMatchingIndexes.push([resultItem, currentIteration]),
-          );
-          setMatchingIndexes(genomeMatchingIndexes);
+          setMatchingIndexes([
+            ...[...result].map((x) => {
+              return [x, i];
+            }),
+            ...matchingIndexes,
+          ]);
         }
-        genomeCopy = genomeCopy.substring(1);
-        currentIteration += 1;
-        setGenomeObject({ index: currentIteration });
+        if (i === genome.length && j === genomeCopy.length) {
+          clearTimeout(timeout);
+        }
+        setGenomeCopy(genomeCopy.substring(1));
+        setResultSearchIndexes({ i: i + 1, j });
+        setGenomeObject({ index: i });
       }, value);
     }
-  }, [trieState]);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [trieState, resultSearchIndexes]);
 
   useEffect(() => {
     if (disableButton) {
@@ -336,6 +343,8 @@ function PatternPrefixTrie({ genome, patternList }) {
               setCurrentEdge({});
               setMatchingIndexes([]);
               setTrieState({});
+              setGenomeCopy(genome);
+              setResultSearchIndexes({ i: 0, j: 0 });
               setGenomeView({});
               setGenomeView(
                 <Grid container>
