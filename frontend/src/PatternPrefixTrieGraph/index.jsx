@@ -55,6 +55,7 @@ export const defaults = {
   stop() {}, // on layoutstop
 };
 
+let resultIsWrong = false;
 function PatternPrefixTrie({ genome, patternList }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
@@ -92,9 +93,27 @@ function PatternPrefixTrie({ genome, patternList }) {
             <div className="opacityText" style={{ float: 'left' }}>
               {genome.substring(0, listItem.index)}
             </div>
-            <div style={{ float: 'left', color: '#FFFFFF' }}>
-              {genome.substring(listItem.index)}
+            <div style={{ float: 'left', color: 'green' }}>
+              {genome.substring(listItem.index, listItem.index + listItem.jIndex - 1)}
             </div>
+            {resultIsWrong && (
+              <div style={{ float: 'left', color: 'red' }}>
+                {genome.substring(
+                  listItem.index + listItem.jIndex - 1,
+                  listItem.index + listItem.jIndex,
+                )}
+              </div>
+            )}
+            {resultIsWrong && (
+              <div style={{ float: 'left', color: '#FFFFFF' }}>
+                {genome.substring(listItem.index + listItem.jIndex)}
+              </div>
+            )}
+            {!resultIsWrong && (
+              <div style={{ float: 'left', color: '#FFFFFF' }}>
+                {genome.substring(listItem.index + listItem.jIndex - 1)}
+              </div>
+            )}
           </Stack>
         </Grid>,
       );
@@ -106,45 +125,170 @@ function PatternPrefixTrie({ genome, patternList }) {
     if (Object.keys(trieState).length > 0) {
       timeout = setTimeout(() => {
         const { i, j } = resultSearchIndexes;
+        let edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
+          return {
+            ...previousValue,
+            [currentValue.data.id]: {
+              ...currentValue,
+            },
+          };
+        }, {});
 
         if (j !== -1) {
           const c = genomeCopy.charAt(j);
           if ('$' in trieState[sourceState]) {
-            // setMatchingIndexes([[resultValue, i], ...matchingIndexes]);
+            setMatchingIndexes([[resultValue, i], ...matchingIndexes]);
             if (Object.keys(trieState[sourceState]).length === 1) {
-              setMatchingIndexes([[resultValue, i], ...matchingIndexes]);
+              resultIsWrong = false;
+              edgesFormated[`${sourceState}-${data.trie[sourceState].$}`] = {
+                data: {
+                  source: sourceState,
+                  target: data.trie[sourceState].$,
+                  label: '$',
+                  id: `${sourceState}-${data.trie[sourceState].$}`,
+                },
+                classes: 'active',
+              };
+              setElements({
+                ...elements,
+                edges: Object.values(edgesFormated),
+              });
               setResultSearchIndexes({ i, j: -1 });
               setSourceState('root');
               setResultValue('');
             } else if (c in trieState[sourceState]) {
               setResultValue(resultValue + c);
+              edgesFormated[`${sourceState}-${data.trie[sourceState][c]}`] = {
+                data: {
+                  source: sourceState,
+                  target: data.trie[sourceState][c],
+                  label: c,
+                  id: `${sourceState}-${data.trie[sourceState][c]}`,
+                },
+                classes: 'active',
+              };
+              edgesFormated[`${sourceState}-${data.trie[sourceState].$}`] = {
+                data: {
+                  source: sourceState,
+                  target: data.trie[sourceState].$,
+                  label: '$',
+                  id: `${sourceState}-${data.trie[sourceState].$}`,
+                },
+                classes: 'active',
+              };
+              setElements({
+                ...elements,
+                edges: Object.values(edgesFormated),
+              });
               setSourceState(trieState[sourceState][c]);
               setResultSearchIndexes({ i, j: j + 1 });
             } else {
-              setMatchingIndexes([[resultValue, i], ...matchingIndexes]);
+              resultIsWrong = true;
               setResultSearchIndexes({ i, j: -1 });
+              Object.keys(data.trie[sourceState]).forEach((item) => {
+                if (item !== '$') {
+                  edgesFormated[`${sourceState}-${data.trie[sourceState][item]}`] = {
+                    data: {
+                      source: sourceState,
+                      target: data.trie[sourceState][item],
+                      label: item,
+                      id: `${sourceState}-${data.trie[sourceState][item]}`,
+                    },
+                    classes: 'reallyinactive',
+                  };
+                }
+              });
+              edgesFormated[`${sourceState}-${data.trie[sourceState].$}`] = {
+                data: {
+                  source: sourceState,
+                  target: data.trie[sourceState].$,
+                  label: '$',
+                  id: `${sourceState}-${data.trie[sourceState].$}`,
+                },
+                classes: 'active',
+              };
+              setElements({
+                ...elements,
+                edges: Object.values(edgesFormated),
+              });
               setSourceState('root');
-              setResultValue('');
             }
           } else if (c in trieState[sourceState]) {
             setResultValue(resultValue + c);
+            edgesFormated[`${sourceState}-${data.trie[sourceState][c]}`] = {
+              data: {
+                source: sourceState,
+                target: data.trie[sourceState][c],
+                label: c,
+                id: `${sourceState}-${data.trie[sourceState][c]}`,
+              },
+              classes: 'active',
+            };
+            setElements({
+              ...elements,
+              edges: Object.values(edgesFormated),
+            });
             setSourceState(trieState[sourceState][c]);
             setResultSearchIndexes({ i, j: j + 1 });
           } else {
+            resultIsWrong = true;
             setResultSearchIndexes({ i, j: -1 });
+            Object.keys(data.trie[sourceState]).forEach((item) => {
+              edgesFormated[`${sourceState}-${data.trie[sourceState][item]}`] = {
+                data: {
+                  source: sourceState,
+                  target: data.trie[sourceState][item],
+                  label: item,
+                  id: `${sourceState}-${data.trie[sourceState][item]}`,
+                },
+                classes: 'reallyinactive',
+              };
+            });
+            setElements({
+              ...elements,
+              edges: Object.values(edgesFormated),
+            });
             setSourceState('root');
             setResultValue('');
           }
+          setGenomeObject({ index: i, jIndex: j + 1 });
         }
 
         if (i === genome.length) {
+          edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
+            return {
+              ...previousValue,
+              [currentValue.data.id]: {
+                ...currentValue,
+                classes: 'inactive',
+              },
+            };
+          }, {});
+          setElements({
+            ...elements,
+            edges: Object.values(edgesFormated),
+          });
           clearTimeout(timeout);
           return;
         }
+
         if (j === -1) {
           if (i !== -1) {
+            resultIsWrong = false;
+            edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
+              return {
+                ...previousValue,
+                [currentValue.data.id]: {
+                  ...currentValue,
+                  classes: 'inactive',
+                },
+              };
+            }, {});
+            setElements({
+              ...elements,
+              edges: Object.values(edgesFormated),
+            });
             setGenomeCopy(genomeCopy.substring(1));
-            setGenomeObject({ index: i });
           }
           setResultSearchIndexes({ i: i + 1, j: j + 1 });
         }
