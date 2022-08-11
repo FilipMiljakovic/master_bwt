@@ -10,6 +10,7 @@ import SuffixTrieCompressedGraph from '../SuffixTrieCompressedGraph';
 function SuffixTrieCompressed() {
   const [genome, setGenome] = useState('');
   const [pattern, setPattern] = useState('');
+  const [doStepByStep, setDoStepByStep] = useState(false);
   const [showGraph, setShowGraph] = useState(false);
 
   const submitForm = () => {
@@ -54,6 +55,18 @@ function SuffixTrieCompressed() {
                 onChange={(e) => setPattern(e.target.value)}
               />
             </Grid>
+            <Grid item xs={7} textAlign="center" style={{ padding: '5px' }}>
+              <label htmlFor="suffixTrieCompressedCheckbox">
+                <input
+                  type="checkbox"
+                  value={doStepByStep}
+                  id="suffixTrieCompressedCheckbox"
+                  name="suffixTrieCompressedCheckbox"
+                  onChange={(e) => setDoStepByStep(e.target.checked)}
+                />
+                Iscrtaj graf postupno
+              </label>
+            </Grid>
             <Grid item xs={7} style={{ padding: '5px' }}>
               <CustomButton variant="contained" onClick={submitForm}>
                 Create Compressed Suffix Trie
@@ -62,7 +75,7 @@ function SuffixTrieCompressed() {
           </Grid>
         </Grid>
       ) : (
-        <SuffixTrieCompressedGraph genome={genome} pattern={pattern} />
+        <SuffixTrieCompressedGraph genome={genome} pattern={pattern} doStepByStep={doStepByStep} />
       )}
     </>
   );

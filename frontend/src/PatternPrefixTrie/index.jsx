@@ -10,6 +10,7 @@ import PatternPrefixTrieGraph from '../PatternPrefixTrieGraph';
 function PatternPrefixTrie() {
   const [genome, setGenome] = useState('');
   const [patternList, setPatternList] = useState('');
+  const [doStepByStep, setDoStepByStep] = useState(false);
   const [showGraph, setShowGraph] = useState(false);
 
   const submitForm = () => {
@@ -54,6 +55,18 @@ function PatternPrefixTrie() {
                 onChange={(e) => setPatternList(e.target.value)}
               />
             </Grid>
+            <Grid item xs={7} textAlign="center" style={{ padding: '5px' }}>
+              <label htmlFor="suffixTrieCheckbox">
+                <input
+                  type="checkbox"
+                  value={doStepByStep}
+                  id="suffixTrieCheckbox"
+                  name="suffixTrieCheckbox"
+                  onChange={(e) => setDoStepByStep(e.target.checked)}
+                />
+                Iscrtaj graf postupno
+              </label>
+            </Grid>
             <Grid item xs={7} style={{ padding: '5px' }}>
               <CustomButton variant="contained" onClick={submitForm}>
                 Create Pattern Prefix Trie
@@ -62,7 +75,11 @@ function PatternPrefixTrie() {
           </Grid>
         </Grid>
       ) : (
-        <PatternPrefixTrieGraph genome={genome} patternList={patternList} />
+        <PatternPrefixTrieGraph
+          genome={genome}
+          patternList={patternList}
+          doStepByStep={doStepByStep}
+        />
       )}
     </>
   );

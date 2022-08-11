@@ -56,7 +56,7 @@ export const defaults = {
 };
 
 let resultIsWrong = false;
-function PatternPrefixTrie({ genome, patternList }) {
+function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
   const [data, setData] = useState(null);
   const [elements, setElements] = useState({ nodes: [], edges: [] });
   const [indexes, setIndexes] = useState({ i: 0, j: 0 });
@@ -331,66 +331,6 @@ function PatternPrefixTrie({ genome, patternList }) {
   }, []);
 
   useEffect(() => {
-    let timeout;
-    if (data && isPlaying) {
-      const triePatternArray = data.trieArray;
-      timeout = setTimeout(() => {
-        const { i, j } = indexes;
-
-        const { edge, source, target } = triePatternArray[i][j];
-        const { nodes, edges } = elements;
-        const edgesFormated =
-          edges.length === 0
-            ? {}
-            : edges.reduce((previousValue, currentValue) => {
-                return {
-                  ...previousValue,
-                  [currentValue.data.id]: {
-                    ...currentValue,
-                    classes: 'inactive',
-                  },
-                };
-              }, {});
-        edgesFormated[`${source}-${target}`] = {
-          data: {
-            source,
-            target,
-            label: edge,
-            id: `${source}-${target}`,
-          },
-          classes: 'active',
-        };
-        setCurrentEdge({ i, edge });
-        setElements({
-          nodes: [
-            ...nodes,
-            { data: { id: source, label: source } },
-            { data: { id: target, label: target } },
-          ],
-          edges: Object.values(edgesFormated),
-        });
-        if (j === triePatternArray[i].length - 1 && i === triePatternArray.length - 1) {
-          clearTimeout(timeout);
-          setDisableButton(true);
-          setTrieState(data.trie);
-          return;
-        }
-
-        if (j === triePatternArray[i].length - 1) {
-          setIndexes({ i: i + 1, j: 0 });
-          setCurrentEdge({ i: i + 1 });
-          return;
-        }
-
-        setIndexes({ i, j: j + 1 });
-      }, value);
-    }
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [indexes, data, isPlaying]);
-
-  useEffect(() => {
     const { i, edge } = currentEdge;
     const suffixArrayCopy = [...suffixArray];
     if (edge) {
@@ -401,6 +341,105 @@ function PatternPrefixTrie({ genome, patternList }) {
       setSuffixArray(suffixArrayCopy);
     }
   }, [currentEdge]);
+
+  function createPatternList() {
+    const patternListValues = [];
+    for (let i = 0; i < matchingPatternList.length; i += 1) {
+      patternListValues.push(`${i} ${matchingPatternList[i]}`);
+    }
+    return patternListValues;
+  }
+
+  useEffect(() => {
+    let timeout;
+    if (data && isPlaying) {
+      const triePatternArray = data.trieArray;
+      if (doStepByStep) {
+        timeout = setTimeout(() => {
+          const { i, j } = indexes;
+
+          const { edge, source, target } = triePatternArray[i][j];
+          const { nodes, edges } = elements;
+          const edgesFormated =
+            edges.length === 0
+              ? {}
+              : edges.reduce((previousValue, currentValue) => {
+                  return {
+                    ...previousValue,
+                    [currentValue.data.id]: {
+                      ...currentValue,
+                      classes: 'inactive',
+                    },
+                  };
+                }, {});
+          edgesFormated[`${source}-${target}`] = {
+            data: {
+              source,
+              target,
+              label: edge,
+              id: `${source}-${target}`,
+            },
+            classes: 'active',
+          };
+          setCurrentEdge({ i, edge });
+          setElements({
+            nodes: [
+              ...nodes,
+              { data: { id: source, label: source } },
+              { data: { id: target, label: target } },
+            ],
+            edges: Object.values(edgesFormated),
+          });
+          if (j === triePatternArray[i].length - 1 && i === triePatternArray.length - 1) {
+            clearTimeout(timeout);
+            setDisableButton(true);
+            setTrieState(data.trie);
+            return;
+          }
+
+          if (j === triePatternArray[i].length - 1) {
+            setIndexes({ i: i + 1, j: 0 });
+            setCurrentEdge({ i: i + 1 });
+            return;
+          }
+
+          setIndexes({ i, j: j + 1 });
+        }, value);
+      } else {
+        const edgesFormated = {};
+        let nodesFormated = [];
+        triePatternArray.forEach((triePatternArrayEntry) => {
+          triePatternArrayEntry.forEach((triePatternArrayEntryValueObject) => {
+            const { edge, source, target } = triePatternArrayEntryValueObject;
+            nodesFormated = [
+              ...nodesFormated,
+              { data: { id: source, label: source } },
+              { data: { id: target, label: target } },
+            ];
+            edgesFormated[`${source}-${target}`] = {
+              data: {
+                source,
+                target,
+                label: edge,
+                id: `${source}-${target}`,
+              },
+              classes: 'inactive',
+            };
+          });
+        });
+        setSuffixArray(createPatternList());
+        setElements({
+          nodes: nodesFormated,
+          edges: Object.values(edgesFormated),
+        });
+        setDisableButton(true);
+        setTrieState(data.trie);
+      }
+    }
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [indexes, data, isPlaying]);
 
   const ref = useRef(null);
   useEffect(() => {

@@ -10,6 +10,7 @@ import SuffixTrieGraph from '../SuffixTrieGraph';
 function SuffixTrie() {
   const [genome, setGenome] = useState('');
   const [pattern, setPattern] = useState('');
+  const [doStepByStep, setDoStepByStep] = useState(false);
   const [showGraph, setShowGraph] = useState(false);
 
   const submitForm = () => {
@@ -54,6 +55,18 @@ function SuffixTrie() {
                 onChange={(e) => setPattern(e.target.value)}
               />
             </Grid>
+            <Grid item xs={7} textAlign="center" style={{ padding: '5px' }}>
+              <label htmlFor="suffixTrieCheckbox">
+                <input
+                  type="checkbox"
+                  value={doStepByStep}
+                  id="suffixTrieCheckbox"
+                  name="suffixTrieCheckbox"
+                  onChange={(e) => setDoStepByStep(e.target.checked)}
+                />
+                Iscrtaj graf postupno
+              </label>
+            </Grid>
             <Grid item xs={7} style={{ padding: '5px' }}>
               <CustomButton variant="contained" onClick={submitForm}>
                 Create Suffix Trie
@@ -62,7 +75,7 @@ function SuffixTrie() {
           </Grid>
         </Grid>
       ) : (
-        <SuffixTrieGraph genome={genome} pattern={pattern} />
+        <SuffixTrieGraph genome={genome} pattern={pattern} doStepByStep={doStepByStep} />
       )}
     </>
   );
