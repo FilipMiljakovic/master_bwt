@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -142,25 +144,27 @@ function BwtVisual({ genome, pattern }) {
   }, [firstLastArray]);
 
   function colorLeftValues() {
-    const iterationNumber = genome.length;
-    let currentIteration = 0;
-    setFirstLastArray(
-      firstLastArray.map((item) => {
-        const newItem = { ...item };
-        newItem.firstColor = '#FFFFFF';
-        return newItem;
-      }),
-    );
-    const interval = setInterval(() => {
-      if (currentIteration === iterationNumber) {
-        if (patternIndex !== pattern.length) {
-          setPatternIndex(patternIndex + 1);
-          setMatchingStrings([]);
-          // eslint-disable-next-line no-use-before-define
-          colorRightValues();
-        }
-        clearInterval(interval);
-      }
+    const patternMatchingCharacter = pattern[pattern.length - 1 - patternIndex];
+    let array = firstLastArray.map((item) => {
+      const newItem = { ...item };
+      newItem.firstColor = '#FFFFFF';
+      return newItem;
+    });
+    let indexArray = [];
+    // setFirstLastArray(
+    // );
+    // const interval = setInterval(() => {
+    // if (currentIteration === iterationNumber) {
+    //   if (patternIndex !== pattern.length) {
+    //     setPatternIndex(patternIndex + 1);
+    //     setMatchingStrings([]);
+    //     // eslint-disable-next-line no-use-before-define
+    //     colorRightValues();
+    //   }
+    //   clearInterval(interval);
+    // }
+    // eslint-disable-next-line no-restricted-syntax, guard-for-in
+    for (const item in firstLastArray) {
       for (let i = 0; i < matchingStrings.length; i += 1) {
         console.log(firstLastArray);
         if (
@@ -168,79 +172,79 @@ function BwtVisual({ genome, pattern }) {
           //   (element) => element === firstLastArray[currentIteration].value[element.length],
           // )
           matchingStrings[i] ===
-          firstLastArray[currentIteration].value.substring(0, matchingStrings[i].length)
+            firstLastArray[item].value.substring(0, matchingStrings[i].length) &&
+          patternMatchingCharacter === matchingStrings[i][0]
         ) {
-          setFirstLastArray(
-            changeIElement(
-              firstLastArray,
-              currentIteration,
-              '#00FFFF',
-              firstLastArray[currentIteration].lastColor,
-              2 + patternIndex,
-            ),
-          );
-          setFoundIndexArray([...foundIndexArray, currentIteration]);
+          array = changeIElement(array, item, '#00FFFF', array[item].lastColor, 2 + patternIndex);
+          // );
+          indexArray = [...indexArray, item];
+          break;
         } else {
-          setFirstLastArray(
-            changeIElement(
-              firstLastArray,
-              currentIteration,
-              '#FF0000',
-              firstLastArray[currentIteration].lastColor,
-              2,
-            ),
-          );
+          array = changeIElement(array, item, '#FF0000', array[item].lastColor, 2);
+          // )
         }
       }
-      currentIteration += 1;
-    }, 500);
+    }
+    setFirstLastArray(array);
+    setFoundIndexArray(indexArray);
+    setMatchingStrings([]);
+
+    //     setPatternIndex(patternIndex + 1);
+    //     setMatchingStrings([]);
+    // currentIteration += 1;
+    // }, 500);
   }
 
   function colorRightValues() {
-    const iterationNumber = foundIndexArray.length - 1;
-    let currentIteration = 0;
-    setFirstLastArray(
-      firstLastArray.map((item) => {
-        const newItem = { ...item };
-        newItem.lastColor = '#FFFFFF';
-        return newItem;
-      }),
-    );
-    const interval = setInterval(() => {
-      if (currentIteration === iterationNumber) {
-        colorLeftValues();
-        clearInterval(interval);
-      }
-      if (
-        pattern[pattern.length - 1 - patternIndex] ===
-        firstLastArray[foundIndexArray[currentIteration]].value[genome.length + 1]
-      ) {
-        setFirstLastArray(
-          changeIElement(
-            firstLastArray,
-            currentIteration,
-            firstLastArray[currentIteration].firstColor,
+    // const iterationNumber = foundIndexArray.length - 1;
+    // let currentIteration = 0;
+    let array = firstLastArray.map((item) => {
+      const newItem = { ...item };
+      newItem.lastColor = '#FFFFFF';
+      return newItem;
+    });
+    let matching = [];
+
+    // const interval = setInterval(() => {
+    //   if (currentIteration === iterationNumber) {
+    //     colorLeftValues();
+    //     clearInterval(interval);
+    //   }
+
+    if (patternIndex === pattern.length - 1) {
+      return;
+    }
+
+    for (const item in firstLastArray) {
+      for (let i = 0; i < foundIndexArray.length; i += 1) {
+        if (item === foundIndexArray[i]) {
+          array = changeIElement(
+            array,
+            item,
+            firstLastArray[item].firstColor,
             '#00FFFF',
-            2 + pattern.length - patternIndex,
-          ),
-        );
-        setMatchingStrings([
-          ...matchingStrings,
-          firstLastArray[foundIndexArray[currentIteration]].value.slice(-2),
-        ]);
-      } else {
-        setFirstLastArray(
-          changeIElement(
+            2 + patternIndex,
+          );
+
+          matching = [...matching, firstLastArray[foundIndexArray[i]].value.slice(-2)];
+          break;
+        } else {
+          array = changeIElement(
             firstLastArray,
-            currentIteration,
+            item,
+            firstLastArray[item].firstColor,
             '#FF0000',
-            firstLastArray[currentIteration].lastColor,
             2,
-          ),
-        );
+          );
+        }
       }
-      currentIteration += 1;
-    }, 500);
+    }
+
+    setFirstLastArray(array);
+    setPatternIndex(patternIndex + 1);
+    setMatchingStrings(matching);
+    // currentIteration += 1;
+    // }, 500);
   }
 
   // let timeout;
@@ -291,10 +295,20 @@ function BwtVisual({ genome, pattern }) {
   // };
 
   useEffect(() => {
-    if (runFLIteration) {
-      colorLeftValues();
+    if (runFLIteration && matchingStrings?.length) {
+      setTimeout(() => {
+        colorLeftValues();
+      }, 5000);
     }
-  }, [runFLIteration]);
+  }, [runFLIteration, matchingStrings, firstLastArray]);
+
+  useEffect(() => {
+    if (foundIndexArray?.length) {
+      setTimeout(() => {
+        colorRightValues();
+      }, 5000);
+    }
+  }, [foundIndexArray, firstLastArray]);
 
   useEffect(() => {
     setInverseMatrix(Array.from(bwtString));

@@ -122,7 +122,7 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
 
   useEffect(() => {
     let timeout;
-    if (Object.keys(trieState).length > 0) {
+    if (Object.keys(trieState).length > 0 && isPlaying) {
       timeout = setTimeout(() => {
         const { i, j } = resultSearchIndexes;
         let edgesFormated = elements.edges.reduce((previousValue, currentValue) => {
@@ -268,6 +268,7 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
             ...elements,
             edges: Object.values(edgesFormated),
           });
+          setDisableButton(true);
           clearTimeout(timeout);
           return;
         }
@@ -297,7 +298,7 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
     return () => {
       clearTimeout(timeout);
     };
-  }, [trieState, resultSearchIndexes]);
+  }, [trieState, resultSearchIndexes, isPlaying]);
 
   useEffect(() => {
     if (disableButton) {
@@ -392,7 +393,7 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
           });
           if (j === triePatternArray[i].length - 1 && i === triePatternArray.length - 1) {
             clearTimeout(timeout);
-            setDisableButton(true);
+            // setDisableButton(true);
             setTrieState(data.trie);
             return;
           }
