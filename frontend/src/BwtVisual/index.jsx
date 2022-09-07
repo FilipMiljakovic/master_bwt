@@ -24,7 +24,7 @@ let k = 0;
 function BwtVisual({ genome, pattern }) {
   const [cyclicRotationList1, setCyclicRotationList1] = useState([]);
   const [cyclicRotationList2, setCyclicRotationList2] = useState([]);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
   const [resetButton, setResetButton] = useState(false);
   const [inverseMatrix, setInverseMatrix] = useState([]);
@@ -41,11 +41,12 @@ function BwtVisual({ genome, pattern }) {
       </Grid>
     )),
   );
-  const [isPlayingFL, setIsPlayingFL] = useState(true);
+  const [isPlayingFL, setIsPlayingFL] = useState(false);
   const [disableButtonFL, setDisableButtonFL] = useState(false);
   const [patternIndex, setPatternIndex] = useState(0);
   const [matchingStrings, setMatchingStrings] = useState([pattern[pattern.length - 1]]);
   const [foundIndexArray, setFoundIndexArray] = useState([]);
+  const [resultsFound, setResultsFound] = useState([]);
   const [runFLIteration, setRunFLIteration] = useState(false);
 
   useEffect(() => {
@@ -79,6 +80,12 @@ function BwtVisual({ genome, pattern }) {
     return result;
   }
 
+  function calculateGenomIndex(rowValue) {
+    return Array.from(rowValue).indexOf('$') === 0
+      ? rowValue.length - 3 - Array.from(rowValue).indexOf('$')
+      : rowValue.length - 2 - Array.from(rowValue).indexOf('$');
+  }
+
   function addIndexesToBwt(matrix) {
     const matrixTmp = [...matrix];
     const firstColumn = putIndexesOnArray(matrixTmp.map((item) => item[0]));
@@ -89,6 +96,9 @@ function BwtVisual({ genome, pattern }) {
       valueMap.value = firstColumn[index] + item.substring(1, item.length - 1) + lastColumn[index];
       valueMap.firstSubIndex = 2;
       valueMap.lastColor = '#FFFFFF';
+      valueMap.genomIndex = calculateGenomIndex(
+        firstColumn[index] + item.substring(1, item.length - 1) + lastColumn[index],
+      );
       return valueMap;
     });
   }
@@ -121,9 +131,7 @@ function BwtVisual({ genome, pattern }) {
                 color: '#00FFFF',
               }}
             >
-              {Array.from(listItem.value).indexOf('$') === 0
-                ? listItem.value.length - 3 - Array.from(listItem.value).indexOf('$')
-                : listItem.value.length - 2 - Array.from(listItem.value).indexOf('$')}
+              {listItem.genomIndex}
             </div>
             <div style={{ paddingTop: '6px', color: listItem.firstColor }}>
               {listItem.value.substring(0, listItem.firstSubIndex)}
@@ -151,53 +159,31 @@ function BwtVisual({ genome, pattern }) {
       return newItem;
     });
     let indexArray = [];
-    // setFirstLastArray(
-    // );
-    // const interval = setInterval(() => {
-    // if (currentIteration === iterationNumber) {
-    //   if (patternIndex !== pattern.length) {
-    //     setPatternIndex(patternIndex + 1);
-    //     setMatchingStrings([]);
-    //     // eslint-disable-next-line no-use-before-define
-    //     colorRightValues();
-    //   }
-    //   clearInterval(interval);
-    // }
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const item in firstLastArray) {
       for (let i = 0; i < matchingStrings.length; i += 1) {
         console.log(firstLastArray);
         if (
-          // matchingStrings.find(
-          //   (element) => element === firstLastArray[currentIteration].value[element.length],
-          // )
           matchingStrings[i] ===
             firstLastArray[item].value.substring(0, matchingStrings[i].length) &&
           patternMatchingCharacter === matchingStrings[i][0]
         ) {
           array = changeIElement(array, item, '#00FFFF', array[item].lastColor, 2 + patternIndex);
-          // );
           indexArray = [...indexArray, item];
           break;
         } else {
           array = changeIElement(array, item, '#FF0000', array[item].lastColor, 2);
-          // )
         }
       }
     }
+
+    setRunFLIteration(false);
     setFirstLastArray(array);
     setFoundIndexArray(indexArray);
     setMatchingStrings([]);
-
-    //     setPatternIndex(patternIndex + 1);
-    //     setMatchingStrings([]);
-    // currentIteration += 1;
-    // }, 500);
   }
 
   function colorRightValues() {
-    // const iterationNumber = foundIndexArray.length - 1;
-    // let currentIteration = 0;
     let array = firstLastArray.map((item) => {
       const newItem = { ...item };
       newItem.lastColor = '#FFFFFF';
@@ -205,13 +191,19 @@ function BwtVisual({ genome, pattern }) {
     });
     let matching = [];
 
-    // const interval = setInterval(() => {
-    //   if (currentIteration === iterationNumber) {
-    //     colorLeftValues();
-    //     clearInterval(interval);
-    //   }
-
     if (patternIndex === pattern.length - 1) {
+      setDisableButtonFL(true);
+      array = firstLastArray.map((item) => {
+        const newItem = { ...item };
+        newItem.lastColor = '#FFFFFF';
+        return newItem;
+      });
+      setFirstLastArray(array);
+      setResultsFound(
+        array
+          .filter((item) => item.firstColor === '#00FFFF')
+          .map((changedItem) => changedItem.genomIndex),
+      );
       return;
     }
 
@@ -243,72 +235,23 @@ function BwtVisual({ genome, pattern }) {
     setFirstLastArray(array);
     setPatternIndex(patternIndex + 1);
     setMatchingStrings(matching);
-    // currentIteration += 1;
-    // }, 500);
   }
 
-  // let timeout;
-  // // Mesam dve stvari, pattern i ovu listu stringova od genoma.....
-  // if (patternIndex < pattern.length) {
-  //   if (isPlayingFL) {
-  //     timeout = setTimeout(() => {
-  //       let indexFoundList = [];
-  //       // array se menja u zavisnosti sta se poklapa
-  //       for (let i = 0; i < firstLastArray.length && mistake >= 0; i += 1) {
-  //         if (firstLastArray[i].value[0] === pattern[pattern.length - 1 - patternIndex]) {
-  //           indexFoundList.push(i);
-  //         }
-  //       }
-  //       for (let j = 0; j < indexFoundList.length; j += 1) {
-  //         if (indexFoundList.length !== 0) {
-  //           setFirstLastArray(
-  //             changeIElement(
-  //               firstLastArray,
-  //               indexFoundList[j],
-  //               '#FF0000',
-  //               '#FFFFFF',
-  //               2 + patternIndex,
-  //             ),
-  //           );
-  //         } else if (mistake < 0) {
-  //           setFirstLastArray(
-  //             changeIElement(firstLastArray, j, '#FF0000', '#FFFFFF', 2 + patternIndex),
-  //           );
-  //           // zaustavi izvrsavanje, oboj poslednji u crveno i posle nekako vrati sve na belo
-  //         } else {
-  //           setMistake(mistake - 1);
-  //           setFirstLastArray(
-  //             changeIElement(firstLastArray, j, '#FF0000', '#FFFFFF', 2 + patternIndex),
-  //           );
-  //         }
-  //         indexFoundList = indexFoundList.slice(1, indexFoundList.length);
-  //       }
-  //       // oboj i pattern u istu boju
-  //       setPatternIndex(patternIndex + 1);
-  //     }, valueFL);
-  //   }
-  // } else {
-  //   setDisableButtonFL(true);
-  // }
-  // return () => {
-  //   clearTimeout(timeout);
-  // };
-
   useEffect(() => {
-    if (runFLIteration && matchingStrings?.length) {
+    if (runFLIteration && matchingStrings?.length && isPlayingFL) {
       setTimeout(() => {
         colorLeftValues();
-      }, 5000);
+      }, valueFL);
     }
-  }, [runFLIteration, matchingStrings, firstLastArray]);
+  }, [runFLIteration, matchingStrings, isPlayingFL]);
 
   useEffect(() => {
     if (foundIndexArray?.length) {
       setTimeout(() => {
         colorRightValues();
-      }, 5000);
+      }, valueFL);
     }
-  }, [foundIndexArray, firstLastArray]);
+  }, [foundIndexArray]);
 
   useEffect(() => {
     setInverseMatrix(Array.from(bwtString));
@@ -371,6 +314,16 @@ function BwtVisual({ genome, pattern }) {
         </Grid>
       ));
 
+  const indexesMatch = resultsFound
+    ? resultsFound.map((item, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Grid item textAlign="center" key={index} style={{ margin: '6px' }}>
+          <div style={{ color: '#00FFFF', float: 'left', fontSize: '30px' }}>
+            {index === resultsFound.length - 1 ? item : `${item}, `}
+          </div>
+        </Grid>
+      ))
+    : '';
   return (
     <Grid container spacing={2} style={{ padding: '0% 10% 0% 10%', color: '#FFFFFF' }}>
       <Grid container style={{ margin: '5% 0%', fontSize: '30px' }}>
@@ -469,6 +422,9 @@ function BwtVisual({ genome, pattern }) {
       <Box textAlign="center" style={{ margin: '3% auto 3% auto' }}>
         <Grid style={{ paddingBottom: '10%', fontSize: '30px' }}>First-Last svojstvo</Grid>
         <Grid style={{ paddingBottom: '10%', fontSize: '30px' }}>Pattern: {pattern}</Grid>
+        <Stack direction="row" spacing={2} style={{ color: '#00FFFF', fontSize: '30px' }}>
+          <div style={{ margin: '6px' }}>Pronađena rešenja:</div> {indexesMatch}
+        </Stack>
         <CustomButton
           disabled={disableButtonFL}
           variant="contained"
@@ -480,7 +436,19 @@ function BwtVisual({ genome, pattern }) {
           variant="contained"
           onClick={() => {
             setDisableButtonFL(false);
-            setIsPlayingFL(true);
+            setIsPlayingFL(false);
+            setFirstLastArray(
+              firstLastArray.map((item) => {
+                const newItem = { ...item };
+                newItem.firstColor = '#FFFFFF';
+                newItem.lastColor = '#FFFFFF';
+                newItem.firstSubIndex = 2;
+                return newItem;
+              }),
+            );
+            setMatchingStrings([pattern[pattern.length - 1]]);
+            setPatternIndex(0);
+            setResultsFound([]);
           }}
         >
           Reset

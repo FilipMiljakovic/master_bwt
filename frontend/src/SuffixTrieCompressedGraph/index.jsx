@@ -374,6 +374,19 @@ function SuffixTrieCompressed({ genome, pattern, doStepByStep }) {
     setValue(valueToChange);
   };
 
+  const reset = () => {
+    setDisableButton(false);
+    setElements({ nodes: [], edges: [] });
+    setIndexes({ i: 0, j: 0 });
+    setIsPlaying(true);
+    setSuffixArray(['0 ']);
+    setCurrentEdge({});
+    setFindIndexesFlag(false);
+    matchedIndexes = [];
+    alreadySeenMultipleNodes = [];
+    sourceSearch = 'root';
+  };
+
   const indexesMatch = matchedIndexes
     ? matchedIndexes.map((item, index) => (
         // eslint-disable-next-line react/no-array-index-key
@@ -410,22 +423,7 @@ function SuffixTrieCompressed({ genome, pattern, doStepByStep }) {
             startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
             onClick={() => setIsPlaying(!isPlaying)}
           />
-          <CustomButton
-            disabled={!disableButton}
-            variant="contained"
-            onClick={() => {
-              setDisableButton(false);
-              setElements({ nodes: [], edges: [] });
-              setIndexes({ i: 0, j: 0 });
-              setIsPlaying(true);
-              setSuffixArray(['0 ']);
-              setCurrentEdge({});
-              setFindIndexesFlag(false);
-              matchedIndexes = [];
-              alreadySeenMultipleNodes = [];
-              sourceSearch = 'root';
-            }}
-          >
+          <CustomButton disabled={!disableButton} variant="contained" onClick={() => reset()}>
             Reset
           </CustomButton>
           <Slider
