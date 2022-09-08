@@ -1,54 +1,41 @@
 import React from 'react';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import { Link } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
-const CustomButton = styled(Button)(() => ({
-  width: 300,
-  height: 50,
-  backgroundColor: '#00FFFF',
-  color: '#191970',
-  marginTop: '15px',
-}));
-
 function Home() {
   return (
-    <Grid container>
-      <Grid
-        item
-        xs={4}
-        textAlign="center"
-        style={{ marginTop: '10%', marginLeft: '10%', float: 'left' }}
-      >
-        <Grid item xs={7}>
-          <CustomButton variant="contained" component={Link} to="/bruteforce">
-            Brute force
-          </CustomButton>
-        </Grid>
-        <Grid item xs={7}>
-          <CustomButton variant="contained" component={Link} to="/patternprefixtrie">
-            Pattern prefix trie
-          </CustomButton>
-        </Grid>
-        <Grid item xs={7}>
-          <CustomButton variant="contained" component={Link} to="/suffixtrie">
-            Suffix trie
-          </CustomButton>
-        </Grid>
-        <Grid item xs={7}>
-          <CustomButton variant="contained" component={Link} to="/suffixtriecompressed">
-            Compressed suffix trie
-          </CustomButton>
-        </Grid>
-        <Grid item xs={7}>
-          <CustomButton variant="contained" component={Link} to="/bwt">
-            BWT
-          </CustomButton>
-        </Grid>
-      </Grid>
+    <Grid style={{ marginLeft: '300px', marginTop: '100px' }}>
+      <h1 style={{ textAlign: 'center' }}>Uparivanje šablona</h1>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
+        <Typography paragraph>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
+          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
+          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
+          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
+          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
+          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
+          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
+          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
+          donec massa sapien faucibus et molestie ac.
+        </Typography>
+        <Typography paragraph>
+          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
+          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
+          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
+          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
+          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
+          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
+          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
+          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
+          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
+        </Typography>
+      </Box>
     </Grid>
   );
 }

@@ -414,7 +414,7 @@ function SuffixTrieCompressed({ genome, pattern, doStepByStep }) {
       ))
     : 'Error!!!';
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} style={{ marginLeft: '300px' }}>
       <Grid item xs={4}>
         <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
           <CustomButton

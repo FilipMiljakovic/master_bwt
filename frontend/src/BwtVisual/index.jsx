@@ -325,7 +325,11 @@ function BwtVisual({ genome, pattern }) {
       ))
     : '';
   return (
-    <Grid container spacing={2} style={{ padding: '0% 10% 0% 10%', color: '#FFFFFF' }}>
+    <Grid
+      container
+      spacing={2}
+      style={{ padding: '0% 10% 0% 10%', color: '#FFFFFF', marginLeft: '300px' }}
+    >
       <Grid container style={{ margin: '5% 0%', fontSize: '30px' }}>
         Genom:
         <Grid style={{ marginLeft: '20px' }}>{genome}</Grid>

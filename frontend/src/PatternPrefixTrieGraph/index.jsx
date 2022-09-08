@@ -75,7 +75,7 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
   const [genomeView, setGenomeView] = useState(
     <Grid container>
       <Stack direction="row" xs={12}>
-        <div style={{ float: 'left', color: '#FFFFFF' }}>{genome}</div>
+        <div style={{ float: 'left' }}>{genome}</div>
       </Stack>
     </Grid>,
   );
@@ -90,7 +90,7 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
       setGenomeView(
         <Grid container>
           <Stack direction="row" xs={12}>
-            <div className="opacityText" style={{ float: 'left' }}>
+            <div style={{ float: 'left', color: 'gray' }}>
               {genome.substring(0, listItem.index)}
             </div>
             <div style={{ float: 'left', color: 'green' }}>
@@ -105,12 +105,12 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
               </div>
             )}
             {resultIsWrong && (
-              <div style={{ float: 'left', color: '#FFFFFF' }}>
+              <div style={{ float: 'left' }}>
                 {genome.substring(listItem.index + listItem.jIndex)}
               </div>
             )}
             {!resultIsWrong && (
-              <div style={{ float: 'left', color: '#FFFFFF' }}>
+              <div style={{ float: 'left' }}>
                 {genome.substring(listItem.index + listItem.jIndex - 1)}
               </div>
             )}
@@ -482,10 +482,10 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
         // eslint-disable-next-line react/no-array-index-key
         <Grid container key={index}>
           <Grid item xs={10}>
-            <div style={{ color: '#00FFFF', padding: '6px', float: 'left' }}>
+            <div style={{ padding: '6px', float: 'left' }}>
               {item.charAt(item.length - 1) === '$' ? item : item.substring(0, item.length - 1)}
             </div>
-            <div style={{ color: '#00FFFF', fontSize: '30px', float: 'left' }}>
+            <div style={{ fontSize: '30px', float: 'left' }}>
               {item.charAt(item.length - 1) === '$' ? '' : item.substring(item.length - 1)}
             </div>
           </Grid>
@@ -497,7 +497,7 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
     ? matchingIndexes.map((item, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <Grid item textAlign="center" key={index} style={{ marginLeft: '10px' }}>
-          <div style={{ color: '#00FFFF', float: 'left', fontSize: '30px' }}>
+          <div style={{ float: 'left', fontSize: '30px' }}>
             {index === matchingIndexes.length - 1
               ? `(${item[0]},${item[1]})`
               : `(${item[0]},${item[1]}), `}
@@ -507,12 +507,13 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
     : '';
 
   return (
-    <Grid container spacing={2}>
-      <Grid container style={{ margin: '5% 0% 0% 5%', fontSize: '30px', color: '#00FFFF' }}>
-        Genom:
-        <Grid style={{ marginLeft: '20px' }}>{genomeView}</Grid>
-      </Grid>
+    <Grid container spacing={2} style={{ marginLeft: '300px', marginTop: '100px' }}>
       <Grid item xs={4}>
+        <Grid container style={{ marginLeft: '5%', fontSize: '30px' }}>
+          Genom:
+          <Grid style={{ marginLeft: '20px' }}>{genomeView}</Grid>
+        </Grid>
+        <Grid style={{ marginLeft: '5%', fontSize: '20px' }}>{renderedOutput}</Grid>
         <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
           <CustomButton
             disabled={disableButton}
@@ -540,7 +541,7 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
               setGenomeView(
                 <Grid container>
                   <Stack direction="row" xs={12}>
-                    <div style={{ float: 'left', color: '#FFFFFF' }}>{genome}</div>
+                    <div style={{ float: 'left' }}>{genome}</div>
                   </Stack>
                 </Grid>,
               );
@@ -561,31 +562,26 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
           />
         </Box>
         {disableButton && (
-          <Stack
-            direction="row"
-            spacing={2}
-            style={{ margin: '5% 0 2% 10%', color: '#00FFFF', flexWrap: 'wrap' }}
-          >
-            <div style={{ margin: '6px' }}>Indexses found:</div> {indexesMatch}
+          <Stack direction="row" spacing={2} style={{ marginLeft: '5%', flexWrap: 'wrap' }}>
+            <div style={{ fontSize: '30px' }}>Pronađena rešenja:</div> {indexesMatch}
           </Stack>
         )}
-        <Box style={{ marginLeft: '10%' }}>{renderedOutput}</Box>
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={4}>
         <Box
           style={{
             borderRadius: '25px',
             border: '2px solid #00FFFF',
             padding: '20px',
-            width: '650px',
-            height: '650px',
+            width: '550px',
+            height: '550px',
             margin: '2% 12%',
           }}
         >
           <div
             className="topology-viewer-component canvas-css"
             ref={ref}
-            style={{ width: '650px', height: '650px' }}
+            style={{ width: '550px', height: '550px' }}
           />
         </Box>
       </Grid>

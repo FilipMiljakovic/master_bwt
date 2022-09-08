@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../App.css';
 import { Link } from 'react-router-dom';
 import {
-  AppBar,
-  Toolbar,
   Avatar,
   Box,
   Divider,
-  IconButton,
   List,
   ListItem,
   ListItemIcon,
@@ -15,7 +12,6 @@ import {
   makeStyles,
   Drawer,
 } from '@material-ui/core';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     margin: '0.5rem auto',
     padding: '1rem',
+    marginTop: '80px',
     width: theme.spacing(20),
     height: theme.spacing(30),
   },
@@ -38,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const listItems = [
   {
     listIcon: <ChevronRightIcon />,
-    listText: 'Home',
+    listText: 'Početna stranica',
     link: '/',
   },
   {
@@ -48,17 +45,17 @@ const listItems = [
   },
   {
     listIcon: <ChevronRightIcon />,
-    listText: 'Pattern prefix trie',
+    listText: 'Prefiksna stabla',
     link: '/patternprefixtrie',
   },
   {
     listIcon: <ChevronRightIcon />,
-    listText: 'Suffix trie',
+    listText: 'Sufiksna stabla',
     link: '/suffixtrie',
   },
   {
     listIcon: <ChevronRightIcon />,
-    listText: 'Compressed suffix trie',
+    listText: 'Kompresovana sufiksna stabla',
     link: '/suffixtriecompressed',
   },
   {
@@ -70,11 +67,6 @@ const listItems = [
 
 export default function SideBar() {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-
-  const toggleSlider = () => {
-    setOpen(!open);
-  };
 
   const sideList = () => (
     <Box className={classes.menuSliderContainer} component="div">
@@ -88,7 +80,6 @@ export default function SideBar() {
             key={index}
             component={Link}
             to={listItem.link}
-            onClick={toggleSlider}
           >
             <ListItemIcon className={classes.listItem}>{listItem.listIcon}</ListItemIcon>
             <ListItemText primary={listItem.listText} />
@@ -99,19 +90,17 @@ export default function SideBar() {
   );
 
   return (
-    <>
-      <Box component="nav">
-        <AppBar position="static" style={{ background: '#191970' }}>
-          <Toolbar>
-            <IconButton onClick={toggleSlider}>
-              <MenuIcon style={{ color: '#00FFFF' }} />
-            </IconButton>
-            <Drawer open={open} anchor="left" onClose={toggleSlider}>
-              {sideList()}
-            </Drawer>
-          </Toolbar>
-        </AppBar>
-      </Box>
-    </>
+    <Box component="nav">
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: 240,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: { width: 240, boxSizing: 'border-box' },
+        }}
+      >
+        {sideList()}
+      </Drawer>
+    </Box>
   );
 }
