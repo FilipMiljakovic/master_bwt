@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Box from '@mui/material/Box';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
@@ -507,84 +509,113 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
     : '';
 
   return (
-    <Grid container spacing={2} style={{ marginLeft: '300px', marginTop: '100px' }}>
-      <Grid item xs={4}>
-        <Grid container style={{ marginLeft: '5%', fontSize: '30px' }}>
-          Genom:
-          <Grid style={{ marginLeft: '20px' }}>{genomeView}</Grid>
+    <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '80px' }}>
+      <Grid container>
+        <Grid item xs={4}>
+          <Grid container style={{ marginLeft: '5%', fontSize: '30px' }}>
+            Genom:
+            <Grid style={{ marginLeft: '20px' }}>{genomeView}</Grid>
+          </Grid>
+          <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
+            <CustomButton
+              disabled={disableButton}
+              variant="contained"
+              startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+              onClick={() => setIsPlaying(!isPlaying)}
+            />
+            <CustomButton
+              disabled={!disableButton}
+              variant="contained"
+              onClick={() => {
+                setDisableButton(false);
+                setElements({ nodes: [], edges: [] });
+                setIndexes({ i: 0, j: 0 });
+                setIsPlaying(true);
+                setSuffixArray(['0 ']);
+                setCurrentEdge({});
+                setMatchingIndexes([]);
+                setTrieState({});
+                setGenomeCopy(genome);
+                setResultSearchIndexes({ i: -1, j: -1 });
+                setGenomeView({});
+                setSourceState('root');
+                setResultValue('');
+                setGenomeView(
+                  <Grid container>
+                    <Stack direction="row" xs={12}>
+                      <div style={{ float: 'left' }}>{genome}</div>
+                    </Stack>
+                  </Grid>,
+                );
+              }}
+            >
+              Reset
+            </CustomButton>
+            <Slider
+              defaultValue={50}
+              aria-label="Iteration speed"
+              valueLabelDisplay="auto"
+              value={value}
+              onChange={changeValue}
+              min={100}
+              max={1000}
+              step={100}
+              style={{ width: '50%', marginTop: '20px' }}
+            />
+          </Box>
+          {disableButton && (
+            <Stack direction="row" spacing={2} style={{ marginLeft: '5%', flexWrap: 'wrap' }}>
+              <div style={{ marginBottom: '5%', fontSize: '30px' }}>Pronađena rešenja:</div>{' '}
+              {indexesMatch}
+            </Stack>
+          )}
+          <Grid style={{ marginLeft: '5%', fontSize: '20px' }}>{renderedOutput}</Grid>
         </Grid>
-        <Grid style={{ marginLeft: '5%', fontSize: '20px' }}>{renderedOutput}</Grid>
-        <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
-          <CustomButton
-            disabled={disableButton}
-            variant="contained"
-            startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-            onClick={() => setIsPlaying(!isPlaying)}
-          />
-          <CustomButton
-            disabled={!disableButton}
-            variant="contained"
-            onClick={() => {
-              setDisableButton(false);
-              setElements({ nodes: [], edges: [] });
-              setIndexes({ i: 0, j: 0 });
-              setIsPlaying(true);
-              setSuffixArray(['0 ']);
-              setCurrentEdge({});
-              setMatchingIndexes([]);
-              setTrieState({});
-              setGenomeCopy(genome);
-              setResultSearchIndexes({ i: -1, j: -1 });
-              setGenomeView({});
-              setSourceState('root');
-              setResultValue('');
-              setGenomeView(
-                <Grid container>
-                  <Stack direction="row" xs={12}>
-                    <div style={{ float: 'left' }}>{genome}</div>
-                  </Stack>
-                </Grid>,
-              );
+        <Grid item xs={4}>
+          <Box
+            style={{
+              borderRadius: '25px',
+              border: '2px solid #081054',
+              padding: '20px',
+              width: '550px',
+              height: '550px',
+              margin: '2% 12%',
             }}
           >
-            Reset
-          </CustomButton>
-          <Slider
-            defaultValue={50}
-            aria-label="Iteration speed"
-            valueLabelDisplay="auto"
-            value={value}
-            onChange={changeValue}
-            min={100}
-            max={1000}
-            step={100}
-            style={{ width: '50%', marginTop: '20px' }}
-          />
-        </Box>
-        {disableButton && (
-          <Stack direction="row" spacing={2} style={{ marginLeft: '5%', flexWrap: 'wrap' }}>
-            <div style={{ fontSize: '30px' }}>Pronađena rešenja:</div> {indexesMatch}
-          </Stack>
-        )}
+            <div
+              className="topology-viewer-component canvas-css"
+              ref={ref}
+              style={{ width: '550px', height: '550px' }}
+            />
+          </Box>
+        </Grid>
       </Grid>
-      <Grid item xs={4}>
-        <Box
-          style={{
-            borderRadius: '25px',
-            border: '2px solid #00FFFF',
-            padding: '20px',
-            width: '550px',
-            height: '550px',
-            margin: '2% 12%',
-          }}
-        >
-          <div
-            className="topology-viewer-component canvas-css"
-            ref={ref}
-            style={{ width: '550px', height: '550px' }}
-          />
-        </Box>
-      </Grid>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
+        <Typography paragraph>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
+          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
+          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
+          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
+          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
+          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
+          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
+          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
+          donec massa sapien faucibus et molestie ac.
+        </Typography>
+        <Typography paragraph>
+          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
+          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
+          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
+          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
+          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
+          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
+          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
+          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
+          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
+        </Typography>
+      </Box>
     </Grid>
   );
 }

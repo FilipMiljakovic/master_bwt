@@ -82,7 +82,7 @@ function BruteForce() {
             </Grid>
             <Grid item xs={7} style={{ padding: '5px' }}>
               <CustomButton variant="contained" onClick={submitForm}>
-                Pokreni brute force algoritam
+                Pokreni iterativni algoritam
               </CustomButton>
             </Grid>
           </Grid>

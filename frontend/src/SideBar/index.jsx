@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(30),
   },
   listItem: {
-    color: '#00FFFF',
+    color: 'white',
   },
 }));
 
@@ -40,7 +40,7 @@ const listItems = [
   },
   {
     listIcon: <ChevronRightIcon />,
-    listText: 'Brute force',
+    listText: 'Iterativni algoritam',
     link: '/bruteforce',
   },
   {

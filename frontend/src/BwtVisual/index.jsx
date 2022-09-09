@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -92,10 +93,10 @@ function BwtVisual({ genome, pattern }) {
     const lastColumn = putIndexesOnArray(matrixTmp.map((item) => item[item.length - 1]));
     return matrixTmp.map((item, index) => {
       const valueMap = {};
-      valueMap.firstColor = '#FFFFFF';
+      valueMap.firstColor = 'black';
       valueMap.value = firstColumn[index] + item.substring(1, item.length - 1) + lastColumn[index];
       valueMap.firstSubIndex = 2;
-      valueMap.lastColor = '#FFFFFF';
+      valueMap.lastColor = 'black';
       valueMap.genomIndex = calculateGenomIndex(
         firstColumn[index] + item.substring(1, item.length - 1) + lastColumn[index],
       );
@@ -128,7 +129,6 @@ function BwtVisual({ genome, pattern }) {
               style={{
                 paddingTop: '6px',
                 width: '50px',
-                color: '#00FFFF',
               }}
             >
               {listItem.genomIndex}
@@ -136,7 +136,7 @@ function BwtVisual({ genome, pattern }) {
             <div style={{ paddingTop: '6px', color: listItem.firstColor }}>
               {listItem.value.substring(0, listItem.firstSubIndex)}
             </div>
-            <div className="opacityText" style={{ paddingTop: '6px', float: 'left' }}>
+            <div style={{ color: 'gray', paddingTop: '6px', float: 'left' }}>
               {listItem.value.substring(listItem.firstSubIndex, listItem.value.length - 2)}
             </div>
             <div style={{ padding: '6px 0', float: 'left', color: listItem.lastColor }}>
@@ -155,14 +155,13 @@ function BwtVisual({ genome, pattern }) {
     const patternMatchingCharacter = pattern[pattern.length - 1 - patternIndex];
     let array = firstLastArray.map((item) => {
       const newItem = { ...item };
-      newItem.firstColor = '#FFFFFF';
+      newItem.firstColor = 'black';
       return newItem;
     });
     let indexArray = [];
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const item in firstLastArray) {
       for (let i = 0; i < matchingStrings.length; i += 1) {
-        console.log(firstLastArray);
         if (
           matchingStrings[i] ===
             firstLastArray[item].value.substring(0, matchingStrings[i].length) &&
@@ -186,7 +185,7 @@ function BwtVisual({ genome, pattern }) {
   function colorRightValues() {
     let array = firstLastArray.map((item) => {
       const newItem = { ...item };
-      newItem.lastColor = '#FFFFFF';
+      newItem.lastColor = 'black';
       return newItem;
     });
     let matching = [];
@@ -195,7 +194,7 @@ function BwtVisual({ genome, pattern }) {
       setDisableButtonFL(true);
       array = firstLastArray.map((item) => {
         const newItem = { ...item };
-        newItem.lastColor = '#FFFFFF';
+        newItem.lastColor = 'black';
         return newItem;
       });
       setFirstLastArray(array);
@@ -299,7 +298,7 @@ function BwtVisual({ genome, pattern }) {
         <Grid container key={index}>
           <Grid item xs={10}>
             {index === 0 ? (
-              <div style={{ padding: '6px', color: '#00FFFF', fontSize: '30px' }}>{listItem}</div>
+              <div style={{ padding: '6px', color: '#081054', fontSize: '30px' }}>{listItem}</div>
             ) : (
               <div style={{ padding: '6px' }}>{listItem}</div>
             )}
@@ -318,158 +317,247 @@ function BwtVisual({ genome, pattern }) {
     ? resultsFound.map((item, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <Grid item textAlign="center" key={index} style={{ margin: '6px' }}>
-          <div style={{ color: '#00FFFF', float: 'left', fontSize: '30px' }}>
+          <div style={{ float: 'left', fontSize: '30px' }}>
             {index === resultsFound.length - 1 ? item : `${item}, `}
           </div>
         </Grid>
       ))
     : '';
   return (
-    <Grid
-      container
-      spacing={2}
-      style={{ padding: '0% 10% 0% 10%', color: '#FFFFFF', marginLeft: '300px' }}
-    >
-      <Grid container style={{ margin: '5% 0%', fontSize: '30px' }}>
-        Genom:
-        <Grid style={{ marginLeft: '20px' }}>{genome}</Grid>
-      </Grid>
-      <Grid textAlign="center" style={{ margin: '3% auto 3% auto', fontSize: '30px' }}>
-        BWT transformacija
+    <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '100px' }}>
+      <Grid container>
+        <Box textAlign="center" style={{ margin: '3% auto 3% auto' }}>
+          <Grid style={{ fontSize: '30px' }}>Barouz-Vilerova transformacija</Grid>
+        </Box>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <Typography paragraph>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
+            elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
+            hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
+            velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
+            Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
+            viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
+            Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
+            at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
+            ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
+          </Typography>
+          <Typography paragraph>
+            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
+            facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
+            tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
+            consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus
+            sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in.
+            In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
+            et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique
+            sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo
+            viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
+            ultrices sagittis orci a.
+          </Typography>
+        </Box>
+        <Grid container style={{ marginLeft: '5%', fontSize: '30px' }}>
+          Genom:
+          <Grid style={{ marginLeft: '20px' }}>{genome}</Grid>
+        </Grid>
+        <Grid container style={{ margin: '3% 25%', fontSize: '20px' }}>
+          <Grid style={{ float: 'left' }}>
+            {cyclicRotationList1.map((listItem, index) => (
+              <Grid container key={index}>
+                <Grid item xs={10}>
+                  <div style={{ padding: '6px' }}>{listItem}</div>
+                </Grid>
+              </Grid>
+            ))}
+          </Grid>
+          <DoubleArrowIcon
+            style={{
+              float: 'left',
+              margin: 'auto 10% auto 10%',
+              fontSize: '100px',
+            }}
+          />
+          <Grid style={{ float: 'left' }}>
+            {cyclicRotationList2.map((listItem, index) => (
+              <Grid container key={index}>
+                <Grid item xs={10}>
+                  <div style={{ padding: '6px' }}>{listItem}</div>
+                </Grid>
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+        <Grid container style={{ marginLeft: '5%', fontSize: '30px' }}>
+          BWT:
+          <Grid style={{ marginLeft: '20px' }}>{bwtString}</Grid>
+        </Grid>
       </Grid>
       <Grid container>
-        <Grid style={{ float: 'left' }}>
-          {cyclicRotationList1.map((listItem, index) => (
-            <Grid container key={index}>
-              <Grid item xs={10}>
-                <div style={{ padding: '6px' }}>{listItem}</div>
+        <Box textAlign="center" style={{ margin: '3% auto 3% auto' }}>
+          <Grid style={{ fontSize: '30px' }}>Inverzna Barouz-Vilerova transformacija</Grid>
+        </Box>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <Typography paragraph>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
+            elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
+            hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
+            velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
+            Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
+            viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
+            Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
+            at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
+            ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
+          </Typography>
+          <Typography paragraph>
+            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
+            facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
+            tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
+            consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus
+            sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in.
+            In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
+            et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique
+            sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo
+            viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
+            ultrices sagittis orci a.
+          </Typography>
+        </Box>
+        <Box container textAlign="center" style={{ margin: '3% 35%', fontSize: '30px' }}>
+          <CustomButton
+            disabled={disableButton}
+            variant="contained"
+            startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+            onClick={() => setIsPlaying(!isPlaying)}
+          />
+          <CustomButton
+            disabled={!disableButton}
+            variant="contained"
+            onClick={() => {
+              setBwtString('');
+              setDisableButton(false);
+              setIsPlaying(true);
+              setInverseMatrix([]);
+              setInverseMatrix2([]);
+              setBwtLength(0);
+              setResetButton(!resetButton);
+              k = 0;
+            }}
+          >
+            Reset
+          </CustomButton>
+          <Slider
+            defaultValue={50}
+            aria-label="Iteration speed"
+            valueLabelDisplay="auto"
+            value={value}
+            onChange={changeValue}
+            min={500}
+            max={1000}
+            step={100}
+            style={{ width: '50%', marginTop: '20px' }}
+          />
+        </Box>
+        <Grid container style={{ margin: '3% 25%', fontSize: '20px' }}>
+          <Grid style={{ float: 'left' }}>
+            {inverseMatrix2.map((listItem, index) => (
+              <Grid container key={index}>
+                <Grid item xs={10}>
+                  <div style={{ padding: '6px' }}>{listItem}</div>
+                </Grid>
               </Grid>
-            </Grid>
-          ))}
-        </Grid>
-        <DoubleArrowIcon
-          style={{
-            float: 'left',
-            margin: 'auto 10% auto 10%',
-            fontSize: '100px',
-          }}
-        />
-        <Grid style={{ float: 'left' }}>
-          {cyclicRotationList2.map((listItem, index) => (
-            <Grid container key={index}>
-              <Grid item xs={10}>
-                <div style={{ padding: '6px' }}>{listItem}</div>
-              </Grid>
-            </Grid>
-          ))}
+            ))}
+          </Grid>
+          <DoubleArrowIcon
+            style={{
+              float: 'left',
+              margin: 'auto 10% auto 10%',
+              fontSize: '100px',
+            }}
+          />
+          <Grid style={{ float: 'left' }}>{indexMatrixRender}</Grid>
         </Grid>
       </Grid>
-      <Grid container style={{ margin: '5% 0%', fontSize: '30px' }}>
-        Bwt:
-        <Grid style={{ marginLeft: '20px' }}>{bwtString}</Grid>
-      </Grid>
-      <Box textAlign="center" style={{ margin: '3% auto 3% auto' }}>
-        <Grid style={{ paddingBottom: '10%', fontSize: '30px' }}>Inverzna BWT transformacija</Grid>
-        <CustomButton
-          disabled={disableButton}
-          variant="contained"
-          startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-          onClick={() => setIsPlaying(!isPlaying)}
-        />
-        <CustomButton
-          disabled={!disableButton}
-          variant="contained"
-          onClick={() => {
-            setBwtString('');
-            setDisableButton(false);
-            setIsPlaying(true);
-            setInverseMatrix([]);
-            setInverseMatrix2([]);
-            setBwtLength(0);
-            setResetButton(!resetButton);
-            k = 0;
-          }}
-        >
-          Reset
-        </CustomButton>
-        <Slider
-          defaultValue={50}
-          aria-label="Iteration speed"
-          valueLabelDisplay="auto"
-          value={value}
-          onChange={changeValue}
-          min={500}
-          max={1000}
-          step={100}
-          style={{ width: '50%', marginTop: '20px' }}
-        />
-      </Box>
-      <Grid container style={{ margin: '3% auto 3% auto' }}>
-        <Grid style={{ float: 'left' }}>
-          {inverseMatrix2.map((listItem, index) => (
-            <Grid container key={index}>
-              <Grid item xs={10}>
-                <div style={{ padding: '6px' }}>{listItem}</div>
-              </Grid>
-            </Grid>
-          ))}
+      <Grid container>
+        <Box textAlign="center" style={{ margin: '3% auto 3% auto' }}>
+          <Grid style={{ fontSize: '30px' }}>Uparivanje šablona pomoću BWT</Grid>
+        </Box>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <Typography paragraph>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
+            elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
+            hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
+            velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
+            Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
+            viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
+            Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
+            at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
+            ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
+          </Typography>
+          <Typography paragraph>
+            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
+            facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
+            tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
+            consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus
+            sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in.
+            In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
+            et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique
+            sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo
+            viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
+            ultrices sagittis orci a.
+          </Typography>
+        </Box>
+        <Box style={{ margin: '3% 35%' }}>
+          <Grid style={{ paddingBottom: '10px', fontSize: '30px' }}>Genom: {genome}</Grid>
+          <Grid style={{ paddingBottom: '10px', fontSize: '30px' }}>Patern: {pattern}</Grid>
+          <Stack direction="row" spacing={2} style={{ fontSize: '30px' }}>
+            <div>Pronađena rešenja:</div> {indexesMatch}
+          </Stack>
+        </Box>
+        <Box container textAlign="center" style={{ margin: '3% 35%', fontSize: '30px' }}>
+          <CustomButton
+            disabled={disableButtonFL}
+            variant="contained"
+            startIcon={isPlayingFL ? <PauseIcon /> : <PlayArrowIcon />}
+            onClick={() => setIsPlayingFL(!isPlayingFL)}
+          />
+          <CustomButton
+            disabled={!disableButtonFL}
+            variant="contained"
+            onClick={() => {
+              setDisableButtonFL(false);
+              setIsPlayingFL(false);
+              setFirstLastArray(
+                firstLastArray.map((item) => {
+                  const newItem = { ...item };
+                  newItem.firstColor = 'black';
+                  newItem.lastColor = 'black';
+                  newItem.firstSubIndex = 2;
+                  return newItem;
+                }),
+              );
+              setMatchingStrings([pattern[pattern.length - 1]]);
+              setPatternIndex(0);
+              setResultsFound([]);
+            }}
+          >
+            Reset
+          </CustomButton>
+          <Slider
+            defaultValue={50}
+            aria-label="Iteration speed"
+            valueLabelDisplay="auto"
+            value={valueFL}
+            onChange={changeValueFL}
+            min={500}
+            max={1000}
+            step={100}
+            style={{ width: '50%', marginTop: '20px' }}
+          />
+        </Box>
+        <Grid container style={{ margin: '3% 37%', fontSize: '20px' }}>
+          <Grid>{firstLast}</Grid>
         </Grid>
-        <DoubleArrowIcon
-          style={{
-            float: 'left',
-            margin: 'auto 10% auto 10%',
-            fontSize: '100px',
-          }}
-        />
-        <Grid style={{ float: 'left' }}>{indexMatrixRender}</Grid>
       </Grid>
-      <Box textAlign="center" style={{ margin: '3% auto 3% auto' }}>
-        <Grid style={{ paddingBottom: '10%', fontSize: '30px' }}>First-Last svojstvo</Grid>
-        <Grid style={{ paddingBottom: '10%', fontSize: '30px' }}>Pattern: {pattern}</Grid>
-        <Stack direction="row" spacing={2} style={{ color: '#00FFFF', fontSize: '30px' }}>
-          <div style={{ margin: '6px' }}>Pronađena rešenja:</div> {indexesMatch}
-        </Stack>
-        <CustomButton
-          disabled={disableButtonFL}
-          variant="contained"
-          startIcon={isPlayingFL ? <PauseIcon /> : <PlayArrowIcon />}
-          onClick={() => setIsPlayingFL(!isPlayingFL)}
-        />
-        <CustomButton
-          disabled={!disableButtonFL}
-          variant="contained"
-          onClick={() => {
-            setDisableButtonFL(false);
-            setIsPlayingFL(false);
-            setFirstLastArray(
-              firstLastArray.map((item) => {
-                const newItem = { ...item };
-                newItem.firstColor = '#FFFFFF';
-                newItem.lastColor = '#FFFFFF';
-                newItem.firstSubIndex = 2;
-                return newItem;
-              }),
-            );
-            setMatchingStrings([pattern[pattern.length - 1]]);
-            setPatternIndex(0);
-            setResultsFound([]);
-          }}
-        >
-          Reset
-        </CustomButton>
-        <Slider
-          defaultValue={50}
-          aria-label="Iteration speed"
-          valueLabelDisplay="auto"
-          value={valueFL}
-          onChange={changeValueFL}
-          min={500}
-          max={1000}
-          step={100}
-          style={{ width: '50%', marginTop: '20px' }}
-        />
-        <Grid>{firstLast}</Grid>
-      </Box>
     </Grid>
   );
 }
