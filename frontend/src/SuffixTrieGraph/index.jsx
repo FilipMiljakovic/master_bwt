@@ -399,7 +399,7 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
   return (
     <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '80px' }}>
       <Grid container spacing={2}>
-        <Grid item xs={4}>
+        <Grid item xs={5}>
           <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
             <CustomButton
               disabled={disableButton}
@@ -446,7 +446,7 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
           )}
           <Box style={{ marginLeft: '5%', fontSize: '20px' }}>{renderedOutput}</Box>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5}>
           <Box
             style={{
               borderRadius: '25px',

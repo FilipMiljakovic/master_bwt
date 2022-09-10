@@ -36,28 +36,29 @@ function Bwt() {
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             <Toolbar />
             <Typography paragraph>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-              elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-              hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-              velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-              Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-              viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-              Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-              at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-              ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
+              Kako bi se smanjila količina memorije potrebna za rešavanje ovog problema, posegnućemo
+              istraživanjima nekih drugih pristupa. Jedan od njih je kompresija niski velikih
+              dužina. U kompresiji genoma možemo razlikovati dva slučaja: kada imamo nekoliko
+              uzastopnih ponavljanja jedne aminokiseline (to nazi-vamo ranovima : runs) i kada imamo
+              nekoliko uzastopnih ponavljanja niza aminokiselina (to nazivamo ripitima : repeats).
+              Ranove možemo k uzastopnih pojavljivanja jedne aminokiseline kodirati brojem k i
+              oznakom aminokiseline koja se pojavljuje.
+            </Typography>
+            <img src="" alt="Konvertovanje ranova" />
+            <Typography paragraph>
+              Problem je što kod genoma nemamo mnogo ranova, ali imamo dosta ripita. Zato bi bilo
+              dobro kada bismo imali tehniku kojom bismo konvertovali ripite u ranove i na to
+              primenili prethodno opisanu tehniku za kodiranje ranova. Algoritam koji rešava
+              konverziju ripita u ranove je Barouz-Vilerova transforma- cija.
             </Typography>
             <Typography paragraph>
-              Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-              facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-              tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
-              volutpat consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at
-              quis risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra
-              accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec
-              nam aliquam sem et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-              tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend.
-              Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin
-              aliquam ultrices sagittis orci a.
+              Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i paterna, ali i
+              polje za unos broja nepoklapanja koja tolerišemo kako bismo prikazali i približno
+              uparivanje šablona ovim pristupom. Za takav unos klikom na dugme `Pokreni BWT
+              algoritam` otvaramo novu stranicu na kojoj će biti prikazano generisanje
+              Barouz-Vilerove transformacije, inverzne Barouz-Vilerove transformacije i uparivanje
+              šablona pomoću ove transformacije za vrednosti unete u formu. Više objašnjenja biće
+              prikazano na narednoj stranici dostupnoj nakon pokretanja.
             </Typography>
           </Box>
           <Grid container textAlign="center" style={{ margin: '5% 0', float: 'left' }}>

@@ -1,5 +1,6 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
+import { StylesProvider } from '@material-ui/styles';
 // import background from './img/DNK.jpg';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -23,28 +24,30 @@ function App() {
   //   backgroundRepeat: 'no-repeat',
   // };
   return (
-    <div className="App">
-      <AppBar
-        position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        style={{ backgroundColor: '#081054', color: 'white' }}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-            Uparivanje šablona - elektronska lekcija
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <SideBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/suffixtrie" element={<SuffixTrie />} />
-        <Route path="/bruteforce" element={<BruteForce />} />
-        <Route path="/suffixtriecompressed" element={<SuffixTrieCompressed />} />
-        <Route path="/patternprefixtrie" element={<PatternPrefixTrie />} />
-        <Route path="/bwt" element={<Bwt />} />
-      </Routes>
-    </div>
+    <StylesProvider injectFirst>
+      <div className="App">
+        <AppBar
+          position="fixed"
+          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          style={{ backgroundColor: '#081054', color: 'white' }}
+        >
+          <Toolbar>
+            <Typography variant="h6" noWrap component="div">
+              Uparivanje šablona - elektronska lekcija
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <SideBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/suffixtrie" element={<SuffixTrie />} />
+          <Route path="/bruteforce" element={<BruteForce />} />
+          <Route path="/suffixtriecompressed" element={<SuffixTrieCompressed />} />
+          <Route path="/patternprefixtrie" element={<PatternPrefixTrie />} />
+          <Route path="/bwt" element={<Bwt />} />
+        </Routes>
+      </div>
+    </StylesProvider>
   );
 }
 

@@ -3,6 +3,11 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import CircleIcon from '@mui/icons-material/Circle';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
@@ -13,27 +18,67 @@ function Home() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
+          Uparivanje šablona se veoma često javlja kao problem u različitim oblastima naučnog
+          istraživanja: biologiji, informatici, samim tim i bioinformatici, medicini itd.
         </Typography>
         <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
+          Kao jedan od najpoznatijih problema u medicini i bioinformatici koji zahteva uparivanje
+          šablona javlja se problem lociranja mutacija u ljudskom genomu i ranog otkrivanja raznih
+          genetskih poremećaja. Pomenute mutacije se nalaze tako što se segmenti DNK osobe koja se
+          ispituje porede sa referentnim ljudskim genomom. Očitavanje predstavlja sekvencu parova
+          baza koja odgovara nekom delu DNK, dok referentni ljudski genom predstavlja genom
+          sastavljen od genoma više donora i čini šablon u kojem se pomenuti segmenti individualnih
+          ljudskih genoma traže.
+        </Typography>
+        <Typography paragraph>
+          Razmotrimo ključne izazove iz informatičkog ugla koji se javljaju prilikom rešavanja ovog
+          problema. Dužina ljudskog genoma smeštenog u memoriji je preko 3GB, dok ukupna dužina svih
+          očitavanja može biti veća od 1TB. Zbog toga nam je od izuzetne važnosti da algoritmi
+          kojima radimo mapiranje očitavanja budu efikasni.
+        </Typography>
+        <Typography paragraph>
+          U ovoj aplikaciji će biti predstavljeni algoritmi različite složenosti koji se bave
+          uparivanjem šablona, a to su:
+        </Typography>
+        <List>
+          <ListItem disablePadding>
+            <ListItemIcon style={{ color: '#081054' }}>
+              <CircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Iterativni algoritam za uparivanje šablona" />
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemIcon style={{ color: '#081054' }}>
+              <CircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Algoritam uparivanja šablona pomoću prefiksnih stabala" />
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemIcon style={{ color: '#081054' }}>
+              <CircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Algoritam uparivanja šablona pomoću sufiksnih stabala" />
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemIcon style={{ color: '#081054' }}>
+              <CircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Algoritam uparivanja šablona pomoću kompresovanih sufiksnih stabala" />
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemIcon style={{ color: '#081054' }}>
+              <CircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Algoritam uparivanja šablona pomoću Barouz-Vilerove transformacije kao i sama Barouz-Vilerova transformacija i i njena inverzna operacija" />
+          </ListItem>
+        </List>
+        <Typography paragraph>
+          U primeni ovih algoritama možemo razlikovati jednostruko i višestruko uparivanje šablona.
+          Kod jednostrukog su ulaz niska Patern koja se traži i niska Genom u kojoj se traže
+          poklapanja. Dok su izlaz sve pozicije u niski Genom gde se niska Patern pojavljuje kao
+          podniska. Kod višestrukog uparivanja šablona ulaz je kolekcija niski paterna koji se traže
+          i naravno niska Genom u kojoj se traže poklapanja. Izlaz su uređeni parovi (Patern, Index)
+          - za svaki patern iz liste pronalazi se pozicija u niski Genom gde imamo poklapanje.
         </Typography>
       </Box>
     </Grid>

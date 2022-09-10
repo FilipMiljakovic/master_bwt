@@ -331,28 +331,21 @@ function BwtVisual({ genome, pattern }) {
         </Box>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Typography paragraph>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-            elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-            hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-            velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-            Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-            viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-            Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-            at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-            ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
+            Prvo treba kreirati listu svih cikličnih rotacija niske Genom. To ćemo postići tako što
+            ćemo odseći sufiks sa kraja niske Genom i dodati takav sufiks na početak niske Genom i
+            tako za svaki sufiks. Zatim ćemo takve niske sortirati leksikografski, slično kao kod
+            sufiksnog niza, i dobiti matricu dimenzija |Genom| · |Genom| koju nazivamo
+            Barouz-Vilerova matrica. U prikazu ispod je prikazana lista svih cikličnih rotacija
+            niske Genom i šta se dobija leksikografskim sortiranjem takve liste, tj. Barouz-Vilerova
+            matrica, kao i šta nazivamo Barouz-Vilerovom transformacijom polazne niske.
           </Typography>
           <Typography paragraph>
-            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-            facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-            tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-            consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus
-            sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in.
-            In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-            et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique
-            sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo
-            viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
-            ultrices sagittis orci a.
+            Primetimo da je prva kolona matrice dobijena korišćenjem prethodno pomenutog pristupa
+            koji leksikografski sortira karaktere niske Genom. Druga kolona sadrži drugi karakter od
+            svih cikličnih rotacija niske Genom, tako da i ona predstavlja njene karaktere
+            raspoređene u nekom redosledu i tako možemo reći za svaku kolonu ove matrice. Poslednju
+            kolonu ove matrice nazivamo Barouz-Vilerovom transformacijom niske Genom, ili skraćeno
+            BWT(Genom).
           </Typography>
         </Box>
         <Grid container style={{ marginLeft: '5%', fontSize: '30px' }}>
@@ -397,28 +390,29 @@ function BwtVisual({ genome, pattern }) {
         </Box>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Typography paragraph>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-            elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-            hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-            velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-            Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-            viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-            Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-            at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-            ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
+            Potrebno je da možemo da uradimo i inverznu opera- ciju, kako bismo mogli da
+            rekonstruišemo početnu nisku.
           </Typography>
           <Typography paragraph>
-            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-            facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-            tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-            consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus
-            sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in.
-            In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-            et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique
-            sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo
-            viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
-            ultrices sagittis orci a.
+            Jedan od pristupa za rešavanje ove operacije je da iskoristimo to što je svaka kolona
+            Barouz-Vilerove matrice neka kombinacija karaktera početne niske. Ako krenemo od niske
+            koja prdstavlja Barouz-Vilerovu transformaciju i nju sortiramo, dobićemo prvu kolonu
+            gore pomenute matrice. Ako na takvu kolonu dodamo opet BWT(Genom) i takve niske
+            sortiramo, dobićemo prve dve kolone ove matrice. Nastavljajući ovaj postupak dolazimo do
+            kompletne Barouz-Vilerove matrice iz koje početnu nisku Genom možemo da pročitamo iz
+            prvog reda matrice zanemarujući karakter $ na početku.
+          </Typography>
+          <Typography paragraph>
+            Opisani postupak je korak po korak prikazan ispod. Za manipulaciju sa izvršavanjem
+            algoritma imamo na raspolaganju Pause/Play dugme kojim možemo pauzirati izvršavanje
+            algoritma, ako u nekom stanju hoćemo da proverimo gde je algoritam stao. Inicijalno
+            algoritam nije pokrenut, tako da potrebno je kliknuti na Play dugme da bi izvršavanje
+            počelo. Pored toga, kada algoritam završi izvršavanje za unesene parametre, a mi iz
+            nekog razloga želimo opet da ga pokrenemo sa istim parametrima, da se ne bismo vraćali
+            na stranicu za unos parametara i opet ih unosili, postoji dugme Resetuj kojim se ovo
+            može izvršiti. Pored navedene dugmadi postoji i slajder kojim možemo regulisati brzinu
+            izvršavanja algoritma, tj pauzu između koraka. Brzina se kreće u rasponu od 100ms do
+            1000ms, tj. jedne sekunde. Incijalna brzina je 500ms.
           </Typography>
         </Box>
         <Box container textAlign="center" style={{ margin: '3% 35%', fontSize: '30px' }}>
@@ -482,35 +476,39 @@ function BwtVisual({ genome, pattern }) {
         </Box>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Typography paragraph>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-            elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-            hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-            velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-            Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-            viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-            Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-            at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-            ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
+            Ideja za korišćenje Barouz-Vilerove transformacije u svrhu uparivanja šablona potiče od
+            činjenice da svaki red Barouz-Vilerove matrice počinje različitim sufiksima niske Genom.
+            Pošto su ovi sufiksi već leksikografski sortirani, sva poklapanja niske Patern sa niskom
+            Genom će se naći na početku uzastopnih redova ove matrice.
           </Typography>
           <Typography paragraph>
-            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-            facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-            tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-            consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus
-            sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in.
-            In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-            et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique
-            sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo
-            viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
-            ultrices sagittis orci a.
+            Problem sa ovim pristupom je što ne ide u prilog težnji ka smanjenju korišćene memorije
+            jer čuvanje čitave Barouz-Vilerove matrice za nisku Genom zahteva |Genom|^2 mesta u
+            memoriji. Primetimo da čuvanje čitave Barouz-Vilerove matrice i nije neophodno i da je
+            moguće da samo na osnovu prve i poslednje kolone matrice uradimo inverziju. Koristeći
+            ove dve kolone naći ćemo poklapanja niske Patern u niski Genom tako što ćemo krenuti od
+            poslednjeg karaktera niske Patern. Za pretragu u samim kolonama je veoma bitno takozvano
+            First-Last svojstvo koje kaže da
+          </Typography>
+          <Typography paragraph>
+            Želimo da kao povratnu informaciju dobijemo indekse u Genomu na kojima se Patern
+            pojavljuje. To je moguće postići korišćenjem sufiksnog niza koji bi pratio
+            Barouz-Vilerovu matricu i pokazivao indekse svih sufiksa koji je čine. Tu su takođe
+            komponente za manipulaciju algoritmom (`Pause/Play` dugme, `Resetuj` dugme i slajder za
+            regulaciju brzine) koje možemo koristiti kao kod prethodnoh primera inverzne
+            transformacije. Sa strane je prikazan takođe i ceo sufiksni niz indeksa, kojim možemo da
+            utvrdimo na kojim pozicijama se nalazi poklapanje. I ovde će poklapanja biti obojena
+            zelenom, a nepoklapanja crvenom bojom. U obzir uzimamo i ulazni parametar broja
+            nepoklapanja koji tolerišemo, tako da će rešenja koja imaju manje ili jednako
+            nepoklapanja isto biti uključena u krajnju listu. Na kraju se rešenja ispisuju pod
+            labelom `Pronađena rešenja:`.
           </Typography>
         </Box>
         <Box style={{ margin: '3% 35%' }}>
           <Grid style={{ paddingBottom: '10px', fontSize: '30px' }}>Genom: {genome}</Grid>
           <Grid style={{ paddingBottom: '10px', fontSize: '30px' }}>Patern: {pattern}</Grid>
           <Stack direction="row" spacing={2} style={{ fontSize: '30px' }}>
-            <div>Pronađena rešenja:</div> {indexesMatch}
+            <div style={{ marginTop: '6px' }}>Pronađena rešenja:</div> {indexesMatch}
           </Stack>
         </Box>
         <Box container textAlign="center" style={{ margin: '3% 35%', fontSize: '30px' }}>

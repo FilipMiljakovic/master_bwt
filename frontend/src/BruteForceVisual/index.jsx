@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
+// import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -13,8 +13,8 @@ import { styled } from '@mui/material/styles';
 const CustomButton = styled(Button)(() => ({
   width: '150px',
   height: 50,
-  backgroundColor: '#00FFFF',
-  color: '#191970',
+  backgroundColor: '#081054',
+  color: 'white',
   marginRight: '10px',
   marginBottom: '10px',
 }));
@@ -69,8 +69,8 @@ function BruteForceVisual({ genome, pattern }) {
             setPatternSpaces(new Array(i - j + 1).join('_'));
             setMoveIndexes({ i, j });
           } else if (i < genome.length) {
-            setRenderedOutputGenome(changeIElement(renderedOutputGenome, i, genome, '#00FFFF'));
-            setRenderedOutputPattern(changeIElement(renderedOutputPattern, j, pattern, '#00FFFF'));
+            setRenderedOutputGenome(changeIElement(renderedOutputGenome, i, genome, '#008000'));
+            setRenderedOutputPattern(changeIElement(renderedOutputPattern, j, pattern, '#008000'));
 
             if (j === pattern.length - 1) {
               setRenderedOutputResults([...renderedOutputResults, i - j]);
@@ -110,8 +110,17 @@ function BruteForceVisual({ genome, pattern }) {
   return (
     <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '100px' }}>
       <h1 style={{ textAlign: 'center' }}>Iterativni algoritam - rešenje</h1>
-      <Grid container>
-        <Box item textAlign="center" style={{ margin: '5% 10% 5% 10%' }}>
+      <Grid
+        container
+        style={{
+          display: 'block',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          width: '50%',
+          paddingBottom: '5%',
+        }}
+      >
+        <Grid item xs={12} textAlign="center" style={{ margin: '5% 10% 0% 10%' }}>
           <CustomButton
             disabled={disableButton}
             variant="contained"
@@ -161,13 +170,15 @@ function BruteForceVisual({ genome, pattern }) {
             step={100}
             style={{ width: '50%', marginTop: '20px' }}
           />
-        </Box>
-        <Box item style={{ margin: '5% 10% 5% 10%' }}>
+        </Grid>
+        <Grid item xs={12} style={{ margin: '5% 10% 5% 10%' }}>
           <Stack direction="row" style={{ fontSize: '30px' }}>
-            {renderedOutputGenome}
+            <div style={{ width: '150px' }}>Genom:</div>
+            <Stack direction="row">{renderedOutputGenome}</Stack>
           </Stack>
           <Stack direction="row" style={{ fontSize: '30px' }}>
             <Stack direction="row">
+              <div style={{ width: '150px' }}>Patern:</div>
               {patternSpaces.split('').map((character, index) => (
                 <Grid item textAlign="center" key={index}>
                   <div style={{ width: '25px' }}>{character}</div>
@@ -177,49 +188,53 @@ function BruteForceVisual({ genome, pattern }) {
             {/* flex: 0 0 width u pikselima ako ne radi sa width zakucanim */}
             <Stack direction="row">{renderedOutputPattern}</Stack>
           </Stack>
-        </Box>
+        </Grid>
       </Grid>
       <Stack
         direction="row"
         spacing={2}
-        style={{ margin: '0 10% 0 10%', textAlign: 'center', fontSize: '30px' }}
+        style={{ margin: '0 5% 3% 5%', textAlign: 'center', fontSize: '30px' }}
       >
         Pronađena rešenja:
         {renderedOutputResults.slice(0, -1).map((listItem, ind) => (
-          <Grid item textAlign="center" key={ind}>
+          <Grid item textAlign="center" style={{ marginLeft: '2%' }} key={ind}>
             <div> {listItem},</div>
           </Grid>
         ))}
         {renderedOutputResults.slice(-1).map((listItem, ind) => (
-          <Grid item textAlign="center" key={ind}>
+          <Grid item textAlign="center" style={{ marginLeft: '2%' }} key={ind}>
             <div> {listItem} </div>
           </Grid>
         ))}
       </Stack>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Toolbar />
         <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
+          Na ovoj strani je prikazano postupno izvršavanje iterativnog algoritma. Izvršavanje teče
+          tako što prolazimo kroz genom i poredimo karakter na trenutnoj poziciji sa prvim
+          karakterom paterna koji tražimo. Ukoliko je došlo do poklapanja, početak niske Patern na
+          istom karakteru niske Genom, ali izvršavanje pomeramo na naredni karakter niske Patern i
+          njega poredimo sa sledećim karakterom niske Genom. Ukoliko dođemo do kraja niske Patern,
+          zaključujemo da smo pronašli poklapanje. Tada početak niske Patern pomeramo za jedno mesto
+          napred i beležimo rezultat. Ukoliko do poklapanja nije došlo na bilo kod karakteru niske
+          Patern, vraćamo se na prvi karakter niske Patern i izvršavanje nastavljamo od narednog
+          karaktera niske Genom. Izvršavanje zaustavljamo kada dodjemo do karaktera na poziciji
+          |Genom|-|Patern|.
         </Typography>
         <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
+          Može se pratiti koji se trenutno karakter provera- va i različitim bojama je naglašeno da
+          li je do poklapanja došlo ili ne (zelena boja za poklapanje i crvena za nepoklapanje).
+          Pored ovoga, u svakom trenutku možemo videti na kojim indeksima je poklapanje pronađeno do
+          tada, a kada do novog poklapanja dođe lista indeksa će se dopuniti.
+        </Typography>
+        <Typography paragraph>
+          Za manipulaciju sa izvršavanjem algoritma imamo na raspolaganju Pause/Play dugme kojim
+          možemo pauzirati izvršavanje algoritma, ako u nekom stanju hoćemo da proverimo gde je
+          algoritam stao. Pored toga, kada algoritam završi izvršavanje za unesene parametre, a mi
+          iz nekog razloga želimo opet da ga pokrenemo sa istim parametrima, da se ne bismo vraćali
+          na stranicu za unos parametara i opet ih unosili, postoji dugme Resetuj kojim se ovo može
+          izvršiti. Pored navedene dugmadi postoji i slajder kojim možemo regulisati brzinu
+          izvršavanja algoritma, tj pauzu između koraka. Brzina se kreće u rasponu od 100ms do
+          1000ms, tj. jedne sekunde. Incijalna brzina je 500ms.
         </Typography>
       </Box>
     </Grid>

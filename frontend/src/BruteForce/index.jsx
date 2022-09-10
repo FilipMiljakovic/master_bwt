@@ -23,8 +23,8 @@ function BruteForce() {
 
   const CustomButton = styled(Button)(() => ({
     height: 50,
-    backgroundColor: '#00FFFF',
-    color: '#191970',
+    backgroundColor: '#081054',
+    color: 'white',
   }));
 
   return (
@@ -35,32 +35,39 @@ function BruteForce() {
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             <Toolbar />
             <Typography paragraph>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-              elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-              hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-              velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-              Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-              viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-              Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-              at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-              ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
+              Pristup koji prvo pada na pamet za rešavanje problema uparivanja šablona je iterativni
+              pristup kojim se linearno prolazi kroz genom i proverava da li se dati šablon poklapa
+              sa podniskom genoma iste dužine, a koja počinje na toj poziciji.
             </Typography>
+            <img
+              style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '50%' }}
+              alt="Poklapanje podsekvenci"
+              src="/img/ocitavanje_genoma.png"
+            />
             <Typography paragraph>
-              Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-              facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-              tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
-              volutpat consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at
-              quis risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra
-              accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec
-              nam aliquam sem et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-              tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend.
-              Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin
-              aliquam ultrices sagittis orci a.
+              Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i paterna i za
+              takav unos klikom na dugme `Pokreni iterativni algoritam` pokrenemo postupno
+              izvršavanje iterativnog algoritma. Više objašnjenja o samom izvršavanju algoritma biće
+              prikazano na narednoj stranici dostupnoj nakon pokretanja.
             </Typography>
           </Box>
-          <Grid container textAlign="center" style={{ margin: '5% 0', float: 'left' }}>
-            <Grid item xs={7} textAlign="center" style={{ padding: '5px' }}>
+          <Grid
+            container
+            textAlign="center"
+            style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '50%' }}
+          >
+            <Grid
+              item
+              xs={7}
+              textAlign="center"
+              style={{
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: '50%',
+                padding: '5px',
+              }}
+            >
               <TextField
                 id="genome-label"
                 label="Genom"
@@ -70,7 +77,18 @@ function BruteForce() {
                 onChange={(e) => setGenome(e.target.value)}
               />
             </Grid>
-            <Grid item xs={7} textAlign="center" style={{ padding: '5px' }}>
+            <Grid
+              item
+              xs={7}
+              textAlign="center"
+              style={{
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: '50%',
+                padding: '5px',
+              }}
+            >
               <TextField
                 id="pattern-label"
                 label="Patern"
@@ -80,9 +98,19 @@ function BruteForce() {
                 onChange={(e) => setPattern(e.target.value)}
               />
             </Grid>
-            <Grid item xs={7} style={{ padding: '5px' }}>
+            <Grid
+              item
+              xs={7}
+              style={{
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: '50%',
+                padding: '5px',
+              }}
+            >
               <CustomButton variant="contained" onClick={submitForm}>
-                Pokreni iterativni algoritam
+                Pokreni algoritam
               </CustomButton>
             </Grid>
           </Grid>

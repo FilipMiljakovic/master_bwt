@@ -18,8 +18,8 @@ cytoscape.use(dagre);
 const CustomButton = styled(Button)(() => ({
   width: '30%',
   height: 50,
-  backgroundColor: '#00FFFF',
-  color: '#191970',
+  backgroundColor: '#081054',
+  color: 'white',
   margin: '5px',
 }));
 
@@ -511,10 +511,14 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
   return (
     <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '80px' }}>
       <Grid container>
-        <Grid item xs={4}>
-          <Grid container style={{ marginLeft: '5%', fontSize: '30px' }}>
+        <Grid item xs={5}>
+          <Grid container style={{ margin: '3% 0 0 10%', fontSize: '30px' }}>
             Genom:
             <Grid style={{ marginLeft: '20px' }}>{genomeView}</Grid>
+          </Grid>
+          <Grid style={{ margin: '3% 0 0 10%', fontSize: '30px' }}>
+            Paterni:
+            <Grid style={{ marginLeft: '5%', fontSize: '20px' }}>{renderedOutput}</Grid>
           </Grid>
           <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
             <CustomButton
@@ -569,9 +573,8 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
               {indexesMatch}
             </Stack>
           )}
-          <Grid style={{ marginLeft: '5%', fontSize: '20px' }}>{renderedOutput}</Grid>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5}>
           <Box
             style={{
               borderRadius: '25px',
@@ -593,27 +596,43 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
+          Najočigledniji način na koji možemo kreirati prefiksno stablo je iterativno dodavanje
+          svake niske iz liste paterna koji se traže u stablo idući od root čvora. Svaka grana
+          stabla predstavlja karakter paterna. Pomoću ovog stabla lako možemo utvrditi da li je neka
+          niska iz liste paterna prefiks genoma.
         </Typography>
         <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
+          Nalaženje poklapanja je objašnjeno na prethodnoj strani i podrazumeva kretanje kroz stablo
+          od korena ka listovima i proveravanja da li se karakter niske Genom na kom smo trenutno
+          nalazi na putanji u kreiranom stablu. Da bismo pretražili sve pozicije u niski Genom
+          potrebno je pozvati objašnjeni algoritam |Genom| puta i u svakoj iteraciji odstraniti prvi
+          karakter tako kreirane niske Genom, tj. odraditi prethodni postupak za svaki sufiks niske
+          Genom.
+        </Typography>
+        <Typography paragraph>
+          Osnovnim algoritmom nije pokriven slučaj ako je neki patern iz liste paterna prefiks
+          drugog paterna iz liste. U tom slučaju samo kraći patern bi bio uparen, dok bi ovi duži
+          bili preskočeni (na toj lokaciji). Zato je ovde implementiran unapređeni algoritam, na taj
+          način što smo paterne završili karakterom $ i tako kreirali stablo. U trenutku pretrage
+          ćemo onda kada dođemo do karaktera $ znati da smo na kraju jednog paterna i dotadašnju
+          nisku staviti u listu rešenja. Ipak, ukoliko pored grane sa oznakom $, iz trenutnog čvora
+          postoji još neka grana i ona odgovara sledećem karakteru u genomu (tj. možemo da nastavimo
+          kretanje niz stablo) ići ćemo dalje, sve dok takve grane ne bude bilo, ili dok jedina
+          grana iz trenutnog čora bude grana sa oznakom $. Tada odbijamo prvi karakter genoma i na-
+          stavljamo dalje kao u inicijalnom algoritmu NalaženjePoklapanjaUGenomu(Genom, Trie).
+        </Typography>
+        <Typography paragraph>
+          Na ovoj stranici se nalaze isti elementi za manipulaciju sa izvršavanjem algoritma
+          (Pause/Play dugme, Resetuj dugme i slajder za regulaciju brzine) kao i na stranici za
+          iterativni algoritam. Pored ovoga tu je i grafički prikaz kreiranja prefiksnog stabla od
+          unesenih paterna. Sami paterni su izlistani pored radi boljeg pregleda. Kreiranje može
+          biti urađeno postupno (granu po granu) ili ne, u zavisnosti od toga da li je checkbox na
+          prethodnoj strani štikliran. Na tom stablu će biti postupno prikazano i uparivanje, tj.
+          nalaženje rešenja. Postupak nalaženja rešenja se osim na stablu može pratiti i na niski
+          Genom koja je pored prikazana. Slično kao ranije, pozitivna poklapanja u datom trenutku će
+          biti obojena zelenom bojom, a negativna crvenom bojom na granama, odnosno karakterima
+          genoma. Pronađena rešenja su prikazana u vidu uređenih parova (Patern, Indeks) gde je
+          svaki pronađeni patern prikazan sa mestom u niski Genom gde je poklapanje pronađeno.
         </Typography>
       </Box>
     </Grid>
