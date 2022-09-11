@@ -18,8 +18,8 @@ cytoscape.use(dagre);
 const CustomButton = styled(Button)(() => ({
   width: '30%',
   height: 50,
-  backgroundColor: '#00FFFF',
-  color: '#191970',
+  backgroundColor: '#081054',
+  color: 'white',
   margin: '5px',
 }));
 
@@ -398,9 +398,9 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
     : '';
   return (
     <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '80px' }}>
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid item xs={5}>
-          <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
+          <Box textAlign="center" style={{ margin: '5% 3% 5% 3%' }}>
             <CustomButton
               disabled={disableButton}
               variant="contained"
@@ -438,13 +438,24 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
               style={{ width: '50%', marginTop: '20px' }}
             />
           </Box>
+          <Grid container style={{ margin: '3% 0 3% 10%', fontSize: '30px' }}>
+            Genom:
+            <Grid style={{ marginLeft: '20px' }}>{genome}</Grid>
+          </Grid>
+          <Grid container style={{ margin: '3% 0 3% 10%', fontSize: '30px' }}>
+            Patern:
+            <Grid style={{ marginLeft: '20px' }}>{pattern}</Grid>
+          </Grid>
           {disableButton && (
-            <Stack direction="row" spacing={2} style={{ marginLeft: '5%', flexWrap: 'wrap' }}>
+            <Stack direction="row" spacing={2} style={{ marginLeft: '10%', flexWrap: 'wrap' }}>
               <div style={{ marginBottom: '5%', fontSize: '30px' }}>Pronađena rešenja:</div>{' '}
               {indexesMatch}
             </Stack>
           )}
-          <Box style={{ marginLeft: '5%', fontSize: '20px' }}>{renderedOutput}</Box>
+          <Grid style={{ margin: '3% 0 0 10%', fontSize: '30px' }}>
+            Sufiksi genoma:
+            <Grid style={{ margin: '2% 5%', fontSize: '20px' }}>{renderedOutput}</Grid>
+          </Grid>
         </Grid>
         <Grid item xs={5}>
           <Box

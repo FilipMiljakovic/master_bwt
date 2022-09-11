@@ -15,8 +15,8 @@ import { styled } from '@mui/material/styles';
 const CustomButton = styled(Button)(() => ({
   width: '150px',
   height: 50,
-  backgroundColor: '#00FFFF',
-  color: '#191970',
+  backgroundColor: '#081054',
+  color: 'white',
   marginRight: '10px',
   marginBottom: '10px',
 }));
@@ -133,13 +133,20 @@ function BwtVisual({ genome, pattern }) {
             >
               {listItem.genomIndex}
             </div>
-            <div style={{ paddingTop: '6px', color: listItem.firstColor }}>
+            <div style={{ paddingTop: '6px', color: listItem.firstColor, fontWeight: 'bold' }}>
               {listItem.value.substring(0, listItem.firstSubIndex)}
             </div>
             <div style={{ color: 'gray', paddingTop: '6px', float: 'left' }}>
               {listItem.value.substring(listItem.firstSubIndex, listItem.value.length - 2)}
             </div>
-            <div style={{ padding: '6px 0', float: 'left', color: listItem.lastColor }}>
+            <div
+              style={{
+                padding: '6px 0',
+                float: 'left',
+                color: listItem.lastColor,
+                fontWeight: 'bold',
+              }}
+            >
               {listItem.value.substring(listItem.value.length - 2)}
             </div>
           </Stack>
@@ -167,7 +174,7 @@ function BwtVisual({ genome, pattern }) {
             firstLastArray[item].value.substring(0, matchingStrings[i].length) &&
           patternMatchingCharacter === matchingStrings[i][0]
         ) {
-          array = changeIElement(array, item, '#00FFFF', array[item].lastColor, 2 + patternIndex);
+          array = changeIElement(array, item, '#008000', array[item].lastColor, 2 + patternIndex);
           indexArray = [...indexArray, item];
           break;
         } else {
@@ -200,7 +207,7 @@ function BwtVisual({ genome, pattern }) {
       setFirstLastArray(array);
       setResultsFound(
         array
-          .filter((item) => item.firstColor === '#00FFFF')
+          .filter((item) => item.firstColor === '#008000')
           .map((changedItem) => changedItem.genomIndex),
       );
       return;
@@ -213,7 +220,7 @@ function BwtVisual({ genome, pattern }) {
             array,
             item,
             firstLastArray[item].firstColor,
-            '#00FFFF',
+            '#008000',
             2 + patternIndex,
           );
 
@@ -298,7 +305,7 @@ function BwtVisual({ genome, pattern }) {
         <Grid container key={index}>
           <Grid item xs={10}>
             {index === 0 ? (
-              <div style={{ padding: '6px', color: '#081054', fontSize: '30px' }}>{listItem}</div>
+              <div style={{ padding: '6px', color: '#081054', fontWeight: 'bold' }}>{listItem}</div>
             ) : (
               <div style={{ padding: '6px' }}>{listItem}</div>
             )}
@@ -324,7 +331,7 @@ function BwtVisual({ genome, pattern }) {
       ))
     : '';
   return (
-    <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '100px' }}>
+    <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '100px', paddingBottom: '100px' }}>
       <Grid container>
         <Box textAlign="center" style={{ margin: '3% auto 3% auto' }}>
           <Grid style={{ fontSize: '30px' }}>Barouz-Vilerova transformacija</Grid>
@@ -348,40 +355,46 @@ function BwtVisual({ genome, pattern }) {
             BWT(Genom).
           </Typography>
         </Box>
-        <Grid container style={{ marginLeft: '5%', fontSize: '30px' }}>
-          Genom:
-          <Grid style={{ marginLeft: '20px' }}>{genome}</Grid>
-        </Grid>
-        <Grid container style={{ margin: '3% 25%', fontSize: '20px' }}>
-          <Grid style={{ float: 'left' }}>
-            {cyclicRotationList1.map((listItem, index) => (
-              <Grid container key={index}>
-                <Grid item xs={10}>
-                  <div style={{ padding: '6px' }}>{listItem}</div>
-                </Grid>
-              </Grid>
-            ))}
+        <Grid container>
+          <Grid item xs={5} style={{ margin: '3% 0 5% 3%' }}>
+            <Grid container style={{ margin: '0 0 2% 5% ', fontSize: '30px' }}>
+              Genom:
+              <Grid style={{ marginLeft: '20px' }}>{genome}</Grid>
+            </Grid>
+            <Grid container style={{ marginLeft: '5%', fontSize: '30px' }}>
+              BWT:
+              <Grid style={{ marginLeft: '20px' }}>{bwtString}</Grid>
+            </Grid>
           </Grid>
-          <DoubleArrowIcon
-            style={{
-              float: 'left',
-              margin: 'auto 10% auto 10%',
-              fontSize: '100px',
-            }}
-          />
-          <Grid style={{ float: 'left' }}>
-            {cyclicRotationList2.map((listItem, index) => (
-              <Grid container key={index}>
-                <Grid item xs={10}>
-                  <div style={{ padding: '6px' }}>{listItem}</div>
-                </Grid>
+          <Grid item xs={5}>
+            <Grid container style={{ margin: '3% 0', fontSize: '20px' }}>
+              <Grid style={{ float: 'left' }}>
+                {cyclicRotationList1.map((listItem, index) => (
+                  <Grid container key={index}>
+                    <Grid item xs={10}>
+                      <div style={{ padding: '6px' }}>{listItem}</div>
+                    </Grid>
+                  </Grid>
+                ))}
               </Grid>
-            ))}
+              <DoubleArrowIcon
+                style={{
+                  float: 'left',
+                  margin: 'auto 2% auto 2%',
+                  fontSize: '100px',
+                }}
+              />
+              <Grid style={{ float: 'left' }}>
+                {cyclicRotationList2.map((listItem, index) => (
+                  <Grid container key={index}>
+                    <Grid item xs={10}>
+                      <div style={{ padding: '6px' }}>{listItem}</div>
+                    </Grid>
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid container style={{ marginLeft: '5%', fontSize: '30px' }}>
-          BWT:
-          <Grid style={{ marginLeft: '20px' }}>{bwtString}</Grid>
         </Grid>
       </Grid>
       <Grid container>
@@ -415,59 +428,65 @@ function BwtVisual({ genome, pattern }) {
             1000ms, tj. jedne sekunde. Incijalna brzina je 500ms.
           </Typography>
         </Box>
-        <Box container textAlign="center" style={{ margin: '3% 35%', fontSize: '30px' }}>
-          <CustomButton
-            disabled={disableButton}
-            variant="contained"
-            startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-            onClick={() => setIsPlaying(!isPlaying)}
-          />
-          <CustomButton
-            disabled={!disableButton}
-            variant="contained"
-            onClick={() => {
-              setBwtString('');
-              setDisableButton(false);
-              setIsPlaying(true);
-              setInverseMatrix([]);
-              setInverseMatrix2([]);
-              setBwtLength(0);
-              setResetButton(!resetButton);
-              k = 0;
-            }}
-          >
-            Reset
-          </CustomButton>
-          <Slider
-            defaultValue={50}
-            aria-label="Iteration speed"
-            valueLabelDisplay="auto"
-            value={value}
-            onChange={changeValue}
-            min={500}
-            max={1000}
-            step={100}
-            style={{ width: '50%', marginTop: '20px' }}
-          />
-        </Box>
-        <Grid container style={{ margin: '3% 25%', fontSize: '20px' }}>
-          <Grid style={{ float: 'left' }}>
-            {inverseMatrix2.map((listItem, index) => (
-              <Grid container key={index}>
-                <Grid item xs={10}>
-                  <div style={{ padding: '6px' }}>{listItem}</div>
-                </Grid>
-              </Grid>
-            ))}
+        <Grid container>
+          <Grid item xs={5} style={{ margin: '3% 0 5% 3%' }}>
+            <Box container textAlign="center" style={{ margin: '3% 0', fontSize: '30px' }}>
+              <CustomButton
+                disabled={disableButton}
+                variant="contained"
+                startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+                onClick={() => setIsPlaying(!isPlaying)}
+              />
+              <CustomButton
+                disabled={!disableButton}
+                variant="contained"
+                onClick={() => {
+                  setBwtString('');
+                  setDisableButton(false);
+                  setIsPlaying(true);
+                  setInverseMatrix([]);
+                  setInverseMatrix2([]);
+                  setBwtLength(0);
+                  setResetButton(!resetButton);
+                  k = 0;
+                }}
+              >
+                Reset
+              </CustomButton>
+              <Slider
+                defaultValue={50}
+                aria-label="Iteration speed"
+                valueLabelDisplay="auto"
+                value={value}
+                onChange={changeValue}
+                min={500}
+                max={1000}
+                step={100}
+                style={{ width: '50%', marginTop: '20px' }}
+              />
+            </Box>
           </Grid>
-          <DoubleArrowIcon
-            style={{
-              float: 'left',
-              margin: 'auto 10% auto 10%',
-              fontSize: '100px',
-            }}
-          />
-          <Grid style={{ float: 'left' }}>{indexMatrixRender}</Grid>
+          <Grid item xs={5}>
+            <Grid container style={{ margin: '3% 0%', fontSize: '20px' }}>
+              <Grid style={{ float: 'left' }}>
+                {inverseMatrix2.map((listItem, index) => (
+                  <Grid container key={index}>
+                    <Grid item xs={10}>
+                      <div style={{ padding: '6px' }}>{listItem}</div>
+                    </Grid>
+                  </Grid>
+                ))}
+              </Grid>
+              <DoubleArrowIcon
+                style={{
+                  float: 'left',
+                  margin: 'auto 2% auto 2%',
+                  fontSize: '100px',
+                }}
+              />
+              <Grid style={{ float: 'left' }}>{indexMatrixRender}</Grid>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
       <Grid container>
@@ -504,56 +523,62 @@ function BwtVisual({ genome, pattern }) {
             labelom `Pronađena rešenja:`.
           </Typography>
         </Box>
-        <Box style={{ margin: '3% 35%' }}>
-          <Grid style={{ paddingBottom: '10px', fontSize: '30px' }}>Genom: {genome}</Grid>
-          <Grid style={{ paddingBottom: '10px', fontSize: '30px' }}>Patern: {pattern}</Grid>
-          <Stack direction="row" spacing={2} style={{ fontSize: '30px' }}>
-            <div style={{ marginTop: '6px' }}>Pronađena rešenja:</div> {indexesMatch}
-          </Stack>
-        </Box>
-        <Box container textAlign="center" style={{ margin: '3% 35%', fontSize: '30px' }}>
-          <CustomButton
-            disabled={disableButtonFL}
-            variant="contained"
-            startIcon={isPlayingFL ? <PauseIcon /> : <PlayArrowIcon />}
-            onClick={() => setIsPlayingFL(!isPlayingFL)}
-          />
-          <CustomButton
-            disabled={!disableButtonFL}
-            variant="contained"
-            onClick={() => {
-              setDisableButtonFL(false);
-              setIsPlayingFL(false);
-              setFirstLastArray(
-                firstLastArray.map((item) => {
-                  const newItem = { ...item };
-                  newItem.firstColor = 'black';
-                  newItem.lastColor = 'black';
-                  newItem.firstSubIndex = 2;
-                  return newItem;
-                }),
-              );
-              setMatchingStrings([pattern[pattern.length - 1]]);
-              setPatternIndex(0);
-              setResultsFound([]);
-            }}
-          >
-            Reset
-          </CustomButton>
-          <Slider
-            defaultValue={50}
-            aria-label="Iteration speed"
-            valueLabelDisplay="auto"
-            value={valueFL}
-            onChange={changeValueFL}
-            min={500}
-            max={1000}
-            step={100}
-            style={{ width: '50%', marginTop: '20px' }}
-          />
-        </Box>
-        <Grid container style={{ margin: '3% 37%', fontSize: '20px' }}>
-          <Grid>{firstLast}</Grid>
+        <Grid container>
+          <Grid item xs={5} style={{ margin: '3% 0 5% 3%' }}>
+            <Box container textAlign="center" style={{ margin: '3% 0%', fontSize: '30px' }}>
+              <CustomButton
+                disabled={disableButtonFL}
+                variant="contained"
+                startIcon={isPlayingFL ? <PauseIcon /> : <PlayArrowIcon />}
+                onClick={() => setIsPlayingFL(!isPlayingFL)}
+              />
+              <CustomButton
+                disabled={!disableButtonFL}
+                variant="contained"
+                onClick={() => {
+                  setDisableButtonFL(false);
+                  setIsPlayingFL(false);
+                  setFirstLastArray(
+                    firstLastArray.map((item) => {
+                      const newItem = { ...item };
+                      newItem.firstColor = 'black';
+                      newItem.lastColor = 'black';
+                      newItem.firstSubIndex = 2;
+                      return newItem;
+                    }),
+                  );
+                  setMatchingStrings([pattern[pattern.length - 1]]);
+                  setPatternIndex(0);
+                  setResultsFound([]);
+                }}
+              >
+                Reset
+              </CustomButton>
+              <Slider
+                defaultValue={50}
+                aria-label="Iteration speed"
+                valueLabelDisplay="auto"
+                value={valueFL}
+                onChange={changeValueFL}
+                min={500}
+                max={1000}
+                step={100}
+                style={{ width: '50%', marginTop: '20px' }}
+              />
+            </Box>
+            <Box style={{ margin: '3% 0' }}>
+              <Grid style={{ paddingBottom: '10px', fontSize: '30px' }}>Genom: {genome}</Grid>
+              <Grid style={{ paddingBottom: '10px', fontSize: '30px' }}>Patern: {pattern}</Grid>
+              <Stack direction="row" spacing={2} style={{ fontSize: '30px' }}>
+                <div style={{ marginTop: '6px' }}>Pronađena rešenja:</div> {indexesMatch}
+              </Stack>
+            </Box>
+          </Grid>
+          <Grid item xs={5}>
+            <Grid container style={{ margin: '3% 10%', fontSize: '20px' }}>
+              <Grid>{firstLast}</Grid>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

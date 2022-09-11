@@ -24,8 +24,8 @@ function Bwt() {
 
   const CustomButton = styled(Button)(() => ({
     height: 50,
-    backgroundColor: '#00FFFF',
-    color: '#191970',
+    backgroundColor: '#081054',
+    color: 'white',
   }));
 
   return (
@@ -44,7 +44,11 @@ function Bwt() {
               Ranove možemo k uzastopnih pojavljivanja jedne aminokiseline kodirati brojem k i
               oznakom aminokiseline koja se pojavljuje.
             </Typography>
-            <img src="" alt="Konvertovanje ranova" />
+            <img
+              style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '50%' }}
+              src="/img/kompresijaRanova.png"
+              alt="Kompresija ranova"
+            />
             <Typography paragraph>
               Problem je što kod genoma nemamo mnogo ranova, ali imamo dosta ripita. Zato bi bilo
               dobro kada bismo imali tehniku kojom bismo konvertovali ripite u ranove i na to
@@ -61,8 +65,23 @@ function Bwt() {
               prikazano na narednoj stranici dostupnoj nakon pokretanja.
             </Typography>
           </Box>
-          <Grid container textAlign="center" style={{ margin: '5% 0', float: 'left' }}>
-            <Grid item xs={7} textAlign="center" style={{ padding: '5px' }}>
+          <Grid
+            container
+            textAlign="center"
+            style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '50%' }}
+          >
+            <Grid
+              item
+              xs={7}
+              textAlign="center"
+              style={{
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: '50%',
+                padding: '5px',
+              }}
+            >
               <TextField
                 id="genome-label"
                 label="Genom"
@@ -72,7 +91,18 @@ function Bwt() {
                 onChange={(e) => setGenome(e.target.value)}
               />
             </Grid>
-            <Grid item xs={7} textAlign="center" style={{ padding: '5px' }}>
+            <Grid
+              item
+              xs={7}
+              textAlign="center"
+              style={{
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: '50%',
+                padding: '5px',
+              }}
+            >
               <TextField
                 id="pattern-label"
                 label="Patern"
@@ -82,7 +112,18 @@ function Bwt() {
                 onChange={(e) => setPattern(e.target.value)}
               />
             </Grid>
-            <Grid item xs={7} textAlign="center" style={{ padding: '5px' }}>
+            <Grid
+              item
+              xs={7}
+              textAlign="center"
+              style={{
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: '50%',
+                padding: '5px',
+              }}
+            >
               <TextField
                 id="mistake-label"
                 label="Broj dozvoljenih grešaka"
@@ -92,9 +133,19 @@ function Bwt() {
                 onChange={(e) => setMistake(e.target.value)}
               />
             </Grid>
-            <Grid item xs={7} style={{ padding: '5px' }}>
+            <Grid
+              item
+              xs={7}
+              style={{
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: '50%',
+                padding: '5px',
+              }}
+            >
               <CustomButton variant="contained" onClick={submitForm}>
-                Pokreni BWT algoritam
+                Pokreni algoritam
               </CustomButton>
             </Grid>
           </Grid>

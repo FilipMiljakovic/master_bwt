@@ -164,6 +164,7 @@ oznakama može rekonstruisati neku nisku iz liste paterna koji se traže."
               }}
             >
               <Checkbox
+                value={doStepByStep}
                 id="suffixTrieCheckbox"
                 label="Iscrtaj graf postupno"
                 size="medium"

@@ -512,15 +512,7 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
     <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '80px' }}>
       <Grid container>
         <Grid item xs={5}>
-          <Grid container style={{ margin: '3% 0 0 10%', fontSize: '30px' }}>
-            Genom:
-            <Grid style={{ marginLeft: '20px' }}>{genomeView}</Grid>
-          </Grid>
-          <Grid style={{ margin: '3% 0 0 10%', fontSize: '30px' }}>
-            Paterni:
-            <Grid style={{ marginLeft: '5%', fontSize: '20px' }}>{renderedOutput}</Grid>
-          </Grid>
-          <Box textAlign="center" style={{ margin: '15% 3% 5% 3%' }}>
+          <Box textAlign="center" style={{ margin: '5% 3% 5% 3%' }}>
             <CustomButton
               disabled={disableButton}
               variant="contained"
@@ -567,8 +559,17 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
               style={{ width: '50%', marginTop: '20px' }}
             />
           </Box>
+          <Grid container style={{ margin: '3% 0 0 5%', fontSize: '30px' }}>
+            Genom:
+            <Grid style={{ marginLeft: '20px' }}>{genomeView}</Grid>
+          </Grid>
+          <Grid style={{ margin: '3% 0 5% 5%', fontSize: '30px' }}>
+            Paterni:
+            <Grid style={{ marginLeft: '5%', fontSize: '20px' }}>{renderedOutput}</Grid>
+          </Grid>
+
           {disableButton && (
-            <Stack direction="row" spacing={2} style={{ marginLeft: '5%', flexWrap: 'wrap' }}>
+            <Stack direction="row" spacing={2} style={{ marginLeft: '10%', flexWrap: 'wrap' }}>
               <div style={{ marginBottom: '5%', fontSize: '30px' }}>Pronađena rešenja:</div>{' '}
               {indexesMatch}
             </Stack>
