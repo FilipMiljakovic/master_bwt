@@ -403,7 +403,7 @@ function BwtVisual({ genome, pattern }) {
         </Box>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Typography paragraph>
-            Potrebno je da možemo da uradimo i inverznu opera- ciju, kako bismo mogli da
+            Potrebno je da možemo da uradimo i inverznu operaciju, kako bismo mogli da
             rekonstruišemo početnu nisku.
           </Typography>
           <Typography paragraph>

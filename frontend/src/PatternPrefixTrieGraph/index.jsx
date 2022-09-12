@@ -510,6 +510,7 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
 
   return (
     <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '80px' }}>
+      <h1 style={{ textAlign: 'center' }}>Algoritam prefiksnim stablom- rešenje</h1>
       <Grid container>
         <Grid item xs={5}>
           <Box textAlign="center" style={{ margin: '5% 3% 5% 3%' }}>

@@ -37,28 +37,22 @@ function SuffixTrie() {
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             <Toolbar />
             <Typography paragraph>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-              elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-              hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-              velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-              Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-              viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-              Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-              at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-              ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
+              Umesto da stablo kreiramo od liste paterna koji se traže, stablo možemo kreirati i od
+              sufiksa niske Genom. Prvo ćemo nadovezati znak dolara ($) na nisku Genom kako bismo
+              označili njen kraj. Zatim ćemo svaki list stabla koje ćemo da kreiramo od takve liste
+              sufiksa obeležiti sa indeksom u genomu gde taj sufiks počinje. Na taj način ćemo kada
+              stignemo do lista automatski dobiti indeks koji možemo da vratimo kao mesto
+              poklapanja.
             </Typography>
             <Typography paragraph>
-              Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-              facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-              tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
-              volutpat consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at
-              quis risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra
-              accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec
-              nam aliquam sem et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-              tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend.
-              Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin
-              aliquam ultrices sagittis orci a.
+              Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i paterna. Takođe
+              imamo i opciju da štikliranjem checkbox-a `Iscrtaj graf postupno` kreiranje grafa na
+              narednoj stranici izvršimo postupno. U sličaju da pomenuti checkbox nije štikliran
+              stablo će biti automatski kreirano i odmah će se krenuti sa pronalaženjem rešenja, tj.
+              uparivanjem unetih paterna. Za takav unos klikom na dugme `Pokreni algoritam
+              prefiksnim stablom` pokrenemo postupno izvršavanje ovog algoritma. Više objašnjenja o
+              samom izvršavanju algoritma biće prikazano na narednoj stranici dostupnoj nakon
+              pokretanja.
             </Typography>
           </Box>
           <Grid

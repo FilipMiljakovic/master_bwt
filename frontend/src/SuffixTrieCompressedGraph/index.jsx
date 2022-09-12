@@ -8,6 +8,11 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import CircleIcon from '@mui/icons-material/Circle';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import { styled } from '@mui/material/styles';
@@ -417,6 +422,7 @@ function SuffixTrieCompressed({ genome, pattern, doStepByStep }) {
     : 'Error!!!';
   return (
     <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '80px' }}>
+      <h1 style={{ textAlign: 'center' }}>Algoritam kompresovanim sufiksnim stablom- rešenje</h1>
       <Grid container>
         <Grid item xs={5}>
           <Box textAlign="center" style={{ margin: '5% 3% 5% 3%' }}>
@@ -482,27 +488,100 @@ function SuffixTrieCompressed({ genome, pattern, doStepByStep }) {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
+          Konstrukcija kompresovanog sufiksnog stabla na ovoj stranice ne ide do kraja postupnim
+          koracima, već prati sufikse niske Genom i kreira već gotove grane prolazeći kroz njihove
+          podniske. Sama ideja kod ovog ptistupa je objašnjena na prethodnoj stranici i zasniva se
+          na tome da sve grane koje se ne račvaju u sufiksnom stablu spojimo u jednu granu koja bi
+          sadržala sve karaktere na takvim putanjama. Postoji optimizacija kojom se na granam nalaze
+          samo pozicija početka te podniske u niski Genom i njena dužina, ali ovde to neće biti
+          prikazano. Najpoznatiji algoritam za konstrukciju kompresovanog sufiknsog stabla je
+          Ukkonen-ov algoritam.
         </Typography>
         <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
+          Ukkonen-ov algoritam za kreiranje kompresovanog sufiksnog stabla je algoritam predložen od
+          strane Esko Ukkonen-a 1995. godine. Ukkonen-ov algoritam konstruiše niz implicitnih
+          stabala, od kojih se poslednje konvertuje u kompresovano sufiksno stablo niske Genom.
+          Implicitno sufiksno stablo je stablo dobijeno od kompresovanog sufiksnog stabla
+          uklanjanjem svake kopije znaka za kraj $ sa oznake svake grane, zatim uklanjanjem svake
+          grane koja nema oznaku i na kraju uklanjanjem svakog čvora koji nema makar dva potomka.
+          Ukkonen-ov algoritam konstruiše implicitno sufiksno stablo za svaki prefiks niske genoma.
+          Prvo kreira stablo samo od prvog karaktera niske Genom, nakon toga od prefiksa koji sadrži
+          prva dva karaktera i tako sve do cele niske Genom. Implicitno stablo konstruisano od cele
+          niske se onda konvertuje u kompresovano sufiksno stablo i za ceo ovaj postupak je potrebno
+          O(|Genom|) vremena. Inicijalni algoritam koji obuhvata kreiranje imlicitnih stabala ima
+          složenost od O(|Genom|^2), ali se različitim optimizacijama vreme svodi na linearno.
+          Postoje određena pravila koja nam omogućavaju produženje sufiksa pomenuto u prethodnom
+          algoritmu. U produženju sufiksa koji kreće od nekog indeksa j, kada algoritam naiđe na
+          kraj podniske Genom[j...i] u tekućem stablu, ono produžuje ovu podnisku da bi osiguralo da
+          je sufiks Genom[j...j+1] u stablu. Ovo radimo po jednom od naredna tri pravila:
+        </Typography>
+        <List>
+          <ListItem disablePadding>
+            <ListItemIcon style={{ color: '#081054' }}>
+              <CircleIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="U tekućem stablu, put Genom[j...i] se završava u listu. To znači da se put
+od korena produžava do kraja neke grane sa listom. Da bismo unapredili ovo
+stablo znak Genom[i+1] se dodaje na kraj oznake na toj grani sa listom."
+            />
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemIcon style={{ color: '#081054' }}>
+              <CircleIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Ni jedan put od kraja niske Genom[j...i] ne počinje sa Genom[i+1], ali barem
+jedan označen put nastavlja od kraja Genom[j...i]. U ovom slučaju nova grana
+sa listom koja počinje od kraja Genom[j...i] mora biti napravljena i označena
+znakom Genom[i+1]. Novi čvor će takođe morati da bude napravljen ako se
+Genom[j...i] završava unutar grane. Novonastalom listu se dodeljuje broj j."
+            />
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemIcon style={{ color: '#081054' }}>
+              <CircleIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Neka put od kraja niske Genom[j...i] počinje znakom Genom[i+1]. U ovom
+slučaju niska Genom[j...i+1] je već u tekućem stablu, tako da se dalje ne radi
+ništa (U implicitnom sufiksnom stablu kraj sufiksa ne mora da bude eksplicitno
+označen)."
+            />
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemIcon style={{ color: '#081054' }}>
+              <CircleIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Svaki patern iz niza paterna koji se traže može da se kreira spajanjem karaktera
+duž neke putanje od root čvora niz graf."
+            />
+          </ListItem>
+        </List>
+        <Typography paragraph>
+          Kasnije se optimizacija sprovodi u vidu sufiksnih linkova. Sufiksni linkovi povezuju čvor
+          v i čvor w ako je putanja do čvora w najduži sufiks putanje do čvora v koji se pojavljuje
+          u stablu. Takođe se koristi konvertovanje podniski na oznakama grana u uređeni par brojeva
+          koji čine indeks u niski Genom gde ta oznaka počinje i dužinu oznake na grani, koje je već
+          pominjano. Konačno implicitno stablo može da se transformiše u kompresovano sufiksno
+          stablo u vremenu O(|Genom|). Jednostavno ćemo dodati karakter kraja niske $ na Genom i
+          pustiti da Ukkonen-ov algoritam doda ovaj znak. Sada nijedan sufiks nije prefiks bilo kog
+          drugog sufiksa, tako da se ovde izvršavanje završava implicitnim sufiksnim stablom gde se
+          svaki sufiks završava u listu i time je eksplicitno postavljen. Dobijeno stablo je pravo
+          kompresovano sufiksno stablo i vreme ovih promena je O(|Genom|).
+        </Typography>
+        <Typography paragraph>
+          Na ovoj stranici se nalaze isti elementi za manipulaciju sa izvršavanjem algoritma
+          (Pause/Play dugme, Resetuj dugme i slajder za regulaciju brzine) kao i na stranici za
+          iterativni algoritam. Tu su i ulazni parametri (niska Genom i niska Patern). Pored ovoga
+          tu je i grafički prikaz kreiranja kompresovanog sufiksnog stabla od sufiksa niske Genom,
+          koji su takođe prikazani sa strane. Kreiranje može biti urađeno postupno (granu po granu)
+          ili ne, u zavisnosti od toga da li je checkbox na prethodnoj strani štikliran. Na tom
+          stablu će biti postupno prikazano i uparivanje, tj. nalaženje rešenja. Slično kao ranije,
+          pozitivna poklapanja u datom trenutku će biti obojena zelenom bojom, a negativna crvenom
+          bojom na granama. Pronađena rešenja su prikazana u ispod pored labele `Pronađena
+          rešenja:`.
         </Typography>
       </Box>
     </Grid>

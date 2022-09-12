@@ -398,6 +398,7 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
     : '';
   return (
     <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '80px' }}>
+      <h1 style={{ textAlign: 'center' }}>Algoritam sufiksnim stablom- rešenje</h1>
       <Grid container>
         <Grid item xs={5}>
           <Box textAlign="center" style={{ margin: '5% 3% 5% 3%' }}>
@@ -479,27 +480,42 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
+          Da bismo našli da se određeni patern nalazi u genomu kao podniska potrebno je da počev od
+          prvog karaktera paterna prođemo kroz stablo Trie(Genom) krećući se od korena. Ako možemo
+          da nađemo putanju u stablu a da smo prošli kroz sve karaktere paterna, onda znamo da se on
+          mora pojavljivati u genomu. Ukoliko kretanjem kroz stablo dođemo do lista i poslednji
+          karakter paterna se tu nalazi, odatle možemo zaključiti da je patern sufiks genoma. U tom
+          slučaju možemo iz lista pročitati indeks na kojem taj sufiks počinje i tu informaciju
+          vratiti kao mesto gde se patern pojavljuje u genomu.
         </Typography>
         <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
+          Ako se poslednjim karakterom paterna zaustavimo pre lista u nekom čvoru v, isto imamo
+          poklapanje. U ovom slučaju patern može, a ne mora, da se pojavljuje više puta u niski
+          genom. Tada, da bismo došli do indeksa gde patern počinje u genomu potrebno je da se
+          krećemo svim granama od trenutnog čvora v do listova stabla i odatle dobijemo informaciju
+          o indeksima.
+        </Typography>
+        <Typography paragraph>
+          Moguć je i slučaj da nemamo poklapanja. Tada će pretraga stati na nekom čvoru unutar
+          stabla i neće postojati grana iz tog čvora koja će odgovarati narednom karakteru paterna.
+          U tom slučaju zaustavljamo pretragu i zaključujemo da se patern ne nalazi u genomu kao
+          podniska.
+        </Typography>
+        <Typography paragraph>
+          Kod prethodno objašnjenog rešenja stablo konstruišemo od svih sufiksa niske Genom, koji su
+          dužine od 1 do |Genom| i imaju ukupnu dužinu |Genom|·(|Genom|+ 1)/2. Zaključujemo da je
+          složenost približna vrednosti od O(|Genom|^2).
+        </Typography>
+        <Typography paragraph>
+          Na ovoj stranici se nalaze isti elementi za manipulaciju sa izvršavanjem algoritma
+          (Pause/Play dugme, Resetuj dugme i slajder za regulaciju brzine) kao i na stranici za
+          iterativni algoritam. Tu su i ulazni parametri (niska Genom i niska Patern). Pored ovoga
+          tu je i grafički prikaz kreiranja sufiksnog stabla od sufiksa niske Genom, koji su takođe
+          prikazani sa strane. Kreiranje može biti urađeno postupno (granu po granu) ili ne, u
+          zavisnosti od toga da li je checkbox na prethodnoj strani štikliran. Na tom stablu će biti
+          postupno prikazano i uparivanje, tj. nalaženje rešenja. Slično kao ranije, pozitivna
+          poklapanja u datom trenutku će biti obojena zelenom bojom, a negativna crvenom bojom na
+          granama. Pronađena rešenja su prikazana u ispod pored labele `Pronađena rešenja:`.
         </Typography>
       </Box>
     </Grid>
