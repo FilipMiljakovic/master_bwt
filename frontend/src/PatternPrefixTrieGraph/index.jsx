@@ -21,6 +21,8 @@ const CustomButton = styled(Button)(() => ({
   backgroundColor: '#081054',
   color: 'white',
   margin: '5px',
+  textTransform: 'none',
+  fontSize: '20px',
 }));
 
 export const defaults = {
@@ -66,7 +68,7 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
   const [disableButton, setDisableButton] = useState(false);
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
-  const [value, setValue] = useState(100);
+  const [value, setValue] = useState(500);
   const [matchingIndexes, setMatchingIndexes] = useState([]);
   const [resultSearchIndexes, setResultSearchIndexes] = useState({ i: -1, j: -1 });
   const [trieState, setTrieState] = useState({});
@@ -337,8 +339,10 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
     const { i, edge } = currentEdge;
     const suffixArrayCopy = [...suffixArray];
     if (edge) {
-      suffixArrayCopy[i] += edge;
-      setSuffixArray(suffixArrayCopy);
+      if (suffixArrayCopy[i].charAt(suffixArrayCopy[i].length - 1) !== '$') {
+        suffixArrayCopy[i] += edge;
+        setSuffixArray(suffixArrayCopy);
+      }
     } else {
       suffixArrayCopy[i] = `${i} `;
       setSuffixArray(suffixArrayCopy);
@@ -395,7 +399,6 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
           });
           if (j === triePatternArray[i].length - 1 && i === triePatternArray.length - 1) {
             clearTimeout(timeout);
-            // setDisableButton(true);
             setTrieState(data.trie);
             return;
           }
@@ -435,7 +438,6 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
           nodes: nodesFormated,
           edges: Object.values(edgesFormated),
         });
-        setDisableButton(true);
         setTrieState(data.trie);
       }
     }
@@ -546,7 +548,7 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
                 );
               }}
             >
-              Reset
+              Resetuj
             </CustomButton>
             <Slider
               defaultValue={50}
@@ -568,13 +570,9 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
             Paterni:
             <Grid style={{ marginLeft: '5%', fontSize: '20px' }}>{renderedOutput}</Grid>
           </Grid>
-
-          {disableButton && (
-            <Stack direction="row" spacing={2} style={{ marginLeft: '10%', flexWrap: 'wrap' }}>
-              <div style={{ marginBottom: '5%', fontSize: '30px' }}>Pronađena rešenja:</div>{' '}
-              {indexesMatch}
-            </Stack>
-          )}
+          <Stack direction="row" spacing={2} style={{ marginLeft: '10%', flexWrap: 'wrap' }}>
+            <div style={{ fontSize: '30px' }}>Pronađena rešenja:</div> {indexesMatch}
+          </Stack>
         </Grid>
         <Grid item xs={5}>
           <Box

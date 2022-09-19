@@ -11,12 +11,14 @@ import PauseIcon from '@mui/icons-material/Pause';
 import { styled } from '@mui/material/styles';
 
 const CustomButton = styled(Button)(() => ({
-  width: '150px',
+  width: '30%',
   height: 50,
   backgroundColor: '#081054',
   color: 'white',
   marginRight: '10px',
   marginBottom: '10px',
+  textTransform: 'none',
+  fontSize: '20px',
 }));
 
 function changeIElement(renderedOutput, i, valueString, colorHash) {
@@ -33,7 +35,7 @@ function BruteForceVisual({ genome, pattern }) {
   const [renderedOutputResults, setRenderedOutputResults] = useState([]);
   const [isPlaying, setIsPlaying] = useState(true);
   const [disableButton, setDisableButton] = useState(false);
-  const [value, setValue] = useState(400);
+  const [value, setValue] = useState(500);
   const [renderedOutputPattern, setRenderedOutputPattern] = useState(
     pattern
       ? [...pattern].map((item, index) => (
@@ -157,15 +159,15 @@ function BruteForceVisual({ genome, pattern }) {
               );
             }}
           >
-            Reset
+            Resetuj
           </CustomButton>
           <Slider
-            defaultValue={50}
+            defaultValue={500}
             aria-label="Iteration speed"
             valueLabelDisplay="auto"
             value={value}
             onChange={changeValue}
-            min={400}
+            min={100}
             max={1000}
             step={100}
             style={{ width: '50%', marginTop: '20px' }}
@@ -221,10 +223,10 @@ function BruteForceVisual({ genome, pattern }) {
           |Genom|-|Patern|.
         </Typography>
         <Typography paragraph>
-          Može se pratiti koji se trenutno karakter provera- va i različitim bojama je naglašeno da
-          li je do poklapanja došlo ili ne (zelena boja za poklapanje i crvena za nepoklapanje).
-          Pored ovoga, u svakom trenutku možemo videti na kojim indeksima je poklapanje pronađeno do
-          tada, a kada do novog poklapanja dođe lista indeksa će se dopuniti.
+          Može se pratiti koji se trenutno karakter proverava i različitim bojama je naglašeno da li
+          je do poklapanja došlo ili ne (zelena boja za poklapanje i crvena za nepoklapanje). Pored
+          ovoga, u svakom trenutku možemo videti na kojim indeksima je poklapanje pronađeno do tada,
+          a kada do novog poklapanja dođe lista indeksa će se dopuniti.
         </Typography>
         <Typography paragraph>
           Za manipulaciju sa izvršavanjem algoritma imamo na raspolaganju Pause/Play dugme kojim

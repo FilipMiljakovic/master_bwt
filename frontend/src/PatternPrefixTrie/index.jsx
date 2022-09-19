@@ -32,6 +32,8 @@ function PatternPrefixTrie() {
     height: 50,
     backgroundColor: '#081054',
     color: 'white',
+    textTransform: 'none',
+    fontSize: '20px',
   });
 
   return (
@@ -98,10 +100,9 @@ oznakama može rekonstruisati neku nisku iz liste paterna koji se traže."
               opciju da štikliranjem checkbox-a `Iscrtaj graf postupno` kreiranje grafa na narednoj
               stranici izvršimo postupno. U sličaju da pomenuti checkbox nije štikliran stablo će
               biti automatski kreirano i odmah će se krenuti sa pronalaženjem rešenja, tj.
-              uparivanjem unetih paterna. Za takav unos klikom na dugme `Pokreni algoritam
-              prefiksnim stablom` pokrenemo postupno izvršavanje ovog algoritma. Više objašnjenja o
-              samom izvršavanju algoritma biće prikazano na narednoj stranici dostupnoj nakon
-              pokretanja.
+              uparivanjem unetih paterna. Za takav unos klikom na dugme `Pokreni algoritam`
+              pokrenemo postupno izvršavanje ovog algoritma. Više objašnjenja o samom izvršavanju
+              algoritma biće prikazano na narednoj stranici dostupnoj nakon pokretanja.
             </Typography>
           </Box>
           <Grid
@@ -169,7 +170,6 @@ oznakama može rekonstruisati neku nisku iz liste paterna koji se traže."
                 label="Iscrtaj graf postupno"
                 size="medium"
                 onChange={(e) => setDoStepByStep(e.target.checked)}
-                defaultChecked
               />
               Iscrtaj graf postupno
             </Grid>

@@ -21,6 +21,8 @@ const CustomButton = styled(Button)(() => ({
   backgroundColor: '#081054',
   color: 'white',
   margin: '5px',
+  textTransform: 'none',
+  fontSize: '20px',
 }));
 
 export const defaults = {
@@ -68,7 +70,7 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
   const [disableButton, setDisableButton] = useState(false);
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
-  const [value, setValue] = useState(100);
+  const [value, setValue] = useState(500);
   const [sourceSearch, setSourceSearch] = useState('root');
   const [findIndexesFlag, setFindIndexesFlag] = useState(false);
 
@@ -129,6 +131,7 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
         };
       }, {});
       findAllIndexesOfPatternMatching(data.trie, [sourceSearch], [], edgesFormated);
+      setDisableButton(true);
     }
   }, [findIndexesFlag]);
 
@@ -425,7 +428,7 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
                 alreadySeenMultipleNodes = [];
               }}
             >
-              Reset
+              Resetuj
             </CustomButton>
             <Slider
               defaultValue={50}
@@ -447,12 +450,12 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
             Patern:
             <Grid style={{ marginLeft: '20px' }}>{pattern}</Grid>
           </Grid>
-          {disableButton && (
-            <Stack direction="row" spacing={2} style={{ marginLeft: '10%', flexWrap: 'wrap' }}>
-              <div style={{ marginBottom: '5%', fontSize: '30px' }}>Pronađena rešenja:</div>{' '}
-              {indexesMatch}
-            </Stack>
-          )}
+          {/* {disableButton && ( */}
+          <Stack direction="row" spacing={2} style={{ marginLeft: '10%', flexWrap: 'wrap' }}>
+            <div style={{ marginBottom: '5%', fontSize: '30px' }}>Pronađena rešenja:</div>{' '}
+            {indexesMatch}
+          </Stack>
+          {/* )} */}
           <Grid style={{ margin: '3% 0 0 10%', fontSize: '30px' }}>
             Sufiksi genoma:
             <Grid style={{ margin: '2% 5%', fontSize: '20px' }}>{renderedOutput}</Grid>
@@ -504,7 +507,7 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
         <Typography paragraph>
           Kod prethodno objašnjenog rešenja stablo konstruišemo od svih sufiksa niske Genom, koji su
           dužine od 1 do |Genom| i imaju ukupnu dužinu |Genom|·(|Genom|+ 1)/2. Zaključujemo da je
-          složenost približna vrednosti od O(|Genom|^2).
+          složenost približna vrednosti od O(|Genom|<sup>2</sup>).
         </Typography>
         <Typography paragraph>
           Na ovoj stranici se nalaze isti elementi za manipulaciju sa izvršavanjem algoritma

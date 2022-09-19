@@ -13,12 +13,14 @@ import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import { styled } from '@mui/material/styles';
 
 const CustomButton = styled(Button)(() => ({
-  width: '150px',
+  width: '30%',
   height: 50,
   backgroundColor: '#081054',
   color: 'white',
   marginRight: '10px',
   marginBottom: '10px',
+  textTransform: 'none',
+  fontSize: '20px',
 }));
 
 let k = 0;
@@ -159,7 +161,6 @@ function BwtVisual({ genome, pattern }) {
   }, [firstLastArray]);
 
   function colorLeftValues() {
-    const patternMatchingCharacter = pattern[pattern.length - 1 - patternIndex];
     let array = firstLastArray.map((item) => {
       const newItem = { ...item };
       newItem.firstColor = 'black';
@@ -170,9 +171,7 @@ function BwtVisual({ genome, pattern }) {
     for (const item in firstLastArray) {
       for (let i = 0; i < matchingStrings.length; i += 1) {
         if (
-          matchingStrings[i] ===
-            firstLastArray[item].value.substring(0, matchingStrings[i].length) &&
-          patternMatchingCharacter === matchingStrings[i][0]
+          matchingStrings[i] === firstLastArray[item].value.substring(0, matchingStrings[i].length)
         ) {
           array = changeIElement(array, item, '#008000', array[item].lastColor, 2 + patternIndex);
           indexArray = [...indexArray, item];
@@ -190,6 +189,7 @@ function BwtVisual({ genome, pattern }) {
   }
 
   function colorRightValues() {
+    const patternMatchingCharacter = pattern[pattern.length - 1 - patternIndex - 1];
     let array = firstLastArray.map((item) => {
       const newItem = { ...item };
       newItem.lastColor = 'black';
@@ -216,15 +216,25 @@ function BwtVisual({ genome, pattern }) {
     for (const item in firstLastArray) {
       for (let i = 0; i < foundIndexArray.length; i += 1) {
         if (item === foundIndexArray[i]) {
-          array = changeIElement(
-            array,
-            item,
-            firstLastArray[item].firstColor,
-            '#008000',
-            2 + patternIndex,
-          );
+          if (patternMatchingCharacter === firstLastArray[foundIndexArray[i]].value.slice(-2)[0]) {
+            array = changeIElement(
+              array,
+              item,
+              firstLastArray[item].firstColor,
+              '#008000',
+              2 + patternIndex,
+            );
 
-          matching = [...matching, firstLastArray[foundIndexArray[i]].value.slice(-2)];
+            matching = [...matching, firstLastArray[foundIndexArray[i]].value.slice(-2)];
+          } else {
+            array = changeIElement(
+              firstLastArray,
+              item,
+              firstLastArray[item].firstColor,
+              '#FF0000',
+              2 + patternIndex,
+            );
+          }
           break;
         } else {
           array = changeIElement(
@@ -331,7 +341,7 @@ function BwtVisual({ genome, pattern }) {
       ))
     : '';
   return (
-    <Grid spacing={2} style={{ marginLeft: '300px', marginTop: '100px', paddingBottom: '100px' }}>
+    <Grid style={{ marginLeft: '300px', marginTop: '100px', paddingBottom: '100px' }}>
       <Grid container>
         <Box textAlign="center" style={{ margin: '3% auto 3% auto' }}>
           <Grid style={{ fontSize: '30px' }}>Barouz-Vilerova transformacija</Grid>
@@ -387,9 +397,22 @@ function BwtVisual({ genome, pattern }) {
               <Grid style={{ float: 'left' }}>
                 {cyclicRotationList2.map((listItem, index) => (
                   <Grid container key={index}>
-                    <Grid item xs={10}>
-                      <div style={{ padding: '6px' }}>{listItem}</div>
-                    </Grid>
+                    <Stack direction="row" spacing={2}>
+                      <div style={{ padding: '6px 0', float: 'left' }}>
+                        {listItem.substring(0, listItem.length - 1)}
+                      </div>
+                      <div
+                        style={{
+                          padding: '6px 0',
+                          color: '#081054',
+                          fontWeight: 'bold',
+                          float: 'left',
+                          marginLeft: 0,
+                        }}
+                      >
+                        {listItem.substring(listItem.length - 1)}
+                      </div>
+                    </Stack>
                   </Grid>
                 ))}
               </Grid>
@@ -451,7 +474,7 @@ function BwtVisual({ genome, pattern }) {
                   k = 0;
                 }}
               >
-                Reset
+                Resetuj
               </CustomButton>
               <Slider
                 defaultValue={50}
@@ -459,7 +482,7 @@ function BwtVisual({ genome, pattern }) {
                 valueLabelDisplay="auto"
                 value={value}
                 onChange={changeValue}
-                min={500}
+                min={100}
                 max={1000}
                 step={100}
                 style={{ width: '50%', marginTop: '20px' }}
@@ -502,12 +525,12 @@ function BwtVisual({ genome, pattern }) {
           </Typography>
           <Typography paragraph>
             Problem sa ovim pristupom je što ne ide u prilog težnji ka smanjenju korišćene memorije
-            jer čuvanje čitave Barouz-Vilerove matrice za nisku Genom zahteva |Genom|^2 mesta u
-            memoriji. Primetimo da čuvanje čitave Barouz-Vilerove matrice i nije neophodno i da je
-            moguće da samo na osnovu prve i poslednje kolone matrice uradimo inverziju. Koristeći
-            ove dve kolone naći ćemo poklapanja niske Patern u niski Genom tako što ćemo krenuti od
-            poslednjeg karaktera niske Patern. Za pretragu u samim kolonama je veoma bitno takozvano
-            First-Last svojstvo koje kaže da
+            jer čuvanje čitave Barouz-Vilerove matrice za nisku Genom zahteva |Genom|<sup>2</sup>{' '}
+            mesta u memoriji. Primetimo da čuvanje čitave Barouz-Vilerove matrice i nije neophodno i
+            da je moguće da samo na osnovu prve i poslednje kolone matrice uradimo inverziju.
+            Koristeći ove dve kolone naći ćemo poklapanja niske Patern u niski Genom tako što ćemo
+            krenuti od poslednjeg karaktera niske Patern. Za pretragu u samim kolonama je veoma
+            bitno takozvano First-Last svojstvo koje kaže da
           </Typography>
           <Typography paragraph>
             Želimo da kao povratnu informaciju dobijemo indekse u Genomu na kojima se Patern
@@ -552,7 +575,7 @@ function BwtVisual({ genome, pattern }) {
                   setResultsFound([]);
                 }}
               >
-                Reset
+                Resetuj
               </CustomButton>
               <Slider
                 defaultValue={50}
@@ -560,7 +583,7 @@ function BwtVisual({ genome, pattern }) {
                 valueLabelDisplay="auto"
                 value={valueFL}
                 onChange={changeValueFL}
-                min={500}
+                min={100}
                 max={1000}
                 step={100}
                 style={{ width: '50%', marginTop: '20px' }}

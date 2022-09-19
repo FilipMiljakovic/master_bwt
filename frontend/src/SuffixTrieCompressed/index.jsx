@@ -27,6 +27,8 @@ function SuffixTrieCompressed() {
     height: 50,
     backgroundColor: '#081054',
     color: 'white',
+    textTransform: 'none',
+    fontSize: '20px',
   }));
 
   return (
@@ -48,9 +50,18 @@ function SuffixTrieCompressed() {
             </Typography>
             <Typography paragraph>
               Iako ovako kompresovano sufiksno stablo značajno smanjuje memorijske zahteve, sa
-              O(|Genom|^2) na O(|Genom|), prosečno nam i dalje treba oko 20 puta |Genom| memorije. U
-              ovom slučaju, gde ljudski genom ima 3GB, 60GB RAM-a ovim pristupom je veliko
-              unapređenje u odnosu na 1TB.
+              O(|Genom|<sup>2</sup>) na O(|Genom|), prosečno nam i dalje treba oko 20 puta |Genom|
+              memorije. U ovom slučaju, gde ljudski genom ima 3GB, 60GB RAM-a ovim pristupom je
+              veliko unapređenje u odnosu na 1TB.
+            </Typography>
+            <Typography paragraph>
+              Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i paterna. Takođe
+              imamo i opciju da štikliranjem checkbox-a `Iscrtaj graf postupno` kreiranje grafa na
+              narednoj stranici izvršimo postupno. U sličaju da pomenuti checkbox nije štikliran
+              stablo će biti automatski kreirano i odmah će se krenuti sa pronalaženjem rešenja, tj.
+              uparivanjem unetih paterna. Za takav unos klikom na dugme `Pokreni algoritam`
+              pokrenemo postupno izvršavanje ovog algoritma. Više objašnjenja o samom izvršavanju
+              algoritma biće prikazano na narednoj stranici dostupnoj nakon pokretanja.
             </Typography>
           </Box>
           <Grid
@@ -118,7 +129,6 @@ function SuffixTrieCompressed() {
                 label="Iscrtaj graf postupno"
                 size="medium"
                 onChange={(e) => setDoStepByStep(e.target.checked)}
-                defaultChecked
               />
               Iscrtaj graf postupno
             </Grid>

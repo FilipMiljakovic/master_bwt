@@ -26,6 +26,8 @@ function Bwt() {
     height: 50,
     backgroundColor: '#081054',
     color: 'white',
+    textTransform: 'none',
+    fontSize: '20px',
   }));
 
   return (
@@ -58,11 +60,11 @@ function Bwt() {
             <Typography paragraph>
               Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i paterna, ali i
               polje za unos broja nepoklapanja koja tolerišemo kako bismo prikazali i približno
-              uparivanje šablona ovim pristupom. Za takav unos klikom na dugme `Pokreni BWT
-              algoritam` otvaramo novu stranicu na kojoj će biti prikazano generisanje
-              Barouz-Vilerove transformacije, inverzne Barouz-Vilerove transformacije i uparivanje
-              šablona pomoću ove transformacije za vrednosti unete u formu. Više objašnjenja biće
-              prikazano na narednoj stranici dostupnoj nakon pokretanja.
+              uparivanje šablona ovim pristupom. Za takav unos klikom na dugme `Pokreni algoritam`
+              otvaramo novu stranicu na kojoj će biti prikazano generisanje Barouz-Vilerove
+              transformacije, inverzne Barouz-Vilerove transformacije i uparivanje šablona pomoću
+              ove transformacije za vrednosti unete u formu. Više objašnjenja biće prikazano na
+              narednoj stranici dostupnoj nakon pokretanja.
             </Typography>
           </Box>
           <Grid

@@ -26,6 +26,8 @@ const CustomButton = styled(Button)(() => ({
   backgroundColor: '#081054',
   color: 'white',
   margin: '5px',
+  textTransform: 'none',
+  fontSize: '20px',
 }));
 
 export const defaults = {
@@ -83,7 +85,7 @@ function SuffixTrieCompressed({ genome, pattern, doStepByStep }) {
   const [disableButton, setDisableButton] = useState(false);
   const [suffixArray, setSuffixArray] = useState(['0 ']);
   const [currentEdge, setCurrentEdge] = useState({});
-  const [value, setValue] = useState(300);
+  const [value, setValue] = useState(500);
   const [findIndexesFlag, setFindIndexesFlag] = useState(false);
 
   function findAllIndexesOfPatternMatching(trie, sourceNiz, nekiNiz, edgesFormated) {
@@ -433,7 +435,7 @@ function SuffixTrieCompressed({ genome, pattern, doStepByStep }) {
               onClick={() => setIsPlaying(!isPlaying)}
             />
             <CustomButton disabled={!disableButton} variant="contained" onClick={() => reset()}>
-              Reset
+              Resetuj
             </CustomButton>
             <Slider
               defaultValue={50}
@@ -509,11 +511,12 @@ function SuffixTrieCompressed({ genome, pattern, doStepByStep }) {
           prva dva karaktera i tako sve do cele niske Genom. Implicitno stablo konstruisano od cele
           niske se onda konvertuje u kompresovano sufiksno stablo i za ceo ovaj postupak je potrebno
           O(|Genom|) vremena. Inicijalni algoritam koji obuhvata kreiranje imlicitnih stabala ima
-          složenost od O(|Genom|^2), ali se različitim optimizacijama vreme svodi na linearno.
-          Postoje određena pravila koja nam omogućavaju produženje sufiksa pomenuto u prethodnom
-          algoritmu. U produženju sufiksa koji kreće od nekog indeksa j, kada algoritam naiđe na
-          kraj podniske Genom[j...i] u tekućem stablu, ono produžuje ovu podnisku da bi osiguralo da
-          je sufiks Genom[j...j+1] u stablu. Ovo radimo po jednom od naredna tri pravila:
+          složenost od O(|Genom|<sup>2</sup>), ali se različitim optimizacijama vreme svodi na
+          linearno. Postoje određena pravila koja nam omogućavaju produženje sufiksa pomenuto u
+          prethodnom algoritmu. U produženju sufiksa koji kreće od nekog indeksa j, kada algoritam
+          naiđe na kraj podniske Genom[j...i] u tekućem stablu, ono produžuje ovu podnisku da bi
+          osiguralo da je sufiks Genom[j...j+1] u stablu. Ovo radimo po jednom od naredna tri
+          pravila:
         </Typography>
         <List>
           <ListItem disablePadding>
