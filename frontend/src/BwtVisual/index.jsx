@@ -24,7 +24,7 @@ const CustomButton = styled(Button)(() => ({
 }));
 
 let k = 0;
-function BwtVisual({ genome, pattern }) {
+function BwtVisual({ genome, pattern, mistake }) {
   const [cyclicRotationList1, setCyclicRotationList1] = useState([]);
   const [cyclicRotationList2, setCyclicRotationList2] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -99,6 +99,7 @@ function BwtVisual({ genome, pattern }) {
       valueMap.value = firstColumn[index] + item.substring(1, item.length - 1) + lastColumn[index];
       valueMap.firstSubIndex = 2;
       valueMap.lastColor = 'black';
+      valueMap.mistake = Number(mistake);
       valueMap.genomIndex = calculateGenomIndex(
         firstColumn[index] + item.substring(1, item.length - 1) + lastColumn[index],
       );
@@ -112,12 +113,15 @@ function BwtVisual({ genome, pattern }) {
     setFirstLastArray(addIndexesToBwt(cyclicRotationList2));
   }, [cyclicRotationList2]);
 
-  function changeIElement(firstLastArrayArg, i, firstColor, lastColor, firstSubIndex) {
+  function changeIElement(firstLastArrayArg, i, firstColor, lastColor, firstSubIndex, mistakeArg) {
     const firstLastNew = firstLastArrayArg;
     const valueMap = { ...firstLastArrayArg[i] };
     valueMap.firstColor = firstColor;
     valueMap.lastColor = lastColor;
     valueMap.firstSubIndex = firstSubIndex;
+    if (mistakeArg >= 0) {
+      valueMap.mistake = mistakeArg;
+    }
     firstLastNew[i] = valueMap;
     return firstLastNew;
   }
@@ -151,6 +155,17 @@ function BwtVisual({ genome, pattern }) {
             >
               {listItem.value.substring(listItem.value.length - 2)}
             </div>
+            {listItem.mistake > 0 && (
+              <div
+                style={{
+                  paddingTop: '6px',
+                  marginLeft: '20px',
+                  width: '50px',
+                }}
+              >
+                {listItem.mistake}
+              </div>
+            )}
           </Stack>
         </Grid>
       )),
@@ -168,12 +183,21 @@ function BwtVisual({ genome, pattern }) {
     });
     let indexArray = [];
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
-    for (const item in firstLastArray) {
+    for (const item in array) {
       for (let i = 0; i < matchingStrings.length; i += 1) {
-        if (
-          matchingStrings[i] === firstLastArray[item].value.substring(0, matchingStrings[i].length)
-        ) {
+        if (matchingStrings[i] === array[item].value.substring(0, matchingStrings[i].length)) {
           array = changeIElement(array, item, '#008000', array[item].lastColor, 2 + patternIndex);
+          indexArray = [...indexArray, item];
+          break;
+        } else if (array[item].mistake > 0) {
+          array = changeIElement(
+            array,
+            item,
+            '#008000',
+            array[item].lastColor,
+            2 + patternIndex,
+            array[item].mistake - 1,
+          );
           indexArray = [...indexArray, item];
           break;
         } else {
@@ -182,7 +206,6 @@ function BwtVisual({ genome, pattern }) {
       }
     }
 
-    setRunFLIteration(false);
     setFirstLastArray(array);
     setFoundIndexArray(indexArray);
     setMatchingStrings([]);
@@ -213,37 +236,58 @@ function BwtVisual({ genome, pattern }) {
       return;
     }
 
-    for (const item in firstLastArray) {
+    // if (
+    //   array.filter((item) => item.lastColor === '#008000' || item.lastColor === 'black').length ===
+    //   0
+    // ) {
+    //   setDisableButtonFL(true);
+    //   array = firstLastArray.map((item) => {
+    //     const newItem = { ...item };
+    //     newItem.lastColor = 'black';
+    //     newItem.firstColor = 'black';
+    //     newItem.firstSubIndex = 2;
+    //     return newItem;
+    //   });
+    //   setFirstLastArray(array);
+    //   return;
+    // }
+
+    for (const item in array) {
       for (let i = 0; i < foundIndexArray.length; i += 1) {
         if (item === foundIndexArray[i]) {
-          if (patternMatchingCharacter === firstLastArray[foundIndexArray[i]].value.slice(-2)[0]) {
+          if (patternMatchingCharacter === array[foundIndexArray[i]].value.slice(-2)[0]) {
             array = changeIElement(
               array,
               item,
-              firstLastArray[item].firstColor,
+              array[item].firstColor,
               '#008000',
               2 + patternIndex,
             );
 
-            matching = [...matching, firstLastArray[foundIndexArray[i]].value.slice(-2)];
+            matching = [...matching, array[foundIndexArray[i]].value.slice(-2)];
+          } else if (array[item].mistake > 0) {
+            array = changeIElement(
+              array,
+              item,
+              array[item].firstColor,
+              '#008000',
+              2 + patternIndex,
+              array[item].mistake - 1,
+            );
+            matching = [...matching, array[foundIndexArray[i]].value.slice(-2)];
           } else {
             array = changeIElement(
-              firstLastArray,
+              array,
               item,
-              firstLastArray[item].firstColor,
+              array[item].firstColor,
               '#FF0000',
               2 + patternIndex,
+              array[item].mistake - 1,
             );
           }
           break;
         } else {
-          array = changeIElement(
-            firstLastArray,
-            item,
-            firstLastArray[item].firstColor,
-            '#FF0000',
-            2,
-          );
+          array = changeIElement(array, item, array[item].firstColor, '#FF0000', 2);
         }
       }
     }
@@ -567,6 +611,7 @@ function BwtVisual({ genome, pattern }) {
                       newItem.firstColor = 'black';
                       newItem.lastColor = 'black';
                       newItem.firstSubIndex = 2;
+                      newItem.mistake = Number(mistake);
                       return newItem;
                     }),
                   );
