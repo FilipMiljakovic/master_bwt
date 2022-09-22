@@ -39,7 +39,7 @@ function SuffixTrie() {
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             <Toolbar />
             <Typography paragraph>
-              Umesto da stablo kreiramo od liste paterna koji se traže, stablo možemo kreirati i od
+              Umesto da stablo kreiramo od liste šablona koji se traže, stablo možemo kreirati i od
               sufiksa niske Genom. Prvo ćemo nadovezati znak dolara ($) na nisku Genom kako bismo
               označili njen kraj. Zatim ćemo svaki list stabla koje ćemo da kreiramo od takve liste
               sufiksa obeležiti sa indeksom u genomu gde taj sufiks počinje. Na taj način ćemo kada
@@ -47,11 +47,11 @@ function SuffixTrie() {
               poklapanja.
             </Typography>
             <Typography paragraph>
-              Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i paterna. Takođe
+              Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i šablona. Takođe
               imamo i opciju da štikliranjem checkbox-a `Iscrtaj graf postupno` kreiranje grafa na
               narednoj stranici izvršimo postupno. U sličaju da pomenuti checkbox nije štikliran
               stablo će biti automatski kreirano i odmah će se krenuti sa pronalaženjem rešenja, tj.
-              uparivanjem unetih paterna. Za takav unos klikom na dugme `Pokreni algoritam`
+              uparivanjem unetog šablona. Za takav unos klikom na dugme `Pokreni algoritam`
               pokrenemo postupno izvršavanje ovog algoritma. Više objašnjenja o samom izvršavanju
               algoritma biće prikazano na narednoj stranici dostupnoj nakon pokretanja.
             </Typography>

@@ -483,26 +483,26 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         <Typography paragraph>
-          Da bismo našli da se određeni patern nalazi u genomu kao podniska potrebno je da počev od
-          prvog karaktera paterna prođemo kroz stablo Trie(Genom) krećući se od korena. Ako možemo
-          da nađemo putanju u stablu a da smo prošli kroz sve karaktere paterna, onda znamo da se on
+          Da bismo našli da se određeni šablon nalazi u genomu kao podniska potrebno je da počev od
+          prvog karaktera šablona prođemo kroz stablo Trie(Genom) krećući se od korena. Ako možemo
+          da nađemo putanju u stablu a da smo prošli kroz sve karaktere šablona, onda znamo da se on
           mora pojavljivati u genomu. Ukoliko kretanjem kroz stablo dođemo do lista i poslednji
-          karakter paterna se tu nalazi, odatle možemo zaključiti da je patern sufiks genoma. U tom
+          karakter šablona se tu nalazi, odatle možemo zaključiti da je šablon sufiks genoma. U tom
           slučaju možemo iz lista pročitati indeks na kojem taj sufiks počinje i tu informaciju
-          vratiti kao mesto gde se patern pojavljuje u genomu.
+          vratiti kao mesto gde se šablon pojavljuje u genomu.
         </Typography>
         <Typography paragraph>
-          Ako se poslednjim karakterom paterna zaustavimo pre lista u nekom čvoru v, isto imamo
-          poklapanje. U ovom slučaju patern može, a ne mora, da se pojavljuje više puta u niski
-          genom. Tada, da bismo došli do indeksa gde patern počinje u genomu potrebno je da se
+          Ako se poslednjim karakterom šablona zaustavimo pre lista u nekom čvoru v, isto imamo
+          poklapanje. U ovom slučaju šablon može, a ne mora, da se pojavljuje više puta u niski
+          genom. Tada, da bismo došli do indeksa gde šablon počinje u genomu potrebno je da se
           krećemo svim granama od trenutnog čvora v do listova stabla i odatle dobijemo informaciju
           o indeksima.
         </Typography>
         <Typography paragraph>
           Moguć je i slučaj da nemamo poklapanja. Tada će pretraga stati na nekom čvoru unutar
-          stabla i neće postojati grana iz tog čvora koja će odgovarati narednom karakteru paterna.
-          U tom slučaju zaustavljamo pretragu i zaključujemo da se patern ne nalazi u genomu kao
-          podniska.
+          stabla i neće postojati grana iz tog čvora koja će odgovarati narednom karakteru šablona.
+          U tom slučaju zaustavljamo pretragu i zaključujemo da se patšablonern ne nalazi u genomu
+          kao podniska.
         </Typography>
         <Typography paragraph>
           Kod prethodno objašnjenog rešenja stablo konstruišemo od svih sufiksa niske Genom, koji su
@@ -510,13 +510,13 @@ function SuffixTree({ genome, pattern, doStepByStep }) {
           složenost približna vrednosti od O(|Genom|<sup>2</sup>).
         </Typography>
         <Typography paragraph>
-          Na ovoj stranici se nalaze isti elementi za manipulaciju sa izvršavanjem algoritma
-          (Pause/Play dugme, Resetuj dugme i slajder za regulaciju brzine) kao i na stranici za
-          iterativni algoritam. Tu su i ulazni parametri (niska Genom i niska Patern). Pored ovoga
-          tu je i grafički prikaz kreiranja sufiksnog stabla od sufiksa niske Genom, koji su takođe
-          prikazani sa strane. Kreiranje može biti urađeno postupno (granu po granu) ili ne, u
-          zavisnosti od toga da li je checkbox na prethodnoj strani štikliran. Na tom stablu će biti
-          postupno prikazano i uparivanje, tj. nalaženje rešenja. Slično kao ranije, pozitivna
+          Na ovoj stranici se nalaze isti elementi za upravljanje izvršavanjem algoritma
+          (Zaustavi/Pokreni dugme, Resetuj dugme i slajder za regulaciju brzine) kao i na stranici
+          za iterativni algoritam. Tu su i ulazni parametri (niska Genom i niska Patern). Pored
+          ovoga tu je i grafički prikaz kreiranja sufiksnog stabla od sufiksa niske Genom, koji su
+          takođe prikazani sa strane. Kreiranje može biti urađeno postupno (granu po granu) ili ne,
+          u zavisnosti od toga da li je checkbox na prethodnoj strani štikliran. Na tom stablu će
+          biti postupno prikazano i uparivanje, tj. nalaženje rešenja. Slično kao ranije, pozitivna
           poklapanja u datom trenutku će biti obojena zelenom bojom, a negativna crvenom bojom na
           granama. Pronađena rešenja su prikazana u ispod pored labele `Pronađena rešenja:`.
         </Typography>

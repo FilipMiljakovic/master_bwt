@@ -492,8 +492,8 @@ function SuffixTrieCompressed({ genome, pattern, doStepByStep }) {
         <Typography paragraph>
           Konstrukcija kompresovanog sufiksnog stabla na ovoj stranice ne ide do kraja postupnim
           koracima, već prati sufikse niske Genom i kreira već gotove grane prolazeći kroz njihove
-          podniske. Sama ideja kod ovog ptistupa je objašnjena na prethodnoj stranici i zasniva se
-          na tome da sve grane koje se ne račvaju u sufiksnom stablu spojimo u jednu granu koja bi
+          podniske. Sama ideja kod ovog pristupa je objašnjena na prethodnoj stranici i zasniva se
+          na tome da sve grane koje se ne granaju u sufiksnom stablu spojimo u jednu granu koja bi
           sadržala sve karaktere na takvim putanjama. Postoji optimizacija kojom se na granam nalaze
           samo pozicija početka te podniske u niski Genom i njena dužina, ali ovde to neće biti
           prikazano. Najpoznatiji algoritam za konstrukciju kompresovanog sufiknsog stabla je
@@ -534,7 +534,7 @@ stablo znak Genom[i+1] se dodaje na kraj oznake na toj grani sa listom."
               <CircleIcon />
             </ListItemIcon>
             <ListItemText
-              primary="Ni jedan put od kraja niske Genom[j...i] ne počinje sa Genom[i+1], ali barem
+              primary="Nijedan put od kraja niske Genom[j...i] ne počinje sa Genom[i+1], ali barem
 jedan označen put nastavlja od kraja Genom[j...i]. U ovom slučaju nova grana
 sa listom koja počinje od kraja Genom[j...i] mora biti napravljena i označena
 znakom Genom[i+1]. Novi čvor će takođe morati da bude napravljen ako se
@@ -552,15 +552,6 @@ ništa (U implicitnom sufiksnom stablu kraj sufiksa ne mora da bude eksplicitno
 označen)."
             />
           </ListItem>
-          <ListItem disablePadding>
-            <ListItemIcon style={{ color: '#081054' }}>
-              <CircleIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="Svaki patern iz niza paterna koji se traže može da se kreira spajanjem karaktera
-duž neke putanje od root čvora niz graf."
-            />
-          </ListItem>
         </List>
         <Typography paragraph>
           Kasnije se optimizacija sprovodi u vidu sufiksnih linkova. Sufiksni linkovi povezuju čvor
@@ -575,15 +566,15 @@ duž neke putanje od root čvora niz graf."
           kompresovano sufiksno stablo i vreme ovih promena je O(|Genom|).
         </Typography>
         <Typography paragraph>
-          Na ovoj stranici se nalaze isti elementi za manipulaciju sa izvršavanjem algoritma
-          (Pause/Play dugme, Resetuj dugme i slajder za regulaciju brzine) kao i na stranici za
-          iterativni algoritam. Tu su i ulazni parametri (niska Genom i niska Patern). Pored ovoga
-          tu je i grafički prikaz kreiranja kompresovanog sufiksnog stabla od sufiksa niske Genom,
-          koji su takođe prikazani sa strane. Kreiranje može biti urađeno postupno (granu po granu)
-          ili ne, u zavisnosti od toga da li je checkbox na prethodnoj strani štikliran. Na tom
-          stablu će biti postupno prikazano i uparivanje, tj. nalaženje rešenja. Slično kao ranije,
-          pozitivna poklapanja u datom trenutku će biti obojena zelenom bojom, a negativna crvenom
-          bojom na granama. Pronađena rešenja su prikazana u ispod pored labele `Pronađena
+          Na ovoj stranici se nalaze isti elementi za upravljanje izvršavanjem algoritma
+          (Zaustavi/Pokreni dugme, Resetuj dugme i slajder za regulaciju brzine) kao i na stranici
+          za iterativni algoritam. Tu su i ulazni parametri (niska Genom i niska Patern). Pored
+          ovoga tu je i grafički prikaz kreiranja kompresovanog sufiksnog stabla od sufiksa niske
+          Genom, koji su takođe prikazani sa strane. Kreiranje može biti urađeno postupno (granu po
+          granu) ili ne, u zavisnosti od toga da li je checkbox na prethodnoj strani štikliran. Na
+          tom stablu će biti postupno prikazano i uparivanje, tj. nalaženje rešenja. Slično kao
+          ranije, pozitivna poklapanja u datom trenutku će biti obojena zelenom bojom, a negativna
+          crvenom bojom na granama. Pronađena rešenja su prikazana u ispod pored labele `Pronađena
           rešenja:`.
         </Typography>
       </Box>

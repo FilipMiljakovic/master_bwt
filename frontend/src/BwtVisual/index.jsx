@@ -477,16 +477,16 @@ function BwtVisual({ genome, pattern, mistake }) {
             Jedan od pristupa za rešavanje ove operacije je da iskoristimo to što je svaka kolona
             Barouz-Vilerove matrice neka kombinacija karaktera početne niske. Ako krenemo od niske
             koja prdstavlja Barouz-Vilerovu transformaciju i nju sortiramo, dobićemo prvu kolonu
-            gore pomenute matrice. Ako na takvu kolonu dodamo opet BWT(Genom) i takve niske
+            gorepomenute matrice. Ako na takvu kolonu dodamo opet BWT(Genom) i takve niske
             sortiramo, dobićemo prve dve kolone ove matrice. Nastavljajući ovaj postupak dolazimo do
             kompletne Barouz-Vilerove matrice iz koje početnu nisku Genom možemo da pročitamo iz
             prvog reda matrice zanemarujući karakter $ na početku.
           </Typography>
           <Typography paragraph>
-            Opisani postupak je korak po korak prikazan ispod. Za manipulaciju sa izvršavanjem
-            algoritma imamo na raspolaganju Pause/Play dugme kojim možemo pauzirati izvršavanje
+            Opisani postupak je korak po korak prikazan ispod. Za upravljanje izvršavanjem algoritma
+            imamo na raspolaganju Zaustavi/Pokreni dugme kojim možemo pauzirati izvršavanje
             algoritma, ako u nekom stanju hoćemo da proverimo gde je algoritam stao. Inicijalno
-            algoritam nije pokrenut, tako da potrebno je kliknuti na Play dugme da bi izvršavanje
+            algoritam nije pokrenut, tako da potrebno je kliknuti na Pokreni dugme da bi izvršavanje
             počelo. Pored toga, kada algoritam završi izvršavanje za unesene parametre, a mi iz
             nekog razloga želimo opet da ga pokrenemo sa istim parametrima, da se ne bismo vraćali
             na stranicu za unos parametara i opet ih unosili, postoji dugme Resetuj kojim se ovo
@@ -571,19 +571,22 @@ function BwtVisual({ genome, pattern, mistake }) {
             Problem sa ovim pristupom je što ne ide u prilog težnji ka smanjenju korišćene memorije
             jer čuvanje čitave Barouz-Vilerove matrice za nisku Genom zahteva |Genom|<sup>2</sup>{' '}
             mesta u memoriji. Primetimo da čuvanje čitave Barouz-Vilerove matrice i nije neophodno i
-            da je moguće da samo na osnovu prve i poslednje kolone matrice uradimo inverziju.
+            da je moguće da samo na osnovu prve i poslednje kolone matrice pronađemo poklapanja.
             Koristeći ove dve kolone naći ćemo poklapanja niske Patern u niski Genom tako što ćemo
             krenuti od poslednjeg karaktera niske Patern. Za pretragu u samim kolonama je veoma
-            bitno takozvano First-Last svojstvo koje kaže da
+            bitno takozvano First-Last svojstvo koje kaže da k-to pojavljivanje simbola u prvoj
+            koloni Barouz-Vilerove matrice i k-to pojavljivanje simbola u poslednjoj koloni
+            Barouz-Vilerove matrice odgovaraju istoj poziciji tog simbola u niski Genom.
           </Typography>
           <Typography paragraph>
             Želimo da kao povratnu informaciju dobijemo indekse u Genomu na kojima se Patern
             pojavljuje. To je moguće postići korišćenjem sufiksnog niza koji bi pratio
             Barouz-Vilerovu matricu i pokazivao indekse svih sufiksa koji je čine. Tu su takođe
-            komponente za manipulaciju algoritmom (`Pause/Play` dugme, `Resetuj` dugme i slajder za
-            regulaciju brzine) koje možemo koristiti kao kod prethodnoh primera inverzne
-            transformacije. Sa strane je prikazan takođe i ceo sufiksni niz indeksa, kojim možemo da
-            utvrdimo na kojim pozicijama se nalazi poklapanje. I ovde će poklapanja biti obojena
+            komponente za upravljanje izvršavanjem algoritma (Zaustavi/Pokreni dugme, Resetuj dugme
+            i slajder za regulaciju brzine) koje možemo koristiti kao kod prethodnog primera
+            inverzne transformacije. Sa strane je prikazan takođe i ceo sufiksni niz indeksa, kojim
+            možemo da utvrdimo na kojim pozicijama se nalazi poklapanje. Ukoliko postoji, broj
+            dozvoljenih grešaka će biti prikazan sa desne strane. I ovde će poklapanja biti obojena
             zelenom, a nepoklapanja crvenom bojom. U obzir uzimamo i ulazni parametar broja
             nepoklapanja koji tolerišemo, tako da će rešenja koja imaju manje ili jednako
             nepoklapanja isto biti uključena u krajnju listu. Na kraju se rešenja ispisuju pod

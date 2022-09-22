@@ -213,14 +213,14 @@ function BruteForceVisual({ genome, pattern }) {
         <Typography paragraph>
           Na ovoj strani je prikazano postupno izvršavanje iterativnog algoritma. Izvršavanje teče
           tako što prolazimo kroz genom i poredimo karakter na trenutnoj poziciji sa prvim
-          karakterom paterna koji tražimo. Ukoliko je došlo do poklapanja, početak niske Patern na
-          istom karakteru niske Genom, ali izvršavanje pomeramo na naredni karakter niske Patern i
-          njega poredimo sa sledećim karakterom niske Genom. Ukoliko dođemo do kraja niske Patern,
+          karakterom šablona koji tražimo. Ukoliko je došlo do poklapanja početka niske Patern na
+          istom karakteru niske Genom izvršavanje pomeramo na naredni karakter niske Patern i njega
+          poredimo sa sledećim karakterom niske Genom. Ukoliko dođemo do kraja niske Patern,
           zaključujemo da smo pronašli poklapanje. Tada početak niske Patern pomeramo za jedno mesto
-          napred i beležimo rezultat. Ukoliko do poklapanja nije došlo na bilo kod karakteru niske
-          Patern, vraćamo se na prvi karakter niske Patern i izvršavanje nastavljamo od narednog
-          karaktera niske Genom. Izvršavanje zaustavljamo kada dodjemo do karaktera na poziciji
-          |Genom|-|Patern|.
+          napred, kao i poziciju u niski Genom i beležimo rezultat. Ukoliko do poklapanja nije došlo
+          na bilo kod karakteru niske Patern, vraćamo se na prvi karakter niske Patern i izvršavanje
+          nastavljamo od narednog karaktera niske Genom. Izvršavanje zaustavljamo kada dodjemo do
+          karaktera na poziciji |Genom|-|Patern|.
         </Typography>
         <Typography paragraph>
           Može se pratiti koji se trenutno karakter proverava i različitim bojama je naglašeno da li
@@ -229,7 +229,7 @@ function BruteForceVisual({ genome, pattern }) {
           a kada do novog poklapanja dođe lista indeksa će se dopuniti.
         </Typography>
         <Typography paragraph>
-          Za manipulaciju sa izvršavanjem algoritma imamo na raspolaganju Pause/Play dugme kojim
+          Za upravljanje izvršavanjem algoritma imamo na raspolaganju Zaustavi/Pokreni dugme kojim
           možemo pauzirati izvršavanje algoritma, ako u nekom stanju hoćemo da proverimo gde je
           algoritam stao. Pored toga, kada algoritam završi izvršavanje za unesene parametre, a mi
           iz nekog razloga želimo opet da ga pokrenemo sa istim parametrima, da se ne bismo vraćali

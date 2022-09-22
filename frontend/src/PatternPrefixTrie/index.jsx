@@ -44,18 +44,19 @@ function PatternPrefixTrie() {
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             <Toolbar />
             <Typography paragraph>
-              S obzirom da je iterativni algoritam veoma zahtevan, potrebno nam je da nađemo način
-              kako da ceo proces učinimo efikasnijim i smanjimo složenost. Možemo uvideti da u
-              prethodnom algoritmu za višestruko uparivanje prolazimo kroz genom za svaki patern
-              nezavisno. Način na koji možemo optimizovati prethodno rešenje je da sve paterne
-              smestimo u usmeren aciklični graf koji zovemo Trie i koji ima sledeća svojstva:
+              S obzirom da je iterativni algoritam veoma vremenski zahtevan, potrebno nam je da
+              nađemo način kako da ceo proces učinimo efikasnijim i smanjimo složenost. Možemo
+              uvideti da u prethodnom algoritmu za višestruko uparivanje prolazimo kroz genom za
+              svaki šablon nezavisno. Način na koji možemo optimizovati prethodno rešenje je da sve
+              šablone smestimo u usmeren aciklični graf koji zovemo Trie i koji ima sledeća
+              svojstva:
             </Typography>
             <List>
               <ListItem disablePadding>
                 <ListItemIcon style={{ color: '#081054' }}>
                   <CircleIcon />
                 </ListItemIcon>
-                <ListItemText primary="Trie ima jedan početni čvor sa ulaznim stepenom 0 koji nazivamo root." />
+                <ListItemText primary="Trie ima jedan početni čvor sa ulaznim stepenom 0 koji nazivamo koreni čvor." />
               </ListItem>
               <ListItem disablePadding>
                 <ListItemIcon style={{ color: '#081054' }}>
@@ -74,8 +75,8 @@ function PatternPrefixTrie() {
                   <CircleIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Svaki patern iz niza paterna koji se traže može da se kreira spajanjem karaktera
-duž neke putanje od root čvora niz graf."
+                  primary="Svaki šablon iz niza šablona koji se traže može da se kreira spajanjem karaktera
+duž neke putanje od korenog čvora niz graf."
                 />
               </ListItem>
               <ListItem disablePadding>
@@ -84,25 +85,25 @@ duž neke putanje od root čvora niz graf."
                 </ListItemIcon>
                 <ListItemText
                   primary=" Svaka putanja od root čvora do lista (čvora sa izlaznim stepenom 0) sa svojim
-oznakama može rekonstruisati neku nisku iz liste paterna koji se traže."
+oznakama može rekonstruisati neku nisku iz liste šablona koji se traže."
                 />
               </ListItem>
             </List>
             <Typography paragraph>
               Pretraga bi tada bila izvršena tako što bismo krenuli sa čitanjem karaktera u genomu i
-              proverili da li u stablu postoji putanja od korena (čvora root) do lista. Ukoliko smo
-              stigli do lista znamo da je taj patern prefiks niske genom. Izvršavanje tako ponovimo
-              za svaki sufiks niske Genom da bismo našli sva pojavljivanja.
+              proverili da li u stablu postoji putanja od korena do lista. Ukoliko smo stigli do
+              lista znamo da je taj šablon prefiks niske genom. Izvršavanje tako ponovimo za svaki
+              sufiks niske Genom da bismo našli sva pojavljivanja.
             </Typography>
             <Typography paragraph>
-              Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i liste paterna
-              (paterne unosimo razdvojene zarezom. Na primer: mika,pera,laza ). Takođe imamo i
+              Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i liste šablona
+              (šablone unosimo razdvojene zarezom. Na primer: mika,pera,laza ). Takođe imamo i
               opciju da štikliranjem checkbox-a `Iscrtaj graf postupno` kreiranje grafa na narednoj
               stranici izvršimo postupno. U sličaju da pomenuti checkbox nije štikliran stablo će
               biti automatski kreirano i odmah će se krenuti sa pronalaženjem rešenja, tj.
-              uparivanjem unetih paterna. Za takav unos klikom na dugme `Pokreni algoritam`
-              pokrenemo postupno izvršavanje ovog algoritma. Više objašnjenja o samom izvršavanju
-              algoritma biće prikazano na narednoj stranici dostupnoj nakon pokretanja.
+              uparivanjem unetih šablona. Za takav unos klikom na dugme `Pokreni algoritam`
+              pokrenemo izvršavanje ovog algoritma. Više objašnjenja o samom izvršavanju algoritma
+              biće prikazano na narednoj stranici dostupnoj nakon pokretanja.
             </Typography>
           </Box>
           <Grid

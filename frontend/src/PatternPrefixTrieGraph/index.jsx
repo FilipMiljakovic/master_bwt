@@ -597,9 +597,9 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
         <Toolbar />
         <Typography paragraph>
           Najočigledniji način na koji možemo kreirati prefiksno stablo je iterativno dodavanje
-          svake niske iz liste paterna koji se traže u stablo idući od root čvora. Svaka grana
-          stabla predstavlja karakter paterna. Pomoću ovog stabla lako možemo utvrditi da li je neka
-          niska iz liste paterna prefiks genoma.
+          svake niske iz liste šablona koji se traže u stablo idući od korenog čvora. Svaka grana
+          stabla predstavlja karakter šablona. Pomoću ovog stabla lako možemo utvrditi da li je neka
+          niska iz liste šablona prefiks genoma.
         </Typography>
         <Typography paragraph>
           Nalaženje poklapanja je objašnjeno na prethodnoj strani i podrazumeva kretanje kroz stablo
@@ -610,29 +610,29 @@ function PatternPrefixTrie({ genome, patternList, doStepByStep }) {
           Genom.
         </Typography>
         <Typography paragraph>
-          Osnovnim algoritmom nije pokriven slučaj ako je neki patern iz liste paterna prefiks
-          drugog paterna iz liste. U tom slučaju samo kraći patern bi bio uparen, dok bi ovi duži
+          Osnovnim algoritmom nije pokriven slučaj ako je neki šablon iz liste šablona prefiks
+          drugog šablona iz liste. U tom slučaju samo najkraći šablon bi bio uparen, dok bi ovi duži
           bili preskočeni (na toj lokaciji). Zato je ovde implementiran unapređeni algoritam, na taj
-          način što smo paterne završili karakterom $ i tako kreirali stablo. U trenutku pretrage
-          ćemo onda kada dođemo do karaktera $ znati da smo na kraju jednog paterna i dotadašnju
+          način što smo šablone završili karakterom $ i tako kreirali stablo. U trenutku pretrage
+          ćemo onda kada dođemo do karaktera $ znati da smo na kraju jednog šablona i dotadašnju
           nisku staviti u listu rešenja. Ipak, ukoliko pored grane sa oznakom $, iz trenutnog čvora
           postoji još neka grana i ona odgovara sledećem karakteru u genomu (tj. možemo da nastavimo
           kretanje niz stablo) ići ćemo dalje, sve dok takve grane ne bude bilo, ili dok jedina
-          grana iz trenutnog čora bude grana sa oznakom $. Tada odbijamo prvi karakter genoma i na-
-          stavljamo dalje kao u inicijalnom algoritmu NalaženjePoklapanjaUGenomu(Genom, Trie).
+          grana iz trenutnog čora bude grana sa oznakom $. Tada odbijamo prvi karakter genoma i
+          nastavljamo dalje kao u inicijalnom algoritmu.
         </Typography>
         <Typography paragraph>
-          Na ovoj stranici se nalaze isti elementi za manipulaciju sa izvršavanjem algoritma
-          (Pause/Play dugme, Resetuj dugme i slajder za regulaciju brzine) kao i na stranici za
-          iterativni algoritam. Pored ovoga tu je i grafički prikaz kreiranja prefiksnog stabla od
-          unesenih paterna. Sami paterni su izlistani pored radi boljeg pregleda. Kreiranje može
+          Na ovoj stranici se nalaze isti elementi za upravljenje izvršavanjem algoritma
+          (Zaustavi/Pokreni dugme, Resetuj dugme i slajder za regulaciju brzine) kao i na stranici
+          za iterativni algoritam. Pored ovoga tu je i grafički prikaz kreiranja prefiksnog stabla
+          od unesenih šablona. Sami šabloni su izlistani pored radi boljeg pregleda. Kreiranje može
           biti urađeno postupno (granu po granu) ili ne, u zavisnosti od toga da li je checkbox na
           prethodnoj strani štikliran. Na tom stablu će biti postupno prikazano i uparivanje, tj.
           nalaženje rešenja. Postupak nalaženja rešenja se osim na stablu može pratiti i na niski
           Genom koja je pored prikazana. Slično kao ranije, pozitivna poklapanja u datom trenutku će
           biti obojena zelenom bojom, a negativna crvenom bojom na granama, odnosno karakterima
           genoma. Pronađena rešenja su prikazana u vidu uređenih parova (Patern, Indeks) gde je
-          svaki pronađeni patern prikazan sa mestom u niski Genom gde je poklapanje pronađeno.
+          svaki pronađeni šablon prikazan sa mestom u niski Genom gde je poklapanje pronađeno.
         </Typography>
       </Box>
     </Grid>

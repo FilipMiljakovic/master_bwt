@@ -31,8 +31,7 @@ function Home() {
           ljudskih genoma traže.
         </Typography>
         <Typography paragraph>
-          Razmotrimo ključne izazove iz informatičkog ugla koji se javljaju prilikom rešavanja ovog
-          problema. Dužina ljudskog genoma smeštenog u memoriji je preko 3GB, dok ukupna dužina svih
+          Dužina ljudskog genoma smeštenog u memoriji je preko 3GB, dok ukupna dužina svih
           očitavanja može biti veća od 1TB. Zbog toga nam je od izuzetne važnosti da algoritmi
           kojima radimo mapiranje očitavanja budu efikasni.
         </Typography>
@@ -76,9 +75,10 @@ function Home() {
           U primeni ovih algoritama možemo razlikovati jednostruko i višestruko uparivanje šablona.
           Kod jednostrukog su ulaz niska Patern koja se traži i niska Genom u kojoj se traže
           poklapanja. Dok su izlaz sve pozicije u niski Genom gde se niska Patern pojavljuje kao
-          podniska. Kod višestrukog uparivanja šablona ulaz je kolekcija niski paterna koji se traže
+          podniska. Kod višestrukog uparivanja šablona ulaz je kolekcija niski šablona koji se traže
           i naravno niska Genom u kojoj se traže poklapanja. Izlaz su uređeni parovi (Patern, Index)
-          - za svaki patern iz liste pronalazi se pozicija u niski Genom gde imamo poklapanje.
+          - za svaki šablon iz liste pronalazi se pozicija njegovog početka u niski Genom gde imamo
+          poklapanje.
         </Typography>
       </Box>
     </Grid>

@@ -41,7 +41,7 @@ function Bwt() {
               Kako bi se smanjila količina memorije potrebna za rešavanje ovog problema, posegnućemo
               istraživanjima nekih drugih pristupa. Jedan od njih je kompresija niski velikih
               dužina. U kompresiji genoma možemo razlikovati dva slučaja: kada imamo nekoliko
-              uzastopnih ponavljanja jedne aminokiseline (to nazi-vamo ranovima : runs) i kada imamo
+              uzastopnih ponavljanja jedne aminokiseline (to nazivamo ranovima : runs) i kada imamo
               nekoliko uzastopnih ponavljanja niza aminokiselina (to nazivamo ripitima : repeats).
               Ranove možemo k uzastopnih pojavljivanja jedne aminokiseline kodirati brojem k i
               oznakom aminokiseline koja se pojavljuje.
@@ -55,10 +55,10 @@ function Bwt() {
               Problem je što kod genoma nemamo mnogo ranova, ali imamo dosta ripita. Zato bi bilo
               dobro kada bismo imali tehniku kojom bismo konvertovali ripite u ranove i na to
               primenili prethodno opisanu tehniku za kodiranje ranova. Algoritam koji rešava
-              konverziju ripita u ranove je Barouz-Vilerova transforma- cija.
+              konverziju ripita u ranove je Barouz-Vilerova transformacija.
             </Typography>
             <Typography paragraph>
-              Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i paterna, ali i
+              Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i šablona, ali i
               polje za unos broja nepoklapanja koja tolerišemo kako bismo prikazali i približno
               uparivanje šablona ovim pristupom. Za takav unos klikom na dugme `Pokreni algoritam`
               otvaramo novu stranicu na kojoj će biti prikazano generisanje Barouz-Vilerove

@@ -47,7 +47,7 @@ function BruteForce() {
               src="/img/ocitavanje_genoma.png"
             />
             <Typography paragraph>
-              Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i paterna i za
+              Na ovoj stranici je dostupna forma u koju možemo uneti primer genoma i šablona i za
               takav unos klikom na dugme `Pokreni algoritam` pokrenemo postupno izvršavanje
               iterativnog algoritma. Više objašnjenja o samom izvršavanju algoritma biće prikazano
               na narednoj stranici dostupnoj nakon pokretanja.
